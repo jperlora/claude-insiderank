@@ -365,9 +365,71 @@ input[type=file]{display:none}
   .imp-cards,.imp-cards{grid-template-columns:1fr}
   .pr-metrics{display:none}
 }
+/* ═══ LOGIN SCREEN ═══ */
+.login-screen{position:fixed;inset:0;background:var(--bg0);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-card{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:40px 40px 36px;width:100%;max-width:420px;box-shadow:0 24px 64px rgba(0,0,0,.6)}
+.login-logo{display:flex;align-items:center;gap:12px;margin-bottom:32px}
+.login-logo-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--blue),var(--green));border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;color:#fff;flex-shrink:0;box-shadow:0 4px 14px rgba(91,159,255,.35)}
+.login-logo-txt{font-size:20px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.login-logo-sub{font-size:12px;color:var(--text3);margin-top:2px}
+.login-title{font-size:24px;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:-.4px}
+.login-sub{font-size:13px;color:var(--text3);margin-bottom:28px;line-height:1.6}
+.login-field{margin-bottom:16px}
+.login-label{font-size:11px;text-transform:uppercase;letter-spacing:.7px;font-weight:600;color:var(--text3);margin-bottom:7px;display:block}
+.login-input{width:100%;background:var(--bg3);border:1.5px solid var(--border2);border-radius:9px;padding:12px 14px;color:var(--text);font-size:14px;font-family:var(--font);outline:none;transition:border .15s}
+.login-input:focus{border-color:var(--blue)}
+.login-input::placeholder{color:var(--text3)}
+.login-input.shake{animation:shake .35s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.login-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--blue),#4a8ef0);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;margin-top:6px;letter-spacing:.1px}
+.login-btn:hover:not(:disabled){opacity:.9;transform:translateY(-1px);box-shadow:0 6px 20px rgba(91,159,255,.35)}
+.login-btn:active{transform:translateY(0)!important}
+.login-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.login-error{background:var(--red-d);border:1px solid rgba(255,107,107,.3);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:14px;display:none}
+.login-footer{text-align:center;margin-top:20px;font-size:12px;color:var(--text3);line-height:1.7}
+.pw-row{position:relative}
+.pw-toggle{position:absolute;right:13px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text3);cursor:pointer;padding:4px;display:flex;transition:color .15s}
+.pw-toggle:hover{color:var(--text)}
+.login-spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:7px}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
+
+<!-- ═══ LOGIN SCREEN ═══ -->
+<div class="login-screen" id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">IR</div>
+      <div>
+        <div class="login-logo-txt">Inside Rank</div>
+        <div class="login-logo-sub">GSC ranking intel — InsideCasino</div>
+      </div>
+    </div>
+    <div class="login-title">Welcome back</div>
+    <div class="login-sub">Enter your email and the team password to access the dashboard.</div>
+    <div class="login-error" id="login-error">&#10060; Incorrect password. Please try again.</div>
+    <div class="login-field">
+      <label class="login-label" for="login-email">Email address</label>
+      <input class="login-input" type="email" id="login-email" placeholder="you@insidecasino.ca" autocomplete="email" autocapitalize="none" onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()">
+    </div>
+    <div class="login-field">
+      <label class="login-label" for="login-pass">Password</label>
+      <div class="pw-row">
+        <input class="login-input" type="password" id="login-pass" placeholder="Team password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" style="padding-right:42px">
+        <button class="pw-toggle" onclick="togglePw()" tabindex="-1" id="pw-toggle-btn" title="Show/hide password">
+          <svg id="pw-eye" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg id="pw-eye-off" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+      </div>
+    </div>
+    <button class="login-btn" id="login-btn" onclick="doLogin()">Sign in to Inside Rank</button>
+    <div class="login-footer">
+      Authorised team members only &nbsp;·&nbsp; InsideCasino affiliate network<br>
+      <span style="color:var(--text3);font-size:11px;margin-top:4px;display:block">Need access? Contact <a href="mailto:teams@insidecasino.ca" style="color:var(--blue);text-decoration:none">teams@insidecasino.ca</a></span>
+    </div>
+  </div>
+</div>
 <div class="app">
 <aside class="sidebar">
   <div class="logo-area"><div class="logo-mark"><div class="logo-icon">IR</div><div><div class="logo-text">Inside Rank</div><div class="logo-sub">GSC ranking intel</div></div></div></div>
@@ -393,7 +455,7 @@ input[type=file]{display:none}
     <div class="user-row">
       <div class="user-avatar">T</div>
       <div class="user-info"><div class="user-email" id="sidebar-email">teams@insidecasino.ca</div><div class="user-role">Team member</div></div>
-      <button class="signout-btn" title="Sign out" onclick="toast('Signed out')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+      <button class="signout-btn" title="Sign out" onclick="doLogout()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
     </div>
   </div>
 </aside>
@@ -739,7 +801,8 @@ input[type=file]{display:none}
       </ul>
       <strong>For everyone else on the team:</strong>
       <ul>
-        <li>Go to <strong>Settings → Team sync</strong> and enter the same Supabase URL and anon key</li>
+        <li>Open Inside Rank — you'll see a login screen. Enter your email and the team password (ask Joy for it)</li>
+        <li>After logging in, go to <strong>Settings → Team sync</strong> and enter the same Supabase URL and anon key</li>
         <li>Click <strong>Connect &amp; test</strong> — team snapshots will pull automatically every time you open the tool</li>
         <li>Team snapshots show a <span class="tag tg-green" style="font-size:9px;vertical-align:middle">&#127381; Team</span> badge in the Imports list</li>
       </ul>
@@ -916,10 +979,118 @@ const SK='ir_v4b_';const SB_SK='ir_sb_';const SERP_SK='ir_serp_';
 const SERPER_DEFAULT='b7e4d301d6e20226da8828dff4b9d6b10a600b0d';
 
 // ═══ BOOT ═══
-addEventListener('DOMContentLoaded',async()=>{
+// ═══ AUTH ═══
+const AUTH_SK='ir_auth_session';
+const AUTH_PW='InsideRank2026!'; // team password
+const SESSION_HOURS=12; // auto-logout after 12h inactivity
+
+function hashPw(pw){
+  // Simple deterministic hash — not cryptographic, but stops casual snooping
+  let h=0;for(let i=0;i<pw.length;i++){h=((h<<5)-h)+pw.charCodeAt(i);h|=0;}
+  return h.toString(36);
+}
+const AUTH_HASH=hashPw(AUTH_PW);
+
+function getSession(){
+  try{
+    const raw=localStorage.getItem(AUTH_SK);if(!raw)return null;
+    const s=JSON.parse(raw);
+    if(!s||!s.hash||!s.email||!s.ts)return null;
+    // Check expiry
+    if(Date.now()-s.ts>SESSION_HOURS*60*60*1000){localStorage.removeItem(AUTH_SK);return null;}
+    // Check hash still matches
+    if(s.hash!==AUTH_HASH){localStorage.removeItem(AUTH_SK);return null;}
+    return s;
+  }catch(e){return null;}
+}
+function saveSession(email){
+  localStorage.setItem(AUTH_SK,JSON.stringify({hash:AUTH_HASH,email,ts:Date.now()}));
+}
+function clearSession(){localStorage.removeItem(AUTH_SK);}
+
+function showApp(email){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('sidebar-email').textContent=email;
+  // Set avatar initial
+  const av=document.querySelector('.user-avatar');if(av)av.textContent=(email[0]||'T').toUpperCase();
+}
+function showLogin(){document.getElementById('login-screen').style.display='flex';}
+
+function doLogin(){
+  const email=(document.getElementById('login-email').value||'').trim();
+  const pw=document.getElementById('login-pass').value||'';
+  const errEl=document.getElementById('login-error');
+  const btn=document.getElementById('login-btn');
+  const passEl=document.getElementById('login-pass');
+  const emailEl=document.getElementById('login-email');
+
+  // Basic email validation
+  if(!email||!email.includes('@')){
+    emailEl.classList.add('shake');emailEl.focus();
+    setTimeout(()=>emailEl.classList.remove('shake'),400);
+    errEl.textContent='&#10060; Please enter a valid email address.';errEl.style.display='block';return;
+  }
+  if(!pw){passEl.focus();return;}
+
+  // Show loading state
+  btn.disabled=true;
+  btn.innerHTML='<span class="login-spinner"></span>Signing in…';
+  errEl.style.display='none';
+
+  // Small artificial delay so it doesn't feel instant (makes it feel more secure)
+  setTimeout(()=>{
+    if(hashPw(pw)===AUTH_HASH){
+      saveSession(email);
+      showApp(email);
+      bootApp();
+    } else {
+      btn.disabled=false;
+      btn.innerHTML='Sign in to Inside Rank';
+      passEl.value='';
+      passEl.classList.add('shake');
+      setTimeout(()=>passEl.classList.remove('shake'),400);
+      errEl.innerHTML='&#10060; Incorrect password. Please try again.';
+      errEl.style.display='block';
+      passEl.focus();
+    }
+  },600);
+}
+
+function doLogout(){
+  clearSession();
+  showLogin();
+  // Reset email/pass fields
+  const e=document.getElementById('login-email'),p=document.getElementById('login-pass');
+  if(e)e.value='';if(p)p.value='';
+  document.getElementById('login-error').style.display='none';
+  document.getElementById('login-btn').innerHTML='Sign in to Inside Rank';
+  toast('Signed out');
+}
+
+function togglePw(){
+  const inp=document.getElementById('login-pass');
+  const eye=document.getElementById('pw-eye'),eyeOff=document.getElementById('pw-eye-off');
+  if(inp.type==='password'){inp.type='text';eye.style.display='none';eyeOff.style.display='';}
+  else{inp.type='password';eye.style.display='';eyeOff.style.display='none';}
+}
+
+// ═══ BOOT (called after successful auth) ═══
+async function bootApp(){
   await load();await loadSbCreds();autoPickPeriods();renderAll();
   requestAnimationFrame(initKwScrollSync);
   document.addEventListener('click',e=>{if(!e.target.closest('.rel-cell')){document.querySelectorAll('.kw-dropdown').forEach(d=>d.remove());A.openKwDropdown=null;}});
+}
+
+addEventListener('DOMContentLoaded',async()=>{
+  const session=getSession();
+  if(session){
+    showApp(session.email);
+    await bootApp();
+  } else {
+    showLogin();
+    // Focus email field
+    setTimeout(()=>document.getElementById('login-email')?.focus(),100);
+  }
 });
 
 // ═══ STORAGE ═══
