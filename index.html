@@ -1123,39 +1123,55 @@ function updateKpStatusBar(){
 }
 
 function parseKP(text,fname){
-  // KP CSV has various formats — handle Google's keyword ideas export
-  // Headers we look for: Keyword / Avg. monthly searches / Competition / Top of page bid (low range)
-  const raw=text.split(/\r?\n/).map(l=>l.trim()).filter(l=>l&&!l.startsWith('#'));
+  // Decode UTF-16 LE if needed (BOM = 0xFF 0xFE, shows as \xff\xfe or spaced-out chars)
+  let src=text;
+  // If every other char is a space/null, it's UTF-16 decoded as UTF-8 — strip the spaces
+  // Detect: first 20 non-whitespace pairs look like "K e y w o r d"
+  const sample=text.slice(0,100);
+  const isUtf16Mangled=/^[\s\S](?:\x00| )/.test(sample)||/(?:^|\n)K e y/.test(sample)||(sample.charCodeAt(0)===255&&sample.charCodeAt(1)===254);
+  if(isUtf16Mangled){
+    // Remove BOM bytes if present, then strip the interleaved null/space bytes
+    src=text.replace(/^\xff\xfe/,'').replace(/\x00/g,'');
+    // If still spaced out (every char followed by space from UTF-16), collapse
+    if(/^K e y|^\s*K e y/.test(src.slice(0,20))){
+      src=src.split('').filter((_,i)=>i%2===0).join('');
+    }
+  }
+  // Detect delimiter: tab or comma
+  const firstDataLine=src.split(/\r?\n/).find(l=>l.trim()&&!l.trim().startsWith('"Keyword Stats')&&!l.trim().match(/^\d{4}|^November|^January|^"Nov/i));
+  const delim=firstDataLine&&firstDataLine.includes('\t')?'\t':',';
+  const splitRow=line=>delim==='\t'?line.split('\t').map(c=>c.trim().replace(/^"|"$/g,'')):pcr(line);
+  const raw=src.split(/\r?\n/).map(l=>l.trim()).filter(l=>l);
   if(raw.length<2)return{};
-  // Find header row — KP files sometimes have metadata rows at top
+  // Find header row — skip title row ("Keyword Stats…"), date row, blank rows
   let hdrIdx=-1;
   for(let i=0;i<Math.min(15,raw.length);i++){
-    const lc=raw[i].toLowerCase();
-    if((lc.includes('keyword')&&lc.includes('monthly'))||(lc.includes('keyword')&&lc.includes('search'))||(lc.includes('keyword')&&lc.includes('competition'))){hdrIdx=i;break;}
-  }
-  if(hdrIdx<0){
-    // Fallback: look for any row where first col looks like a keyword header
-    for(let i=0;i<Math.min(10,raw.length);i++){const cells=pcr(raw[i]);if(cells[0]&&cells[0].toLowerCase().includes('keyword')){hdrIdx=i;break;}}
+    const cells=splitRow(raw[i]);const first=(cells[0]||'').toLowerCase().trim();
+    // Header row starts with "keyword" and has "monthly" or "competition" somewhere
+    if(first==='keyword'||first==='keywords'||first==='search term'){
+      const row=raw[i].toLowerCase();if(row.includes('monthly')||row.includes('competition')||row.includes('search')){hdrIdx=i;break;}
+      // Even without those, if first col is exactly "keyword" that's the header
+      if(first==='keyword'){hdrIdx=i;break;}
+    }
   }
   if(hdrIdx<0)return{};
-  const hdr=pcr(raw[hdrIdx]).map(h=>h.toLowerCase().replace(/"/g,'').trim());
-  // Find keyword and volume columns
+  const hdr=splitRow(raw[hdrIdx]).map(h=>h.toLowerCase().trim());
   const kwC=hdr.findIndex(h=>h==='keyword'||h==='keywords'||h==='search term');
-  const volC=hdr.findIndex(h=>h.includes('avg')||h.includes('monthly')||h.includes('search vol')||h.includes('searches'));
-  const compC=hdr.findIndex(h=>h==='competition'||h.includes('competition index'));
-  const bidLoC=hdr.findIndex(h=>h.includes('low range')||h.includes('low bid'));
-  const bidHiC=hdr.findIndex(h=>h.includes('high range')||h.includes('high bid'));
+  const volC=hdr.findIndex(h=>h.includes('avg')&&h.includes('monthly')||h.includes('avg. monthly')||h==='avg. monthly searches'||h.includes('monthly searches'));
+  const compC=hdr.findIndex(h=>h==='competition'&&!h.includes('index'));
+  const bidLoC=hdr.findIndex(h=>h.includes('low range'));
+  const bidHiC=hdr.findIndex(h=>h.includes('high range'));
   if(kwC<0||volC<0)return{};
   const map={};
   for(let i=hdrIdx+1;i<raw.length;i++){
-    const cells=pcr(raw[i]);if(!cells.length||cells.every(c=>!c))continue;
-    const kw=(cells[kwC]||'').replace(/"/g,'').trim().toLowerCase();if(!kw)continue;
-    // Volume: KP uses ranges like "1K-10K" or exact numbers or "<10"
-    let vol=0;const rawVol=(cells[volC]||'').replace(/"/g,'').trim();
-    if(rawVol==='<10')vol=5;
-    else if(/^\d+$/.test(rawVol.replace(/,/g,'')))vol=parseInt(rawVol.replace(/,/g,''),10);
-    else{const m=rawVol.match(/^([\d,.]+)[kK]?\s*[-–]\s*([\d,.]+)[kK]?$/);if(m){const lo=parseFloat(m[1].replace(/,/g,''))*(rawVol.toLowerCase().includes('k')?1000:1);const hi=parseFloat(m[2].replace(/,/g,''))*(rawVol.toLowerCase().includes('k')?1000:1);vol=Math.round((lo+hi)/2);}else{const single=parseFloat(rawVol.replace(/[^0-9.]/g,''));if(!isNaN(single))vol=rawVol.toLowerCase().includes('k')?Math.round(single*1000):Math.round(single);}}
-    const competition=compC>=0?(cells[compC]||'').replace(/"/g,'').trim():'';
+    const cells=splitRow(raw[i]);if(!cells.length||cells.every(c=>!c))continue;
+    const kw=(cells[kwC]||'').trim().toLowerCase();if(!kw||kw==='keyword')continue;
+    let vol=0;const rawVol=(cells[volC]||'').trim();
+    if(rawVol===''||rawVol==='-')vol=0;
+    else if(rawVol==='<10')vol=5;
+    else if(/^[\d,]+$/.test(rawVol))vol=parseInt(rawVol.replace(/,/g,''),10);
+    else{const m=rawVol.match(/^([\d,.]+)\s*[kK]?\s*[-–]\s*([\d,.]+)\s*[kK]?$/);if(m){const mult=rawVol.toLowerCase().includes('k')?1000:1;const lo=parseFloat(m[1].replace(/,/g,''))*mult;const hi=parseFloat(m[2].replace(/,/g,''))*mult;vol=Math.round((lo+hi)/2);}else{const n=parseFloat(rawVol.replace(/[^0-9.]/g,''));if(!isNaN(n))vol=rawVol.toLowerCase().includes('k')?Math.round(n*1000):Math.round(n);}}
+    const competition=compC>=0?(cells[compC]||'').trim():'';
     const bidLo=bidLoC>=0?parseFloat((cells[bidLoC]||'').replace(/[^0-9.]/g,''))||0:0;
     const bidHi=bidHiC>=0?parseFloat((cells[bidHiC]||'').replace(/[^0-9.]/g,''))||0:0;
     if(kw)map[kw]={vol,competition,bidLo,bidHi,rawVol};
@@ -1165,10 +1181,24 @@ function parseKP(text,fname){
 
 function handleKP(file){
   if(!file)return;
-  rfText(file).then(text=>{
+  // Use ArrayBuffer so we can detect and decode UTF-16 LE properly
+  rfBuf(file).then(buf=>{
+    const bytes=new Uint8Array(buf);
+    let text;
+    // Check for UTF-16 LE BOM (FF FE)
+    if(bytes[0]===0xFF&&bytes[1]===0xFE){
+      text=new TextDecoder('utf-16le').decode(buf);
+    // Check for UTF-16 BE BOM (FE FF)
+    }else if(bytes[0]===0xFE&&bytes[1]===0xFF){
+      text=new TextDecoder('utf-16be').decode(buf);
+    // UTF-8 BOM (EF BB BF)
+    }else if(bytes[0]===0xEF&&bytes[1]===0xBB&&bytes[2]===0xBF){
+      text=new TextDecoder('utf-8').decode(buf).slice(1);
+    }else{
+      text=new TextDecoder('utf-8').decode(buf);
+    }
     const map=parseKP(text,file.name);const n=Object.keys(map).length;
-    if(!n){toast('No keyword volume data found in: '+file.name,'err');return;}
-    // Merge with existing (new file wins on conflicts)
+    if(!n){toast('No keyword volume data found in: '+file.name+' — check the format','err');return;}
     A.kwVolMap={...A.kwVolMap,...map};A.kpLoaded=true;
     saveKpData();updateKpStatusBar();
     if(A.pagesTab==='ahrefs')renderAhrefsTable();
