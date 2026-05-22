@@ -462,7 +462,7 @@ input[type=file]{display:none}
     <div class="login-sub">Enter the team password to access the dashboard.</div>
     <div class="login-field">
       <label class="login-label" for="login-email">Email</label>
-      <input class="login-input" type="email" id="login-email" placeholder="your@insidecasino.ca" autocomplete="username">
+      <input class="login-input" type="email" id="login-email" placeholder="you@example.com" autocomplete="username">
     </div>
     <div class="login-field">
       <label class="login-label" for="login-pass">Password</label>
@@ -868,7 +868,7 @@ input[type=file]{display:none}
 
   <div id="comp-content" style="display:none">
     <!-- Summary cards -->
-    <div class="two-col" id="comp-cards"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px" id="comp-cards"></div>
     <!-- Keyword breakdown table -->
     <div class="card">
       <div class="card-hdr">
@@ -893,6 +893,8 @@ input[type=file]{display:none}
             <th onclick="srtComp('livePos')">Live Pos<span class="si" id="si-clive">↕</span></th>
             <th onclick="srtComp('bojoko')">bojoko.ca<span class="si" id="si-cboj">↕</span></th>
             <th onclick="srtComp('bonus')">bonus.ca<span class="si" id="si-cbon">↕</span></th>
+            <th onclick="srtComp('canada')">canadacasino.ca<span class="si" id="si-ccan">↕</span></th>
+            <th>Top 5 Organic</th>
             <th>SERP Features</th>
             <th onclick="srtComp('clicks')">Clicks (B)<span class="si" id="si-ccl">↕</span></th>
             <th onclick="srtComp('impressions')">Impressions<span class="si" id="si-cimp">↕</span></th>
@@ -2467,7 +2469,7 @@ function toast(msg,type='ok'){
 // ══════════════════════════════════════════════════════════════
 // SERPER.DEV INTEGRATION — direct browser fetch (Serper supports CORS)
 // ══════════════════════════════════════════════════════════════
-const COMPETITORS    = ['bojoko.ca', 'bonus.ca'];
+const COMPETITORS    = ['bojoko.ca', 'bonus.ca', 'canadacasino.ca'];
 const SERP_SK        = 'ir_serp_';
 const SERPER_DEFAULT_KEY = 'b7e4d301d6e20226da8828dff4b9d6b10a600b0d';
 
@@ -2535,21 +2537,64 @@ async function callSerper(query, serperKey) {
   return res.json();
 }
 
+// Domains to exclude from "top 5 organic competitors" view
+// (sponsored results are already excluded by Serper's organic array)
+const EXCLUDE_DOMAINS = [
+  // Our own sites
+  'insidecasino.ca', 'insidecasino.co.nz', 'insidecasino.com',
+  // Review aggregators / directories not useful as competitors
+  'trustpilot.com', 'trustpilot.ca',
+  // Government / official bodies
+  'agco.ca', 'kahnawakegamingcommission.com', 'gaming.gov.bc.ca', 'bclc.com',
+  // Major platforms not in our space
+  'google.com', 'google.ca', 'youtube.com', 'wikipedia.org', 'reddit.com',
+  'facebook.com', 'twitter.com', 'instagram.com', 'linkedin.com',
+  // Official casino brand sites (not affiliates — too broad to track meaningfully)
+];
+
 function parseSerpResponse(query, data, ourDomain) {
   const organic        = data.organic || [];
   const ourDomainClean = ourDomain.replace(/^https?:\/\/(www\.)?/, '').replace(/\/.*/, '');
   const ourHit         = organic.find(r => r.link && r.link.includes(ourDomainClean));
+
+  // Track our specific competitor domains
   const compPositions  = {};
   COMPETITORS.forEach(comp => {
     const hit = organic.find(r => r.link && r.link.includes(comp));
     compPositions[comp] = hit ? hit.position : null;
   });
+
+  // Top 5 organic results excluding: us, our tracked competitors, and known excluded domains
+  const allExcluded = [ourDomainClean, ...COMPETITORS, ...EXCLUDE_DOMAINS];
+  const top5Organic = organic
+    .filter(r => {
+      if (!r.link) return false;
+      const linkLower = r.link.toLowerCase();
+      return !allExcluded.some(ex => linkLower.includes(ex));
+    })
+    .slice(0, 5)
+    .map(r => ({
+      position: r.position,
+      domain:   r.link.replace(/^https?:\/\/(www\.)?/, '').split('/')[0],
+      link:     r.link,
+      title:    r.title || '',
+    }));
+
   const features = [];
   if (data.answerBox)                         features.push('snippet');
   if (data.peopleAlsoAsk?.length > 0)         features.push('paa');
   if (data.localResults?.length > 0)          features.push('local');
   if (organic.some(r => r.type === 'video'))  features.push('video');
-  return { query, livePos: ourHit ? ourHit.position : null, compPositions, features, timestamp: Date.now(), error: false };
+
+  return {
+    query,
+    livePos:     ourHit ? ourHit.position : null,
+    compPositions,
+    top5Organic,   // top 5 clean organic competitors for this keyword
+    features,
+    timestamp:   Date.now(),
+    error:       false,
+  };
 }
 
 async function testApiKey() {
@@ -2720,40 +2765,47 @@ function renderCompetitorData() {
   const mB = buildKwMap(sb);
   const rows = Object.values(mB).filter(k => k.query && serpData[k.query]).map(k => {
     const s = serpData[k.query];
-    return { query:k.query, gscPos:k.position, livePos:s.livePos, bojoko:s.compPositions?.['bojoko.ca']||null, bonus:s.compPositions?.['bonus.ca']||null, features:s.features||[], clicks:k.clicks, impressions:k.impressions, page:k.page };
+    return {
+      query:      k.query,
+      gscPos:     k.position,
+      livePos:    s.livePos,
+      bojoko:     s.compPositions?.['bojoko.ca']     || null,
+      bonus:      s.compPositions?.['bonus.ca']      || null,
+      canada:     s.compPositions?.['canadacasino.ca'] || null,
+      top5:       s.top5Organic || [],
+      features:   s.features || [],
+      clicks:     k.clicks,
+      impressions:k.impressions,
+      page:       k.page,
+    };
   });
 
   const bojRanking = rows.filter(r=>r.bojoko!==null).length;
   const bonRanking = rows.filter(r=>r.bonus!==null).length;
+  const canRanking = rows.filter(r=>r.canada!==null).length;
   const bojAvg = bojRanking ? (rows.filter(r=>r.bojoko).reduce((s,r)=>s+r.bojoko,0)/bojRanking).toFixed(1) : 'N/A';
   const bonAvg = bonRanking ? (rows.filter(r=>r.bonus).reduce((s,r)=>s+r.bonus,0)/bonRanking).toFixed(1) : 'N/A';
+  const canAvg = canRanking ? (rows.filter(r=>r.canada).reduce((s,r)=>s+r.canada,0)/canRanking).toFixed(1) : 'N/A';
   const total  = rows.length;
 
-  document.getElementById('comp-cards').innerHTML = `
+  const compCard = (domain, color, ranking, avg, outranking, total) => `
     <div class="comp-card">
-      <div class="comp-domain">bojoko.ca</div>
-      <div class="comp-meta">Competitor A · ${bojRanking} of ${total} checked keywords</div>
+      <div class="comp-domain">${domain}</div>
+      <div class="comp-meta">${ranking} of ${total} checked keywords</div>
       <div class="comp-stat-row">
-        <div class="comp-stat"><div class="comp-stat-lbl">Rankings</div><div class="comp-stat-val" style="color:var(--amber)">${bojRanking}</div></div>
-        <div class="comp-stat"><div class="comp-stat-lbl">Avg Position</div><div class="comp-stat-val">${bojAvg}</div></div>
-        <div class="comp-stat"><div class="comp-stat-lbl">Coverage</div><div class="comp-stat-val" style="color:var(--amber)">${total?Math.round(bojRanking/total*100):0}%</div></div>
-        <div class="comp-stat"><div class="comp-stat-lbl">Outranking us</div><div class="comp-stat-val" style="color:var(--red)">${rows.filter(r=>r.bojoko&&r.livePos&&r.bojoko<r.livePos).length}</div></div>
+        <div class="comp-stat"><div class="comp-stat-lbl">Rankings</div><div class="comp-stat-val" style="color:${color}">${ranking}</div></div>
+        <div class="comp-stat"><div class="comp-stat-lbl">Avg Position</div><div class="comp-stat-val">${avg}</div></div>
+        <div class="comp-stat"><div class="comp-stat-lbl">Coverage</div><div class="comp-stat-val" style="color:${color}">${total?Math.round(ranking/total*100):0}%</div></div>
+        <div class="comp-stat"><div class="comp-stat-lbl">Outranking us</div><div class="comp-stat-val" style="color:var(--red)">${outranking}</div></div>
       </div>
       <div style="font-size:11px;color:var(--text3);margin-bottom:6px">Keyword coverage</div>
-      <div class="comp-bar"><div class="comp-pct-track"><div class="comp-pct-fill-b" style="width:${total?bojRanking/total*100:0}%"></div></div><span style="font-size:11px;color:var(--text3);min-width:35px">${total?Math.round(bojRanking/total*100):0}%</span></div>
-    </div>
-    <div class="comp-card">
-      <div class="comp-domain">bonus.ca</div>
-      <div class="comp-meta">Competitor B · ${bonRanking} of ${total} checked keywords</div>
-      <div class="comp-stat-row">
-        <div class="comp-stat"><div class="comp-stat-lbl">Rankings</div><div class="comp-stat-val" style="color:var(--purple)">${bonRanking}</div></div>
-        <div class="comp-stat"><div class="comp-stat-lbl">Avg Position</div><div class="comp-stat-val">${bonAvg}</div></div>
-        <div class="comp-stat"><div class="comp-stat-lbl">Coverage</div><div class="comp-stat-val" style="color:var(--purple)">${total?Math.round(bonRanking/total*100):0}%</div></div>
-        <div class="comp-stat"><div class="comp-stat-lbl">Outranking us</div><div class="comp-stat-val" style="color:var(--red)">${rows.filter(r=>r.bonus&&r.livePos&&r.bonus<r.livePos).length}</div></div>
-      </div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:6px">Keyword coverage</div>
-      <div class="comp-bar"><div class="comp-pct-track"><div class="comp-pct-fill-bo" style="width:${total?bonRanking/total*100:0}%"></div></div><span style="font-size:11px;color:var(--text3);min-width:35px">${total?Math.round(bonRanking/total*100):0}%</span></div>
+      <div class="comp-bar"><div class="comp-pct-track"><div style="height:4px;border-radius:2px;background:${color};width:${total?ranking/total*100:0}%"></div></div><span style="font-size:11px;color:var(--text3);min-width:35px">${total?Math.round(ranking/total*100):0}%</span></div>
     </div>`;
+
+  document.getElementById('comp-cards').innerHTML =
+    compCard('bojoko.ca',       'var(--amber)',  bojRanking, bojAvg, rows.filter(r=>r.bojoko&&r.livePos&&r.bojoko<r.livePos).length, total) +
+    compCard('bonus.ca',        'var(--purple)', bonRanking, bonAvg, rows.filter(r=>r.bonus&&r.livePos&&r.bonus<r.livePos).length, total) +
+    compCard('canadacasino.ca', 'var(--teal)',   canRanking, canAvg, rows.filter(r=>r.canada&&r.livePos&&r.canada<r.livePos).length, total);
 
   compFiltered = rows;
   compPg = 1;
@@ -2780,7 +2832,14 @@ function renderCompetitorTable() {
 
   let rows = Object.values(mB).filter(k=>k.query&&serpData[k.query]).map(k=>{
     const s=serpData[k.query];
-    return {query:k.query,gscPos:k.position,livePos:s.livePos,bojoko:s.compPositions?.['bojoko.ca']||null,bonus:s.compPositions?.['bonus.ca']||null,features:s.features||[],clicks:k.clicks,impressions:k.impressions,page:k.page};
+    return {
+      query:k.query, gscPos:k.position, livePos:s.livePos,
+      bojoko:s.compPositions?.['bojoko.ca']||null,
+      bonus: s.compPositions?.['bonus.ca']||null,
+      canada:s.compPositions?.['canadacasino.ca']||null,
+      top5:  s.top5Organic||[],
+      features:s.features||[], clicks:k.clicks, impressions:k.impressions, page:k.page,
+    };
   });
 
   if (search) rows=rows.filter(r=>r.query.toLowerCase().includes(search));
@@ -2798,23 +2857,27 @@ function renderCompetitorTable() {
   document.getElementById('comp-next').disabled=start+COMP_PER>=total;
 
   const tbody=document.getElementById('comp-tbody');
-  if (!page.length){tbody.innerHTML=`<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:30px">No keywords match</td></tr>`;return;}
+  if (!page.length){tbody.innerHTML=`<tr><td colspan="10" style="text-align:center;color:var(--text3);padding:30px">No keywords match</td></tr>`;return;}
 
   tbody.innerHTML=page.map(r=>{
     let liveBadge='<span class="live-na">—</span>';
     if (r.livePos){const diff=r.gscPos?r.gscPos-r.livePos:0;const cls=diff>0?'live-up':diff<0?'live-dn':'live-same';const arrow=diff>0?'▲':diff<0?'▼':'';liveBadge=`<span class="live-pos ${cls}">${r.livePos}${arrow?` <span style="font-size:9px">${arrow}${Math.abs(diff).toFixed(0)}</span>`:''}</span>`;}
-    const bojBadge=r.bojoko?`<span style="font-family:var(--mono);font-size:12px;font-weight:600;color:${r.bojoko<=3?'var(--red)':r.bojoko<=10?'var(--amber)':'var(--text3)'}">${r.bojoko}</span>`:'<span style="color:var(--text3);font-size:11px">—</span>';
-    const bonBadge=r.bonus?`<span style="font-family:var(--mono);font-size:12px;font-weight:600;color:${r.bonus<=3?'var(--red)':r.bonus<=10?'var(--amber)':'var(--text3)'}">${r.bonus}</span>`:'<span style="color:var(--text3);font-size:11px">—</span>';
+    const bojBadge = r.bojoko?`<span style="font-family:var(--mono);font-size:12px;font-weight:600;color:${r.bojoko<=3?'var(--red)':r.bojoko<=10?'var(--amber)':'var(--text3)'}">${r.bojoko}</span>`:'<span style="color:var(--text3);font-size:11px">—</span>';
+    const bonBadge = r.bonus? `<span style="font-family:var(--mono);font-size:12px;font-weight:600;color:${r.bonus<=3?'var(--red)':r.bonus<=10?'var(--amber)':'var(--text3)'}">${r.bonus}</span>`:'<span style="color:var(--text3);font-size:11px">—</span>';
+    const canBadge = r.canada?`<span style="font-family:var(--mono);font-size:12px;font-weight:600;color:${r.canada<=3?'var(--red)':r.canada<=10?'var(--amber)':'var(--text3)'}">${r.canada}</span>`:'<span style="color:var(--text3);font-size:11px">—</span>';
+    const top5Html = r.top5?.length
+      ? r.top5.map(t=>`<div style="font-size:10px;font-family:var(--mono);color:var(--text2);display:flex;align-items:center;gap:5px;margin-bottom:2px"><span style="color:var(--text3);min-width:14px;font-size:10px">${t.position}</span><span style="color:var(--teal);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px" title="${esc(t.domain)}">${esc(t.domain)}</span></div>`).join('')
+      : '<span style="color:var(--text3);font-size:11px">—</span>';
     const featBadges=r.features.length?r.features.map(f=>{const map={snippet:'✦ Snippet',paa:'💬 PAA',local:'📍 Local',video:'▶ Video'};const cls={snippet:'serp-snippet',paa:'serp-paa',local:'serp-local',video:'serp-video'};return`<span class="serp-badge ${cls[f]||'serp-none'}">${map[f]||f}</span>`;}).join(' '):'<span class="serp-badge serp-none">None</span>';
-    return`<tr><td class="col-kw" title="${esc(r.query)}">${esc(r.query)}</td><td>${posBadge(r.gscPos)}</td><td>${liveBadge}</td><td>${bojBadge}</td><td>${bonBadge}</td><td>${featBadges}</td><td style="font-family:var(--mono);font-size:12px">${r.clicks}</td><td style="font-family:var(--mono);font-size:12px">${fmtN(r.impressions)}</td></tr>`;
+    return`<tr><td class="col-kw" title="${esc(r.query)}">${esc(r.query)}</td><td>${posBadge(r.gscPos)}</td><td>${liveBadge}</td><td>${bojBadge}</td><td>${bonBadge}</td><td>${canBadge}</td><td style="min-width:180px;padding:8px 14px">${top5Html}</td><td>${featBadges}</td><td style="font-family:var(--mono);font-size:12px">${r.clicks}</td><td style="font-family:var(--mono);font-size:12px">${fmtN(r.impressions)}</td></tr>`;
   }).join('');
 }
 
 function srtComp(col){
   if(compSort.col===col)compSort.dir*=-1;else{compSort.col=col;compSort.dir=col==='query'?1:-1;}
   compPg=1;
-  ['cq','cgsc','clive','cboj','cbon','ccl','cimp'].forEach(k=>{const el=document.getElementById('si-'+k);if(el){el.textContent='↕';el.classList.remove('on');}});
-  const map={query:'cq',gscPos:'cgsc',livePos:'clive',bojoko:'cboj',bonus:'cbon',clicks:'ccl',impressions:'cimp'};
+  ['cq','cgsc','clive','cboj','cbon','ccan','ccl','cimp'].forEach(k=>{const el=document.getElementById('si-'+k);if(el){el.textContent='↕';el.classList.remove('on');}});
+  const map={query:'cq',gscPos:'cgsc',livePos:'clive',bojoko:'cboj',bonus:'cbon',canada:'ccan',clicks:'ccl',impressions:'cimp'};
   const el=document.getElementById('si-'+(map[col]||col));
   if(el){el.textContent=compSort.dir===1?'↑':'↓';el.classList.add('on');}
   renderCompetitorTable();
@@ -2885,10 +2948,9 @@ async function doLogin() {
   const email    = (emailEl.value || '').trim().toLowerCase();
   const password = passEl.value || '';
 
-  // Validate email domain
-  const domain = email.split('@')[1] || '';
-  if (!email || !AUTH.domains.some(d => domain === d || domain.endsWith('.' + d))) {
-    errEl.textContent = 'Please use your @insidecasino.ca email address.';
+  // Validate email — any valid address accepted
+  if (!email || !email.includes('@')) {
+    errEl.textContent = 'Please enter a valid email address.';
     errEl.style.display = 'block';
     emailEl.focus();
     return;
