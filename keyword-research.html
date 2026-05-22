@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keyword Research — Inside Rank</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg0:#0c0e11; --bg1:#13161b; --bg2:#1a1e25; --bg3:#222730; --bg4:#2b3040; --bg5:#343b4a;
+      --border:rgba(255,255,255,0.09); --border2:rgba(255,255,255,0.16); --border3:rgba(255,255,255,0.26);
+      --text:#f0f2f5; --text2:#b0b8cc; --text3:#6b7591;
+      --blue:#5b9fff; --blue-d:rgba(91,159,255,0.14);
+      --green:#2ee8b4; --green-d:rgba(46,232,180,0.12);
+      --red:#ff6b6b; --red-d:rgba(255,107,107,0.13);
+      --amber:#ffb83f; --amber-d:rgba(255,184,63,0.13);
+      --purple:#b08cff; --purple-d:rgba(176,140,255,0.13);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 14px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    body { background: var(--bg0); color: var(--text); font-family: 'Inter', system-ui, sans-serif; min-height: 100vh; padding: 20px; }
+
+    .container { max-width: 1400px; margin: 0 auto; }
+    .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; gap: 16px; }
+    .header-left h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 6px; }
+    .header-left p { font-size: 13px; color: var(--text2); }
+    .header-right { display: flex; gap: 12px; align-items: center; }
+
+    .input-group { display: flex; gap: 8px; flex: 1; max-width: 600px; }
+    .input-group textarea {
+      flex: 1; padding: 10px 14px; background: var(--bg2); border: 1px solid var(--border2);
+      border-radius: 8px; color: var(--text); font-family: inherit; font-size: 13px;
+      resize: vertical; min-height: 42px; max-height: 100px;
+    }
+    .input-group textarea::placeholder { color: var(--text3); }
+    .input-group textarea:focus { outline: none; border-color: var(--blue); }
+
+    .btn {
+      padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer;
+      font-weight: 600; font-size: 13px; transition: all 0.2s; font-family: inherit;
+      display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+    }
+    .btn-primary { background: var(--blue); color: white; }
+    .btn-primary:hover { background: #4a8ff0; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .loading { text-align: center; padding: 40px; color: var(--text3); }
+    .spinner {
+      border: 2px solid var(--border); border-top-color: var(--blue);
+      border-radius: 50%; width: 24px; height: 24px; animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error {
+      background: var(--red-d); border: 1px solid rgba(255,107,107,0.3);
+      color: var(--red); padding: 14px 16px; border-radius: 8px; margin-bottom: 20px;
+      font-size: 13px; display: flex; gap: 8px; align-items: center;
+    }
+    .error::before { content: '⚠'; font-size: 16px; }
+
+    .metrics-row {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 24px;
+    }
+    .metric-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+      padding: 16px; text-align: center;
+    }
+    .metric-label { font-size: 11px; text-transform: uppercase; color: var(--text3);
+      letter-spacing: 0.7px; margin-bottom: 8px; font-weight: 500;
+    }
+    .metric-value { font-size: 22px; font-weight: 700; color: var(--text); }
+    .metric-delta { font-size: 12px; color: var(--green); margin-top: 6px; font-weight: 600; }
+    .metric-delta.negative { color: var(--red); }
+
+    .table-wrapper {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+      overflow-x: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    }
+    table {
+      width: 100%; border-collapse: collapse; font-size: 13px;
+    }
+    thead {
+      background: var(--bg3); border-bottom: 1px solid var(--border2); position: sticky; top: 0; z-index: 10;
+    }
+    th {
+      padding: 12px 16px; text-align: left; font-weight: 600; color: var(--text2);
+      text-transform: uppercase; letter-spacing: 0.5px; font-size: 11px; cursor: pointer;
+      user-select: none; white-space: nowrap;
+    }
+    th:hover { color: var(--text); }
+    th.sortable::after { content: ' ⇅'; opacity: 0.3; }
+    th.sorted-asc::after { content: ' ↑'; opacity: 1; color: var(--blue); }
+    th.sorted-desc::after { content: ' ↓'; opacity: 1; color: var(--blue); }
+
+    td {
+      padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: middle;
+    }
+    tbody tr:hover { background: var(--bg3); }
+
+    .keyword-cell {
+      font-weight: 600; color: var(--blue); cursor: pointer; word-break: break-word;
+      max-width: 300px;
+    }
+    .keyword-cell:hover { text-decoration: underline; }
+
+    .badge {
+      display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px;
+      font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .badge.low { background: rgba(46,232,180,0.15); color: var(--green); }
+    .badge.medium { background: rgba(255,184,63,0.15); color: var(--amber); }
+    .badge.high { background: rgba(255,107,107,0.15); color: var(--red); }
+
+    .metric { font-weight: 600; font-family: 'Courier New', monospace; }
+    .metric.positive { color: var(--green); }
+    .metric.negative { color: var(--red); }
+
+    .expansion-row {
+      display: none; background: var(--bg1); border-top: 1px solid var(--border);
+    }
+    .expansion-row.open {
+      display: table-row;
+    }
+    .expansion-content {
+      padding: 20px 16px; border-left: 3px solid var(--blue);
+    }
+
+    .serp-list {
+      list-style: none; font-size: 12px;
+    }
+    .serp-item {
+      padding: 10px 0; border-bottom: 1px solid var(--border); display: flex; gap: 12px;
+    }
+    .serp-item:last-child { border-bottom: none; }
+    .serp-rank {
+      flex: 0 0 30px; font-weight: 700; color: var(--text3); text-align: right;
+    }
+    .serp-details { flex: 1; min-width: 0; }
+    .serp-title { font-weight: 600; color: var(--blue); margin-bottom: 3px; word-break: break-word; }
+    .serp-url { color: var(--text3); font-size: 11px; word-break: break-all; }
+
+    .empty { padding: 40px 20px; text-align: center; color: var(--text3); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-left">
+        <h1>Keyword Research</h1>
+        <p>SERP analysis, traffic potential & keyword difficulty</p>
+      </div>
+      <div class="header-right">
+        <div class="input-group">
+          <textarea id="keywordInput" placeholder="Enter keywords (one per line)&#10;e.g., best online casinos&#10;best crypto casino&#10;live dealer games"></textarea>
+          <button class="btn btn-primary" id="analyzeBtn" onclick="analyzeKeywords()">
+            <span>Analyze</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="resultsContainer" style="display: none;">
+      <div id="errorContainer"></div>
+      <div id="metricsContainer"></div>
+      <div id="tableContainer"></div>
+    </div>
+
+    <div id="emptyState" class="empty">
+      <p>👆 Enter keywords to analyze SERP competition, traffic potential, and difficulty scores</p>
+    </div>
+
+    <div id="loadingState" class="loading" style="display: none;">
+      <div class="spinner"></div>
+      <p>Analyzing keywords...</p>
+    </div>
+  </div>
+
+  <script>
+    const keywordInput = document.getElementById('keywordInput');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const resultsContainer = document.getElementById('resultsContainer');
+    const emptyState = document.getElementById('emptyState');
+    const loadingState = document.getElementById('loadingState');
+
+    let sortState = { column: null, direction: 'asc' };
+
+    async function analyzeKeywords() {
+      const input = keywordInput.value.trim();
+      if (!input) return;
+
+      const keywords = input.split('\n')
+        .map(k => k.trim())
+        .filter(k => k.length > 0);
+
+      if (keywords.length === 0) return;
+
+      analyzeBtn.disabled = true;
+      loadingState.style.display = 'block';
+      emptyState.style.display = 'none';
+      resultsContainer.style.display = 'none';
+
+      try {
+        const response = await fetch('/.netlify/functions/keyword-research', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ keywords })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          showError(result.error || 'Analysis failed');
+          return;
+        }
+
+        displayResults(result.data);
+        resultsContainer.style.display = 'block';
+      } catch (err) {
+        showError(err.message);
+      } finally {
+        analyzeBtn.disabled = false;
+        loadingState.style.display = 'none';
+      }
+    }
+
+    function showError(message) {
+      const errorEl = document.getElementById('errorContainer');
+      errorEl.innerHTML = `<div class="error">${message}</div>`;
+      resultsContainer.style.display = 'block';
+      emptyState.style.display = 'none';
+    }
+
+    function displayResults(data) {
+      const metrics = calculateAggregateMetrics(data);
+      displayMetrics(metrics);
+      displayTable(data);
+      sortState = { column: null, direction: 'asc' };
+    }
+
+    function calculateAggregateMetrics(data) {
+      const validData = data.filter(d => !d.error);
+      const avgDifficulty = validData.length > 0
+        ? Math.round(validData.reduce((sum, d) => sum + d.difficulty, 0) / validData.length)
+        : 0;
+      const avgTraffic = validData.length > 0
+        ? Math.round(validData.reduce((sum, d) => sum + d.trafficPotential, 0) / validData.length)
+        : 0;
+      const totalVolume = validData.reduce((sum, d) => {
+        const vol = d.searchVolume.replace(/[KM]/g, '');
+        return sum + parseInt(vol) * (d.searchVolume.includes('M') ? 1000000 : d.searchVolume.includes('K') ? 1000 : 1);
+      }, 0);
+
+      return { avgDifficulty, avgTraffic, totalVolume, count: validData.length };
+    }
+
+    function displayMetrics(metrics) {
+      const container = document.getElementById('metricsContainer');
+      container.innerHTML = `
+        <div class="metrics-row">
+          <div class="metric-card">
+            <div class="metric-label">Keywords Analyzed</div>
+            <div class="metric-value">${metrics.count}</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Avg. Difficulty</div>
+            <div class="metric-value" style="color: ${metrics.avgDifficulty > 60 ? '#ff6b6b' : metrics.avgDifficulty > 30 ? '#ffb83f' : '#2ee8b4'}">${metrics.avgDifficulty}</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Avg. Traffic Potential</div>
+            <div class="metric-value">${metrics.avgTraffic}</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Total Search Volume</div>
+            <div class="metric-value">${formatNumber(metrics.totalVolume)}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function displayTable(data) {
+      const container = document.getElementById('tableContainer');
+      const validData = data.filter(d => !d.error);
+
+      if (validData.length === 0) {
+        container.innerHTML = '<div class="empty">No data available</div>';
+        return;
+      }
+
+      let html = `
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th class="sortable" onclick="sortTable('keyword')">Keyword</th>
+                <th class="sortable" onclick="sortTable('searchVolume')">Volume</th>
+                <th class="sortable" onclick="sortTable('difficulty')">Difficulty</th>
+                <th class="sortable" onclick="sortTable('trafficPotential')">Traffic Potential</th>
+                <th class="sortable" onclick="sortTable('estimatedCPC')">Est. CPC</th>
+                <th class="sortable" onclick="sortTable('competitionLevel')">Competition</th>
+                <th>SERP Results</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+
+      validData.forEach((item, idx) => {
+        const diffColor = item.difficulty > 60 ? 'high' : item.difficulty > 30 ? 'medium' : 'low';
+        const compColor = item.competitionLevel === 'High' ? 'high' : item.competitionLevel === 'Medium' ? 'medium' : 'low';
+
+        html += `
+          <tr>
+            <td><div class="keyword-cell" onclick="toggleExpansion(${idx})">${item.keyword}</div></td>
+            <td class="metric">${item.searchVolume}</td>
+            <td><span class="badge ${diffColor}">${item.difficultyLabel}</span> <strong>${item.difficulty}</strong></td>
+            <td class="metric">${item.trafficPotential}</td>
+            <td>${item.estimatedCPC}</td>
+            <td><span class="badge ${compColor}">${item.competitionLevel}</span></td>
+            <td>${item.resultCount} results${item.hasFeatureSnippet ? ' <strong style="color: var(--amber)">📌</strong>' : ''}</td>
+          </tr>
+          <tr class="expansion-row" id="expansion-${idx}">
+            <td colspan="7">
+              <div class="expansion-content">
+                <h4 style="margin-bottom: 12px; color: var(--text); font-size: 13px;">Top 10 SERP Results</h4>
+                <ul class="serp-list">
+                  ${item.serpResults.map(r => `
+                    <li class="serp-item">
+                      <span class="serp-rank">${r.position}</span>
+                      <div class="serp-details">
+                        <div class="serp-title">${r.title}</div>
+                        <div class="serp-url">${r.url}</div>
+                      </div>
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+
+      html += `
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function toggleExpansion(idx) {
+      const row = document.getElementById(`expansion-${idx}`);
+      if (row) {
+        row.classList.toggle('open');
+      }
+    }
+
+    function sortTable(column) {
+      // Toggle sort direction if same column
+      if (sortState.column === column) {
+        sortState.direction = sortState.direction === 'asc' ? 'desc' : 'asc';
+      } else {
+        sortState.column = column;
+        sortState.direction = 'asc';
+      }
+
+      // Update header indicators
+      document.querySelectorAll('th').forEach(th => {
+        th.classList.remove('sorted-asc', 'sorted-desc');
+      });
+      const activeHeader = document.querySelector(`th:nth-child(${getColumnIndex(column) + 1})`);
+      if (activeHeader) {
+        activeHeader.classList.add(`sorted-${sortState.direction}`);
+      }
+
+      // Re-sort and display
+      const tableBody = document.querySelector('tbody');
+      const rows = Array.from(tableBody.querySelectorAll('tr:not(.expansion-row)'));
+
+      rows.sort((a, b) => {
+        const aVal = a.cells[getColumnIndex(column)].textContent.trim();
+        const bVal = b.cells[getColumnIndex(column)].textContent.trim();
+
+        let aNum = parseFloat(aVal.replace(/[^0-9.-]/g, '')) || aVal;
+        let bNum = parseFloat(bVal.replace(/[^0-9.-]/g, '')) || bVal;
+
+        if (typeof aNum === 'number' && typeof bNum === 'number') {
+          return sortState.direction === 'asc' ? aNum - bNum : bNum - aNum;
+        }
+
+        return sortState.direction === 'asc'
+          ? String(aVal).localeCompare(String(bVal))
+          : String(bVal).localeCompare(String(aVal));
+      });
+
+      rows.forEach(row => {
+        tableBody.appendChild(row);
+        const expansionRow = row.nextElementSibling;
+        if (expansionRow?.classList.contains('expansion-row')) {
+          tableBody.appendChild(expansionRow);
+        }
+      });
+    }
+
+    function getColumnIndex(column) {
+      const columns = ['keyword', 'searchVolume', 'difficulty', 'trafficPotential', 'estimatedCPC', 'competitionLevel', 'resultCount'];
+      return columns.indexOf(column);
+    }
+
+    function formatNumber(num) {
+      if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+      if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+      return num.toString();
+    }
+
+    keywordInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        analyzeKeywords();
+      }
+    });
+  </script>
+</body>
+</html>
