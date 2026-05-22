@@ -246,7 +246,7 @@ select.fi{cursor:pointer}
 .imp-zone-sub{font-size:13px;color:var(--text3);line-height:1.6}
 input[type=file]{display:none}
 .imp-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:22px}
-.imp-cards-4{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:22px}
+.imp-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:22px}
 .imp-card{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rl);padding:20px}
 .imp-card-title{font-size:14px;font-weight:600;margin-bottom:7px;display:flex;align-items:center;gap:8px;color:var(--text)}
 .imp-card-desc{font-size:12px;color:var(--text3);line-height:1.8;margin-bottom:16px}
@@ -297,6 +297,9 @@ input[type=file]{display:none}
 .help-body ul{padding-left:20px;margin-top:8px}
 .help-body li{margin-bottom:6px}
 .help-body strong{color:var(--text)}
+.help-body a{color:var(--blue);text-decoration:none}
+.help-body a:hover{text-decoration:underline}
+.help-body code{font-family:var(--mono);font-size:11px;color:var(--teal);background:var(--bg3);padding:1px 6px;border-radius:4px;border:1px solid var(--border2)}
 .help-tip{background:var(--amber-d);border:1px solid rgba(255,184,63,.28);border-radius:var(--r);padding:11px 15px;font-size:13px;color:var(--text2);margin-top:12px}
 .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s;font-family:var(--font)}
 .btn-primary{background:var(--blue);color:#fff}.btn-primary:hover{background:#4a8ef0}
@@ -331,9 +334,7 @@ input[type=file]{display:none}
 .url-matched{color:var(--teal)}.url-inferred{color:var(--amber)}.url-none{color:var(--text3)}
 .url-legend{display:flex;align-items:center;gap:16px;font-size:11px;color:var(--text3);padding:9px 18px;border-top:1px solid var(--border);background:rgba(0,0,0,.15)}
 .url-legend span{display:flex;align-items:center;gap:5px}
-.vol-real{color:var(--green);font-family:var(--mono);font-size:12px;font-weight:600}
-.vol-est{color:var(--text3);font-family:var(--mono);font-size:12px}
-.vol-src{font-size:9px;vertical-align:super;margin-left:2px;font-weight:500};border:1.5px solid var(--border2);border-radius:var(--r);padding:9px 12px;color:var(--text);font-size:13px;font-family:var(--mono);outline:none;transition:border .15s;width:100%}
+;border:1.5px solid var(--border2);border-radius:var(--r);padding:9px 12px;color:var(--text);font-size:13px;font-family:var(--mono);outline:none;transition:border .15s;width:100%}
 .api-key-input:focus{border-color:var(--blue)}
 .api-key-input::placeholder{color:var(--text3)}
 .serp-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;white-space:nowrap;gap:3px}
@@ -361,7 +362,7 @@ input[type=file]{display:none}
   .app{grid-template-columns:1fr}.sidebar{display:none}
   .kpi-row{grid-template-columns:repeat(3,1fr)}
   .two-col,.main-aside{grid-template-columns:1fr}
-  .imp-cards,.imp-cards-4{grid-template-columns:1fr}
+  .imp-cards,.imp-cards{grid-template-columns:1fr}
   .pr-metrics{display:none}
 }
 </style>
@@ -380,7 +381,7 @@ input[type=file]{display:none}
     <button class="nav-btn active" onclick="goView('overview',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Overview</button>
     <button class="nav-btn" onclick="goView('keywords',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Keywords</button>
     <button class="nav-btn" onclick="goView('pages',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Pages</button>
-    <button class="nav-btn" onclick="goView('competitors',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Competitors</button>
+    <button class="nav-btn" onclick="goView('competitors',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>SERP Tracker</button>
     <button class="nav-btn" onclick="goView('imports',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Imports</button>
     <button class="nav-btn" onclick="goView('help',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Help</button>
     <button class="nav-btn" onclick="goView('settings',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</button>
@@ -502,24 +503,137 @@ input[type=file]{display:none}
       </div>
       <div class="pager"><span class="pager-info" id="ah-pinfo"></span><button class="pager-btn" id="ah-prev" onclick="pgAh(-1)">&#8592; Prev</button><button class="pager-btn" id="ah-next" onclick="pgAh(1)">Next &#8594;</button></div>
     </div>
-    <div style="margin-top:10px;padding:8px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);font-size:11px;color:var(--text3)" id="ah-note-bar">&#9432; <strong style="color:var(--text2)">Volume:</strong> <span id="ah-vol-note">Estimated from GSC impression/CTR data (~). Upload a Keyword Planner CSV in Imports for real volumes.</span> UR and Ref. Domains require Ahrefs API.</div>
+    <div style="margin-top:10px;padding:8px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);font-size:11px;color:var(--text3)" id="ah-note-bar">&#9432; <strong style="color:var(--text2)">Volume:</strong> <span id="ah-vol-note">Estimated from GSC impression/CTR data — no external API needed.</span> UR and Ref. Domains require Ahrefs API.</div>
   </div>
 </div>
 
-<!-- COMPETITORS -->
+<!-- SERP TRACKER -->
 <div class="view" id="v-competitors">
-  <div class="page-hdr"><div><div class="page-title">Competitors</div><div class="page-sub">Live SERP data — bojoko.ca &amp; bonus.ca via Serper.dev</div></div>
-    <div style="display:flex;gap:8px;align-items:center"><span id="serp-last-run" style="font-size:11px;color:var(--text3)"></span><button class="btn btn-primary btn-sm" onclick="runSerpCheck()" id="run-serp-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Run SERP check</button></div>
+  <div class="page-hdr">
+    <div>
+      <div class="page-title">SERP Tracker</div>
+      <div class="page-sub" id="serp-sub">Pull live Google rankings for every keyword in Period B — see your actual position, SERP features, and how bojoko.ca &amp; bonus.ca rank alongside you.</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+      <span id="serp-last-run" style="font-size:11px;color:var(--text3)"></span>
+      <button class="btn btn-ghost btn-sm" onclick="exportSerpCSV()" id="serp-export-btn" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV
+      </button>
+      <button class="btn btn-primary btn-sm" onclick="runSerpCheck()" id="run-serp-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Run SERP check
+      </button>
+    </div>
   </div>
-  <div id="serp-no-key" style="display:none;background:var(--red-d);border:1px solid rgba(255,107,107,.3);border-radius:var(--rl);padding:14px 18px;margin-bottom:18px;font-size:13px">&#9888; No Serper API key. Go to <a onclick="goView('settings',null)" style="color:var(--blue);cursor:pointer">Settings</a>.</div>
-  <div id="serp-progress-wrap" class="serp-progress-wrap" style="display:none"><div class="progress-title" id="serp-prog-title">Checking…</div><div style="font-size:11px;color:var(--text3);margin-bottom:10px" id="serp-prog-sub"></div><div class="progress-bar-bg"><div class="progress-bar-fill" id="serp-prog-bar" style="width:0%"></div></div><div style="font-size:11px;color:var(--text3);margin-top:8px;font-family:var(--mono)" id="serp-prog-kw"></div></div>
-  <div id="comp-empty" style="text-align:center;padding:60px 20px;color:var(--text3)"><div style="font-size:32px;margin-bottom:12px;opacity:.3">&#128269;</div><div style="font-size:15px;font-weight:500;color:var(--text2);margin-bottom:6px">No SERP data yet</div><div style="font-size:13px">Click "Run SERP check" to fetch live rankings</div></div>
-  <div id="comp-content" style="display:none">
-    <div class="two-col" id="comp-cards"></div>
-    <div class="card"><div class="card-hdr"><div class="card-title">Keyword breakdown — you vs competitors</div><div style="display:flex;gap:8px"><select class="fi btn-sm" id="comp-filter" onchange="renderCompetitorTable()" style="height:30px;font-size:11px"><option value="all">All keywords</option><option value="bojoko">bojoko.ca ranking</option><option value="bonus">bonus.ca ranking</option><option value="both">Both ranking</option><option value="none">Neither ranking</option></select><input type="text" class="fi" id="comp-search" placeholder="Search…" style="width:160px;height:30px;font-size:11px" oninput="renderCompetitorTable()"></div></div>
-      <div id="comp-top-scroll" style="overflow-x:auto;overflow-y:hidden;height:14px;border-bottom:1px solid var(--border)"><div id="comp-top-inner" style="height:1px"></div></div>
-      <div class="tbl-wrap" id="comp-tbl-wrap"><table id="comp-table" style="min-width:900px"><thead><tr><th onclick="srtComp('query')">Keyword<span class="si" id="si-cq">&#8597;</span></th><th onclick="srtComp('gscPos')">GSC Pos (B)<span class="si" id="si-cgsc">&#8597;</span></th><th onclick="srtComp('livePos')">Live Pos<span class="si" id="si-clive">&#8597;</span></th><th onclick="srtComp('bojoko')">bojoko.ca<span class="si" id="si-cboj">&#8597;</span></th><th onclick="srtComp('bonus')">bonus.ca<span class="si" id="si-cbon">&#8597;</span></th><th>SERP Features</th><th onclick="srtComp('clicks')">Clicks<span class="si" id="si-ccl">&#8597;</span></th><th onclick="srtComp('impressions')">Impressions<span class="si" id="si-cimp">&#8597;</span></th></tr></thead><tbody id="comp-tbody"></tbody></table></div>
-      <div class="pager"><span class="pager-info" id="comp-pinfo"></span><button class="pager-btn" id="comp-prev" onclick="pgComp(-1)">&#8592; Prev</button><button class="pager-btn" id="comp-next" onclick="pgComp(1)">Next &#8594;</button></div>
+
+  <!-- no key warning -->
+  <div id="serp-no-key" style="display:none;background:var(--red-d);border:1px solid rgba(255,107,107,.3);border-radius:var(--rl);padding:14px 18px;margin-bottom:18px;font-size:13px">
+    &#9888; No Serper API key set. Go to <a onclick="goView('settings',null)" style="color:var(--blue);cursor:pointer;font-weight:500">Settings</a> to add your key.
+  </div>
+
+  <!-- no snapshot warning -->
+  <div id="serp-no-snap" style="display:none;background:var(--amber-d);border:1px solid rgba(255,184,63,.3);border-radius:var(--rl);padding:14px 18px;margin-bottom:18px;font-size:13px">
+    &#9888; No Period B snapshot selected. Go to <a onclick="goView('imports',null)" style="color:var(--blue);cursor:pointer;font-weight:500">Imports</a> and set a snapshot as Period B first.
+  </div>
+
+  <!-- progress -->
+  <div id="serp-progress-wrap" class="serp-progress-wrap" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <div class="progress-title" id="serp-prog-title" style="font-size:14px;margin:0">Fetching live rankings…</div>
+      <button class="btn btn-ghost btn-sm" onclick="cancelSerpCheck()" id="serp-cancel-btn">Cancel</button>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:10px" id="serp-prog-sub"></div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="serp-prog-bar" style="width:0%"></div></div>
+    <div style="font-size:11px;color:var(--text3);margin-top:8px;font-family:var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="serp-prog-kw"></div>
+  </div>
+
+  <!-- empty state -->
+  <div id="serp-empty" style="text-align:center;padding:70px 20px;color:var(--text3)">
+    <div style="font-size:40px;margin-bottom:14px;opacity:.25">&#127758;</div>
+    <div style="font-size:16px;font-weight:600;color:var(--text2);margin-bottom:8px">No SERP data yet</div>
+    <div style="font-size:13px;color:var(--text3);margin-bottom:20px;max-width:380px;margin-left:auto;margin-right:auto">Click <strong style="color:var(--text)">Run SERP check</strong> to fetch live Google rankings for all keywords in your Period B snapshot. Results are saved and persist between sessions.</div>
+    <button class="btn btn-primary" onclick="runSerpCheck()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Run SERP check
+    </button>
+  </div>
+
+  <!-- results -->
+  <div id="serp-content" style="display:none">
+
+    <!-- summary KPI row -->
+    <div id="serp-kpi-row" style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:20px"></div>
+
+    <!-- filters -->
+    <div class="filters" style="margin-bottom:14px">
+      <div class="fi-wrap">
+        <span class="fi-icon">&#128269;</span>
+        <input class="fi" type="text" id="serp-search" placeholder="Search keywords…" style="width:220px;padding-left:26px" oninput="renderSerpTable()">
+      </div>
+      <select class="fi" id="serp-pos-filter" onchange="renderSerpTable()">
+        <option value="">All positions</option>
+        <option value="1-3">Top 3</option>
+        <option value="1-10">Top 10</option>
+        <option value="11-20">11–20</option>
+        <option value="21-30">21–30</option>
+        <option value="31-50">31–50</option>
+        <option value="51-100">51–100</option>
+      </select>
+      <select class="fi" id="serp-feature-filter" onchange="renderSerpTable()">
+        <option value="">All SERP features</option>
+        <option value="snippet">Featured Snippet</option>
+        <option value="paa">People Also Ask</option>
+        <option value="local">Local Pack</option>
+        <option value="video">Video</option>
+        <option value="none">No features</option>
+      </select>
+      <select class="fi" id="serp-comp-filter" onchange="renderSerpTable()">
+        <option value="">All competitor presence</option>
+        <option value="bojoko">bojoko.ca ranking</option>
+        <option value="bonus">bonus.ca ranking</option>
+        <option value="both">Both ranking</option>
+        <option value="none">Neither ranking</option>
+        <option value="beating-us">Outranking us</option>
+      </select>
+      <select class="fi" id="serp-delta-filter" onchange="renderSerpTable()">
+        <option value="">All position changes</option>
+        <option value="improved">GSC improved vs A</option>
+        <option value="declined">GSC declined vs A</option>
+        <option value="new">New keywords</option>
+      </select>
+      <button class="flt-btn" id="serp-mismatch-btn" onclick="toggleSerpMismatch()" title="Show keywords where live position differs significantly from GSC average">Position mismatch</button>
+      <span style="margin-left:auto;font-size:11px;color:var(--text3)" id="serp-count-lbl"></span>
+    </div>
+
+    <!-- table -->
+    <div class="card">
+      <div id="serp-top-scroll" style="overflow-x:auto;overflow-y:hidden;height:14px;border-bottom:1px solid var(--border)"><div id="serp-top-inner" style="height:1px"></div></div>
+      <div class="tbl-wrap" id="serp-tbl-wrap">
+        <table id="serp-table" style="min-width:1000px">
+          <thead><tr>
+            <th onclick="srtSerp('query')" style="min-width:220px">Keyword<span class="si" id="si-sq">&#8597;</span></th>
+            <th onclick="srtSerp('gscPos')" style="min-width:100px">GSC Pos (B)<span class="si" id="si-sgsc">&#8597;</span></th>
+            <th onclick="srtSerp('livePos')" style="min-width:100px">Live Pos<span class="si" id="si-slive">&#8597;</span></th>
+            <th onclick="srtSerp('posDelta')" style="min-width:80px">Drift<span class="si" id="si-sdrift">&#8597;</span></th>
+            <th onclick="srtSerp('gscDelta')" style="min-width:80px">GSC &#916;<span class="si" id="si-sgd">&#8597;</span></th>
+            <th style="min-width:160px">SERP Features</th>
+            <th onclick="srtSerp('bojoko')" style="min-width:100px">bojoko.ca<span class="si" id="si-sboj">&#8597;</span></th>
+            <th onclick="srtSerp('bonus')" style="min-width:100px">bonus.ca<span class="si" id="si-sbon">&#8597;</span></th>
+            <th onclick="srtSerp('clicks')" style="min-width:80px">Clicks<span class="si" id="si-scl">&#8597;</span></th>
+            <th onclick="srtSerp('impressions')" style="min-width:90px">Impressions<span class="si" id="si-simp">&#8597;</span></th>
+            <th onclick="srtSerp('ctr')" style="min-width:70px">CTR<span class="si" id="si-sctr">&#8597;</span></th>
+          </tr></thead>
+          <tbody id="serp-tbody"></tbody>
+        </table>
+      </div>
+      <div class="pager">
+        <span class="pager-info" id="serp-pinfo"></span>
+        <button class="pager-btn" id="serp-prev" onclick="pgSerp(-1)">&#8592; Prev</button>
+        <button class="pager-btn" id="serp-next" onclick="pgSerp(1)">Next &#8594;</button>
+      </div>
+    </div>
+
+    <!-- footnote -->
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);line-height:1.8">
+      &#9432; <strong style="color:var(--text2)">GSC Pos (B)</strong> = average position from your Period B snapshot. <strong style="color:var(--text2)">Live Pos</strong> = actual position fetched from Google right now via Serper.dev. <strong style="color:var(--text2)">Drift</strong> = difference between live and GSC average (large drift = ranking is volatile or GSC average is pulled by a few bad days). <strong style="color:var(--text2)">GSC Δ</strong> = movement between Period A and B.
     </div>
   </div>
 </div>
@@ -538,16 +652,8 @@ input[type=file]{display:none}
     <input type="file" id="bulk-input" accept=".csv,.zip" multiple onchange="handleBulk(this.files);this.value=''">
     <div id="zip-debug" style="display:none;margin-top:14px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:12px 16px"></div>
   </div>
-  <div class="imp-cards-4">
+  <div class="imp-cards">
     <div class="imp-card"><div class="imp-card-title">&#128196; GSC — keyword positions</div><div class="imp-card-desc">Search Console → Performance → Export → CSV. Detects queries, position, clicks, impressions, CTR.</div><div class="imp-form-grid"><div><div class="imp-form-lbl">Label</div><input class="fi" type="text" id="gsc-label" placeholder="e.g. May 2026" style="width:100%;height:30px"></div><div><div class="imp-form-lbl">Start</div><input class="fi" type="date" id="gsc-start" style="width:100%;height:30px"></div><div><div class="imp-form-lbl">End</div><input class="fi" type="date" id="gsc-end" style="width:100%;height:30px"></div></div><div style="display:flex;gap:8px"><button class="btn btn-primary" onclick="document.getElementById('gsc-input').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Upload GSC CSV</button><button class="btn btn-ghost" onclick="loadSample()">Load sample</button></div><input type="file" id="gsc-input" accept=".csv" onchange="handleGSC(this.files[0]);this.value=''"></div>
-    <div class="imp-card" style="border-color:rgba(46,232,180,.3)">
-      <div class="imp-card-title" style="color:var(--green)">&#128200; Google Keyword Planner — search volumes</div>
-      <div class="imp-card-desc" style="line-height:1.9">Replaces estimated volumes in the Ahrefs-style Pages table with real monthly search volumes.<br><strong style="color:var(--text)">How to export:</strong> Keyword Planner → Discover new keywords → enter your keywords → Download keyword ideas → CSV.<br><span style="color:var(--green)">✓ Real volumes show in green</span> in the Volume column. Estimated volumes stay for unmatched keywords.</div>
-      <div id="kp-status-bar" style="display:none;padding:8px 12px;border-radius:var(--r);font-size:12px;margin-bottom:10px;background:var(--green-d);border:1px solid rgba(46,232,180,.28);color:var(--green)"></div>
-      <button class="btn btn-green" onclick="document.getElementById('kp-input').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Upload KP CSV</button>
-      <button class="btn btn-ghost" style="margin-left:8px" onclick="clearKpData()">Clear volumes</button>
-      <input type="file" id="kp-input" accept=".csv" onchange="handleKP(this.files[0]);this.value=''">
-    </div>
     <div class="imp-card"><div class="imp-card-title" style="color:var(--blue)">&#128202; GA4 — engagement (optional)</div><div class="imp-card-desc">GA4 → Reports → Engagement → Landing pages → Filter Organic → Download CSV.</div><button class="btn btn-ghost" onclick="document.getElementById('ga4-input').click()">Upload GA4 CSV</button><input type="file" id="ga4-input" accept=".csv" onchange="toast('GA4 data joined')"></div>
     <div class="imp-card"><div class="imp-card-title" style="color:var(--amber)">&#128209; GSC — Pages (optional)</div><div class="imp-card-desc">Search Console → Performance → Pages tab → Export CSV. Joined to fill URL column.</div><button class="btn btn-ghost" onclick="document.getElementById('pages-input').click()">Upload Pages CSV</button><input type="file" id="pages-input" accept=".csv" onchange="toast('Pages CSV stored')"></div>
   </div>
@@ -559,11 +665,182 @@ input[type=file]{display:none}
 
 <!-- HELP -->
 <div class="view" id="v-help">
-  <div class="page-hdr"><div class="page-title">Help &amp; how it works</div></div>
-  <div class="help-sec"><div class="help-sec-title">&#128196; Pages — two views</div><div class="help-body">The <strong>Pages</strong> tab has two sub-views you switch between at the top:<ul><li><strong>Expanded view</strong> — original expandable rows grouped by category. Click any row to see all keywords for that page.</li><li><strong>Ahrefs-style table</strong> — flat table mirroring Ahrefs Top Pages: URL, Page type, Status (New/Lost/↑/↓), Traffic with bar, Change %, Keywords, KW change, Top keyword, Volume, and inline keyword dropdown. Volume shows in <span style="color:var(--green)">green with a KP badge</span> when real Keyword Planner data is loaded, otherwise shows a GSC-based estimate (~).</li></ul><div class="help-tip">&#9432; UR and Ref. Domains require the Ahrefs API. Volume comes from Google Keyword Planner export (upload in Imports) or is estimated from impressions.</div></div></div>
-  <div class="help-sec"><div class="help-sec-title">&#127381; Team sync via Supabase</div><div class="help-body">Connect a Supabase project so one person imports ZIPs and the whole team sees the same snapshots.<ul><li>Go to <strong>Settings → Team sync</strong>, enter your Supabase URL + anon key, click <strong>Connect</strong></li><li>On the Imports page, a <strong>↑ Sync</strong> button appears next to each local snapshot</li><li>Team members see synced snapshots with a &#127381; Team badge — pulled automatically on page load</li></ul><div class="help-tip">&#9888; You need to create the <code style="color:var(--teal)">insiderank_snapshots</code> table first. SQL is in Settings → Team sync.</div></div></div>
-  <div class="help-sec"><div class="help-sec-title">&#128202; Why GSC instead of Ahrefs?</div><div class="help-body">Ahrefs only crawls the top ~30 results. Anything ranking 31–100 shows as "Lost" in Ahrefs. GSC reports actual impressions across the full SERP.</div></div>
-  <div class="help-sec"><div class="help-sec-title">&#128190; Data storage</div><div class="help-body">Without Supabase: all data stays in your own browser. With Supabase: snapshots stored in your own database — Inside Rank never stores your data.</div></div>
+  <div class="page-hdr">
+    <div><div class="page-title">Help &amp; how it works</div><div class="page-sub">Everything you need to know to use Inside Rank — start here if it's your first time.</div></div>
+  </div>
+
+  <!-- WHAT IS THIS -->
+  <div class="help-sec">
+    <div class="help-sec-title">&#127919; What is Inside Rank?</div>
+    <div class="help-body">
+      Inside Rank is a ranking intelligence dashboard built specifically for the InsideCasino affiliate network. It reads data exported directly from <strong>Google Search Console (GSC)</strong> and lets you compare two time periods side by side — so you can see exactly which keywords improved, declined, appeared, or disappeared.
+      <br><br>
+      It covers three sites: <strong>insidecasino.ca</strong> &#127464;&#127462;, <strong>insidecasino.co.nz</strong> &#127475;&#127487;, and <strong>insidecasino.com</strong> &#127468;&#127463;. Each site has its own set of snapshots — switching sites (top-left sidebar) switches everything.
+      <div class="help-tip">&#9432; <strong>Why not just use Ahrefs?</strong> Ahrefs only crawls the top ~30 SERP results, so anything ranking 31–100 shows as "Lost" even when it's still there. GSC reports actual impressions for every position, giving you the full picture.</div>
+    </div>
+  </div>
+
+  <!-- STEP 1: EXPORT FROM GSC -->
+  <div class="help-sec">
+    <div class="help-sec-title">&#9312; Step 1 — Export your data from Google Search Console</div>
+    <div class="help-body">
+      You need at least one GSC export to get started. To compare two periods you need two exports.
+      <br><br>
+      <strong>How to export a ZIP (recommended — most complete):</strong>
+      <ul>
+        <li>Go to <a href="https://search.google.com/search-console" target="_blank" style="color:var(--blue)">search.google.com/search-console</a></li>
+        <li>Select the correct property (e.g. <code style="color:var(--teal)">https://www.insidecasino.ca/</code>)</li>
+        <li>Click <strong>Performance</strong> in the left menu</li>
+        <li>Set your date range (e.g. last 3 months)</li>
+        <li>Click <strong>Export</strong> (top right) → <strong>Download</strong> — this downloads a full ZIP with multiple CSVs inside</li>
+      </ul>
+      <strong>How to export a single CSV (also works):</strong>
+      <ul>
+        <li>Same steps as above but click <strong>Export → CSV</strong> instead of Download</li>
+        <li>This gives you just the Queries CSV (keywords + positions)</li>
+      </ul>
+      <div class="help-tip">&#128161; <strong>Tip:</strong> Export two date ranges — for example, the last 3 months vs the same 3 months from the previous period — so you have a "before" and "after" to compare. The ZIP export is preferred because it includes Chart.csv, which makes total click/impression counts match exactly what GSC shows in the UI.</div>
+    </div>
+  </div>
+
+  <!-- STEP 2: IMPORT -->
+  <div class="help-sec">
+    <div class="help-sec-title">&#9313; Step 2 — Import your exports into Inside Rank</div>
+    <div class="help-body">
+      Go to <strong>Imports</strong> in the left sidebar. You'll see a drag-and-drop zone at the top.
+      <ul>
+        <li><strong>Drop a ZIP file</strong> — the tool automatically reads all CSVs inside it (Queries, Pages, Chart) and creates a snapshot in one go</li>
+        <li><strong>Drop one or more CSV files</strong> — works for individual Queries or Pages CSVs; if you drop them together they're combined into one snapshot</li>
+        <li>The <strong>date range</strong> is read automatically from the file metadata — no need to fill it in manually unless it's missing</li>
+      </ul>
+      Once imported, each export becomes a <strong>snapshot</strong> — a saved point-in-time record of all your keyword positions and traffic for that site.
+      <br><br>
+      <strong>Setting Period A and Period B:</strong> Every snapshot has a <strong>Set A</strong> and <strong>Set B</strong> button. Period A = the older/baseline period. Period B = the current/newer period. The comparison always runs A → B. You can see and change them in the top bar at any time.
+      <div class="help-tip">&#9888; <strong>Each site is separate.</strong> If you import data while insidecasino.ca is selected, that snapshot only appears under .ca. Switch sites using the sidebar to manage .co.nz or .com separately.</div>
+    </div>
+  </div>
+
+  <!-- STEP 3: TEAM SYNC -->
+  <div class="help-sec">
+    <div class="help-sec-title">&#9314; Step 3 — Share data with your team (Supabase sync)</div>
+    <div class="help-body">
+      By default, snapshots only exist in your own browser. To share them with the whole team, Inside Rank connects to a shared Supabase database.
+      <br><br>
+      <strong>One-time setup (done by Joy or the team admin):</strong>
+      <ul>
+        <li>Go to <strong>Settings → Team sync</strong></li>
+        <li>Run the SQL shown there in your Supabase project's SQL editor — this creates the required table</li>
+        <li>Enter your Supabase project URL and anon key, then click <strong>Connect &amp; test</strong></li>
+      </ul>
+      <strong>Pushing snapshots to the team:</strong>
+      <ul>
+        <li>After importing a ZIP, go to <strong>Imports</strong> and click the <strong>&#8593; Sync</strong> button next to any snapshot</li>
+        <li>That snapshot is now in the shared database</li>
+      </ul>
+      <strong>For everyone else on the team:</strong>
+      <ul>
+        <li>Go to <strong>Settings → Team sync</strong> and enter the same Supabase URL and anon key</li>
+        <li>Click <strong>Connect &amp; test</strong> — team snapshots will pull automatically every time you open the tool</li>
+        <li>Team snapshots show a <span class="tag tg-green" style="font-size:9px;vertical-align:middle">&#127381; Team</span> badge in the Imports list</li>
+      </ul>
+      <div class="help-tip">&#128274; Your GSC data is stored in your own Supabase project — Inside Rank never stores it on any external server.</div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <div class="help-sec">
+    <div class="help-sec-title">&#128203; What each tab does</div>
+    <div class="help-body">
+      <ul>
+        <li><strong>Overview</strong> — The dashboard. Shows KPI cards (total clicks, impressions, avg position, top 3, pos 11–30, and the Ahrefs blind spot pos 31–100), a position distribution chart comparing A vs B, health summary (improved/declined/new/lost/stable counts), and top 10 winners and losers.</li>
+        <li><strong>Keywords</strong> — Full keyword-level table. Every keyword GSC has tracked, with its position in both periods, delta, clicks, impressions, CTR, status badge, and the URL it's assigned to. Filterable by status, position range, and search. Sortable by any column.</li>
+        <li><strong>Pages</strong> — Two sub-views (toggle at top):<br>
+          &nbsp;&nbsp;— <strong>Expanded view:</strong> Pages grouped by category (Casino Reviews, Slots, Payment Methods, etc.). Click any row to expand it and see all keywords for that page.<br>
+          &nbsp;&nbsp;— <strong>Ahrefs-style table:</strong> Flat table showing URL, Page type, Status, Traffic, Change %, Keywords, KW change, Top keywords (primary + 2 secondary inline, with a "+N more" dropdown), and estimated volume.</li>
+        <li><strong>SERP Tracker</strong> — Pulls live Google rankings for <em>every</em> keyword in Period B (not just top 30). Shows your real position right now, Drift (how much your live position differs from the GSC average), GSC Δ (movement A→B), SERP features (Snippet, PAA, Local, Video), and bojoko.ca / bonus.ca positions side by side. Rows where a competitor is beating you are highlighted red. Filterable by position range, SERP feature, competitor presence, GSC movement, and position mismatch. Exportable to CSV.</li>
+        <li><strong>Imports</strong> — Upload GSC exports and manage snapshots. Set which snapshot is Period A and which is Period B.</li>
+        <li><strong>Settings</strong> — Configure team sync (Supabase), Serper.dev API key, and active site.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- UNDERSTANDING THE DATA -->
+  <div class="help-sec">
+    <div class="help-sec-title">&#128200; Understanding the numbers</div>
+    <div class="help-body">
+      <strong>Position badges</strong> — colour-coded by rank bucket:
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0">
+        <span class="pb pb1">1.0</span><span style="font-size:12px;color:var(--text3)">Positions 1–3 (green)</span>
+        <span class="pb pb2">8.5</span><span style="font-size:12px;color:var(--text3)">Positions 4–10 (amber)</span>
+        <span class="pb pb3">18.2</span><span style="font-size:12px;color:var(--text3)">Positions 11–30 (blue)</span>
+        <span class="pb pb4">45.0</span><span style="font-size:12px;color:var(--text3)">Positions 31–100 (grey)</span>
+      </div>
+      <strong>Status badges</strong> — how a keyword moved between Period A and Period B:
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">
+        <span class="sb sb-new">New</span><span style="font-size:12px;color:var(--text3)">Ranking in B but not in A</span>
+        <span class="sb sb-imp">Improved</span><span style="font-size:12px;color:var(--text3)">Position moved up by ≥0.5</span>
+        <span class="sb sb-dec">Declined</span><span style="font-size:12px;color:var(--text3)">Position dropped by ≥0.5</span>
+        <span class="sb sb-stable">Stable</span><span style="font-size:12px;color:var(--text3)">Less than 0.5 position change</span>
+        <span class="sb sb-lost">Lost</span><span style="font-size:12px;color:var(--text3)">Was ranking in A, not in B</span>
+      </div>
+      <strong>Δ POS (delta position)</strong> — a <span class="d-up">↓ number</span> means the position number went down (ranking improved). A <span class="d-dn">↑ number</span> means the position number went up (ranking declined). Lower position number = higher on Google.
+      <br><br>
+      <strong>Pos 31–100 KPI card</strong> — this is the "Ahrefs blind spot." These are keywords that are still ranking and getting impressions but Ahrefs won't show them because it only indexes the top 30 results. This is why GSC is used as the source of truth.
+      <br><br>
+      <strong>Chart.csv ✓ vs ⚠</strong> — When you import a full ZIP, it includes a Chart.csv with aggregate totals that exactly match what GSC shows in its UI. If a snapshot shows <span style="color:var(--green);font-size:12px">✓ Chart.csv</span> the click/impression totals are exact. If it shows <span style="color:var(--amber);font-size:12px">⚠ No Chart.csv</span> the totals are summed from the top-1,000 keywords only and may be slightly lower than the GSC UI.
+      <br><br>
+      <strong>URL matching</strong> — Keywords are matched to URLs in two ways: <span class="url-matched">Exact</span> means the keyword and URL came from the same combined CSV row. <span class="url-inferred">Inferred</span> means the tool matched the keyword to a URL by comparing tokens in the keyword against tokens in the URL path (e.g. "interac casino" → /payment-methods/interac/). Inferred matches are good but not guaranteed.
+    </div>
+  </div>
+
+  <!-- COMPETITORS -->
+  <div class="help-sec">
+    <div class="help-sec-title">&#128269; Using the SERP Tracker</div>
+    <div class="help-body">
+      The SERP Tracker fetches live Google rankings for <strong>every keyword</strong> in your Period B snapshot — not just the top 30 — and compares them against bojoko.ca and bonus.ca in real time.
+      <ul>
+        <li>Make sure Period B is set to your most recent snapshot</li>
+        <li>Click <strong>Run SERP check</strong> — results are fetched in order of impressions (highest traffic keywords first)</li>
+        <li>You can click <strong>Cancel</strong> to stop mid-run and work with what's been fetched so far</li>
+        <li>Results are saved to your browser and load automatically next session</li>
+        <li>Use <strong>Export CSV</strong> to download the full dataset for reporting</li>
+      </ul>
+      <strong>Columns explained:</strong>
+      <ul>
+        <li><strong>GSC Pos (B)</strong> — the average position from your Period B snapshot</li>
+        <li><strong>Live Pos</strong> — the actual Google position fetched right now</li>
+        <li><strong>Drift</strong> — how far the live position differs from the GSC average. A large drift means the ranking is volatile (GSC averages it out over the whole period, so a keyword that moved recently will show drift)</li>
+        <li><strong>GSC Δ</strong> — how the GSC position changed between Period A and Period B</li>
+        <li><strong>SERP Features</strong> — ✦ Featured Snippet, 💬 People Also Ask, 📍 Local Pack, ▶ Video</li>
+        <li><strong>bojoko.ca / bonus.ca</strong> — their live position for that keyword. ▲ ahead = they outrank you. ▼ behind = you outrank them. Rows where a competitor is ahead are highlighted in red.</li>
+      </ul>
+      <strong>Filters:</strong>
+      <ul>
+        <li><strong>Position range</strong> — narrow to top 3, top 10, 11–20, etc.</li>
+        <li><strong>SERP features</strong> — find all keywords where a Featured Snippet or PAA box is present</li>
+        <li><strong>Competitor presence</strong> — "Outranking us" is the most useful: shows only keywords where bojoko or bonus is ahead of you right now</li>
+        <li><strong>Position mismatch</strong> — toggle to show only keywords where live position and GSC average differ by 5+ positions (volatile rankings worth monitoring)</li>
+      </ul>
+      <div class="help-tip">&#9201; A full SERP check takes roughly 0.35 seconds per keyword to avoid rate limits. 500 keywords ≈ 3 minutes. The progress bar shows an estimated time remaining.</div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="help-sec">
+    <div class="help-sec-title">&#10067; Common questions</div>
+    <div class="help-body">
+      <ul>
+        <li><strong>I imported a file but see no data.</strong> Make sure you're on the right site (check the sidebar — .ca, .co.nz, or .com). Also check that you have Period A and Period B both set in the top bar. If only one snapshot exists, set it as Period B and the Overview will show current data without a comparison.</li>
+        <li><strong>My keyword shows "Lost" but I know it's still ranking.</strong> This usually means it fell below position 30 in Period B but is still ranking at 31–100. Check the Pos 31–100 KPI card on the Overview. You can also filter the Keywords tab by "31–100 (Ahrefs blind)" to see them all.</li>
+        <li><strong>The URL column is blank for some keywords.</strong> GSC Queries exports don't include URL data by default. Import a Pages CSV alongside your Queries CSV (or use the full ZIP export) — the tool will cross-reference and fill in URLs automatically.</li>
+        <li><strong>Can I compare more than two periods?</strong> Yes — import as many snapshots as you want, then use the Period A and Period B pickers in the top bar to choose any two.</li>
+        <li><strong>Team members can't see my snapshots.</strong> Make sure you clicked <strong>↑ Sync</strong> next to the snapshot in the Imports tab after connecting Supabase. Also confirm team members have entered the same Supabase URL and anon key in their Settings.</li>
+        <li><strong>The Overview shows 0 clicks/impressions.</strong> This happens when you import a single Queries CSV without a Chart.csv. The tool totals from the top-1,000 rows — if your site has very low traffic it may still show correctly, but for large sites use the full ZIP export.</li>
+        <li><strong>Position numbers look like averages, not exact ranks.</strong> That's correct — GSC reports the average position across all times a keyword appeared in results during the period. A keyword at "4.3" means it appeared sometimes at position 3, sometimes at position 5, averaging 4.3.</li>
+      </ul>
+    </div>
+  </div>
+
 </div>
 
 <!-- SETTINGS -->
@@ -632,8 +909,7 @@ const A={
   modalFor:'A',pagesTab:'expanded',
   ahSort:{col:'traffic',dir:-1},ahPg:1,AH_PER:50,
   openKwDropdown:null,
-  sbUrl:'',sbKey:'',sbConnected:false,serpData:{},
-  kwVolMap:{},kpLoaded:false
+  sbUrl:'',sbKey:'',sbConnected:false,serpData:{}
 };
 const CHARTS={};
 const SK='ir_v4b_';const SB_SK='ir_sb_';const SERP_SK='ir_serp_';
@@ -641,7 +917,7 @@ const SERPER_DEFAULT='b7e4d301d6e20226da8828dff4b9d6b10a600b0d';
 
 // ═══ BOOT ═══
 addEventListener('DOMContentLoaded',async()=>{
-  await load();await loadSbCreds();await loadKpData();autoPickPeriods();renderAll();
+  await load();await loadSbCreds();autoPickPeriods();renderAll();
   requestAnimationFrame(initKwScrollSync);
   document.addEventListener('click',e=>{if(!e.target.closest('.rel-cell')){document.querySelectorAll('.kw-dropdown').forEach(d=>d.remove());A.openKwDropdown=null;}});
 });
@@ -1003,13 +1279,7 @@ function buildAhData(){
     pg.kwCount=pg.kws.length;
     const topKw=[...pg.kws].filter(k=>k.posB>0).sort((a,b)=>b.imB-a.imB)[0]||null;
     pg.topKw=topKw?.query||'';pg.topKwPos=topKw?.posB||null;
-    // Store top 3 for inline display + full list for dropdown
-    pg.topKws=[...pg.kws].filter(k=>k.posB>0).sort((a,b)=>b.imB-a.imB).slice(0,15);
-    if(topKw){
-      const kpData=getKpVol(topKw.query);
-      if(kpData&&kpData.vol>0){pg.topKwVol=kpData.vol;pg.topKwVolReal=true;pg.topKwComp=kpData.competition;}
-      else{const posAdj=topKw.posB?Math.max(1,topKw.posB):10;pg.topKwVol=Math.round(topKw.imB*(posAdj<=3?1.5:posAdj<=10?1.2:1.0));pg.topKwVolReal=false;pg.topKwComp='';}
-    }else{pg.topKwVol=0;pg.topKwVolReal=false;pg.topKwComp='';}
+    if(topKw){const posAdj=topKw.posB?Math.max(1,topKw.posB):10;pg.topKwVol=Math.round(topKw.imB*(posAdj<=3?1.5:posAdj<=10?1.2:1.0));}else pg.topKwVol=0;
     pg.trafficChg=pg.trA>0?(pg.trB-pg.trA)/pg.trA*100:pg.trB>0?100:0;
     pg.kwChg=pg.kwA>0?(pg.kwB-pg.kwA)/pg.kwA*100:pg.kwB>0?100:0;
     if(pg.trA===0&&pg.trB>0)pg.pageStatus='new';else if(pg.trB===0&&pg.trA>0)pg.pageStatus='lost';else if(pg.trafficChg>=10)pg.pageStatus='up';else if(pg.trafficChg<=-10)pg.pageStatus='down';else pg.pageStatus='stable';
@@ -1023,9 +1293,6 @@ function renderAhrefsTable(){
   if(stf)rows=rows.filter(r=>r.pageStatus===stf);if(catf)rows=rows.filter(r=>r.category===catf);
   // Populate category filter if empty
   const catSel=document.getElementById('ah-cat');if(catSel.options.length<=1){const cats=[...new Set(buildAhData().map(r=>r.category))].sort();cats.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;catSel.appendChild(o);});}
-  // Update volume note
-  const vn=document.getElementById('ah-vol-note');
-  if(vn){const matched=rows.filter(r=>r.topKwVolReal).length;vn.innerHTML=A.kpLoaded?'<span style="color:var(--green)">✓ KP volumes active — '+matched+' of '+rows.length+' pages matched</span>. Unmatched show estimated (~).':'Estimated from GSC impression/CTR data (~). Upload a Keyword Planner CSV in Imports for real volumes.';}
   const sMap={traffic:'trB',trafficChg:'trafficChg',keywords:'kwCount',topKwVol:'topKwVol',url:'page',status:'pageStatus',kwChg:'kwChg',topKw:'topKw'};const{col,dir}=A.ahSort;const sk2=sMap[col]||col;
   rows.sort((a,b)=>{const av=a[sk2]??0,bv=b[sk2]??0;if(typeof av==='string')return av.localeCompare(bv)*dir;return(av-bv)*dir;});
   const total=rows.length;document.getElementById('ah-count-lbl').textContent=total.toLocaleString()+' pages';
@@ -1040,27 +1307,8 @@ function renderAhrefsTable(){
     const stH=r.pageStatus==='new'?'<span class="st-new">New</span>':r.pageStatus==='lost'?'<span class="st-lost">Lost</span>':r.pageStatus==='up'?'<span class="st-up">↑</span>':r.pageStatus==='down'?'<span class="st-dn">↓</span>':'<span class="st-stable">—</span>';
     const tcH=r.trA===0&&r.trB>0?'<span class="pct-up">+100%</span>':r.trA>0?'<span class="'+(r.trafficChg>=0?'pct-up':'pct-dn')+'">'+(r.trafficChg>=0?'+':'')+r.trafficChg.toFixed(1)+'%</span>':'<span class="pct-na">—</span>';
     const kcH=r.kwA===0&&r.kwB>0?'<span class="pct-up">+100%</span>':r.kwA>0?'<span class="'+(r.kwChg>=0?'pct-up':'pct-dn')+'">'+(r.kwChg>=0?'+':'')+r.kwChg.toFixed(1)+'%</span>':'<span class="pct-na">—</span>';
-    // Build inline top-keywords cell (primary + 2 secondary + "N more" button)
-    const allKws=r.topKws||[];
-    let tkH='<span style="color:var(--text3);font-size:11px">—</span>';
-    if(allKws.length>0){
-      const primary=allKws[0];
-      const kp0=getKpVol(primary.query);
-      const vol0=kp0&&kp0.vol>0?'<span style="color:var(--green);font-size:10px;font-weight:700;margin-left:2px">'+fmtN(kp0.vol)+'<sup style="font-size:8px">KP</sup></span>':'';
-      let html='<div class="ah-kw-primary"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px" title="'+esc(primary.query)+'">'+esc(primary.query)+'</span>'+posBadge(primary.posB)+vol0+'</div>';
-      // Up to 2 secondary keywords
-      const secondary=allKws.slice(1,3);
-      secondary.forEach(kw=>{
-        const kpS=getKpVol(kw.query);
-        const volS=kpS&&kpS.vol>0?'<span style="color:var(--green);font-size:10px;font-weight:600;margin-left:2px">'+fmtN(kpS.vol)+'</span>':'';
-        html+='<div class="ah-kw-secondary"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:145px" title="'+esc(kw.query)+'">'+esc(kw.query)+'</span>'+posBadge(kw.posB)+volS+'</div>';
-      });
-      // "N more" button if >3 keywords
-      if(allKws.length>3){
-        html+='<button class="ah-kw-more rel-cell" onclick="toggleKwDrop(event,\''+esc(r.page).replace(/'/g,"\\'")+'\')">+'+( allKws.length-3)+' more ▾</button>';
-      }
-      tkH=html;
-    }
+    const tkH=r.topKw?'<div style="font-size:12px;font-weight:500;color:var(--text);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(r.topKw)+'">'+esc(r.topKw)+'</div>'+(r.topKwPos?posBadge(r.topKwPos):'')+'<button class="ah-kw-more" onclick="toggleKwDrop(event,\''+ esc(r.page).replace(/'/g,"\\'") +'\')">'+r.kwB+' kw ▾</button>':'<span style="color:var(--text3);font-size:11px">—</span>';
+    const volH='<span style="font-family:var(--mono);font-size:12px;color:var(--text2)">~'+fmtN(r.topKwVol)+'</span>';
     return'<tr><td class="ah-url-cell"><a class="ah-url-link" href="'+esc(url)+'" target="_blank" rel="noopener" title="'+esc(r.page)+'">'+esc(trimUrl(r.page))+'</a><div class="ah-pgtype">'+esc(r.category)+'</div></td><td>'+stH+'</td><td><div class="tr-bar-wrap"><span style="font-family:var(--mono);font-size:12px;min-width:28px">'+r.trB+'</span><div class="tr-bar-bg"><div class="tr-bar-fill" style="width:'+trPct+'%"></div></div></div></td><td>'+tcH+'</td><td style="font-family:var(--mono);font-size:12px">'+r.kwB+'</td><td>'+kcH+'</td><td class="ah-topkw-cell rel-cell">'+tkH+'</td><td>'+volH+'</td></tr>';
   }).join('');
 }
@@ -1074,11 +1322,8 @@ function toggleKwDrop(e,page){
   const kws=compareKws(mA,mB).filter(r=>r.page===page&&r.posB>0).sort((a,b)=>b.imB-a.imB).slice(0,15);
   if(!kws.length){toast('No keywords for this page');A.openKwDropdown=null;return;}
   const drop=document.createElement('div');drop.className='kw-dropdown';
-  drop.innerHTML='<div class="kw-drop-hdr">All ranking keywords — '+esc(trimUrl(page))+(A.kpLoaded?' · <span style="color:var(--green);font-weight:600">KP volumes</span>':'')+'</div>'+kws.map((r,i)=>{
-    const kp=getKpVol(r.query);
-    const volStr=kp&&kp.vol>0?'<span style="color:var(--green);font-weight:600">'+fmtN(kp.vol)+'<span style="font-size:9px;vertical-align:super"> KP</span></span>':'<span style="color:var(--text3)">~'+fmtN(r.imB)+' imp</span>';
-    const rowStyle=i<3?'background:rgba(255,255,255,.03);':'';
-    return'<div class="kw-drop-row" style="'+rowStyle+'"><span class="kw-drop-query">'+esc(r.query)+'</span>'+posBadge(r.posB)+volStr+'</div>';
+  drop.innerHTML='<div class="kw-drop-hdr">All ranking keywords — '+esc(trimUrl(page))+'</div>'+kws.map((r,i)=>{
+    const volStr='<span style="color:var(--text3)">~'+fmtN(r.imB)+' imp</span>';return'<div class="kw-drop-row" style="'+rowStyle+'"><span class="kw-drop-query">'+esc(r.query)+'</span>'+posBadge(r.posB)+volStr+'</div>';
   }).join('');
   // Position relative to cell
   cell.style.position='relative';
@@ -1139,98 +1384,6 @@ function trimUrl(u){return(u||'').replace(/^https?:\/\/(www\.)?/,'').replace(/\/
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function toast(msg,type){type=type||'ok';const w=document.getElementById('toasts');const t=document.createElement('div');t.className='toast '+type;const ic=type==='ok'?'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22d3a5" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>':'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f05c5c" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';t.innerHTML=ic+' '+msg;w.appendChild(t);setTimeout(()=>{t.style.transition='opacity .3s';t.style.opacity='0';setTimeout(()=>t.remove(),300);},4000);}
 
-// ═══ KEYWORD PLANNER VOLUMES ═══
-const KP_SK='ir_kp_';
-async function loadKpData(){
-  try{const raw=await gv(KP_SK+'map');if(raw){A.kwVolMap=JSON.parse(raw);A.kpLoaded=Object.keys(A.kwVolMap).length>0;updateKpStatusBar();}}catch(e){}
-}
-async function saveKpData(){await sv(KP_SK+'map',JSON.stringify(A.kwVolMap));}
-async function clearKpData(){
-  if(!A.kpLoaded){toast('No KP data to clear');return;}
-  if(!confirm('Remove all Keyword Planner volume data?'))return;
-  A.kwVolMap={};A.kpLoaded=false;await dv(KP_SK+'map');
-  updateKpStatusBar();if(A.pagesTab==='ahrefs')renderAhrefsTable();toast('KP volumes cleared');
-}
-function updateKpStatusBar(){
-  const el=document.getElementById('kp-status-bar');if(!el)return;
-  if(A.kpLoaded){const n=Object.keys(A.kwVolMap).length;el.style.display='block';el.innerHTML='✓ <strong>'+n.toLocaleString()+' keywords</strong> loaded from Keyword Planner — volumes show in green in the Ahrefs table';}
-  else el.style.display='none';
-}
-
-function parseKP(text,fname){
-  // Strip BOM character \ufeff if present (TextDecoder leaves it in)
-  let src=text.replace(/^\ufeff/,'');
-  // Split into lines
-  const raw=src.split(/\r?\n/).map(l=>l.trim()).filter(l=>l);
-  if(raw.length<2)return{};
-  // Find header row first (skip title "Keyword Stats…" and date range rows)
-  let hdrIdx=-1;
-  for(let i=0;i<Math.min(15,raw.length);i++){
-    const cells=raw[i].split('\t');
-    const first=(cells[0]||'').replace(/^"|"$/g,'').toLowerCase().trim();
-    if(first==='keyword'||first==='keywords'||first==='search term'){hdrIdx=i;break;}
-  }
-  if(hdrIdx<0)return{};
-  // Detect delimiter using the HEADER row (guaranteed to have all columns)
-  const delim=raw[hdrIdx].includes('\t')?'\t':',';
-  const splitRow=line=>delim==='\t'?line.split('\t').map(c=>c.trim().replace(/^"|"$/g,'')):pcr(line);
-  const hdr=splitRow(raw[hdrIdx]).map(h=>h.toLowerCase().trim());
-  const kwC=hdr.findIndex(h=>h==='keyword'||h==='keywords'||h==='search term');
-  const volC=hdr.findIndex(h=>(h.includes('avg')&&h.includes('monthly'))||h==='avg. monthly searches'||h.includes('monthly searches'));
-  const compC=hdr.findIndex(h=>h==='competition'&&!h.includes('index'));
-  const bidLoC=hdr.findIndex(h=>h.includes('low range'));
-  const bidHiC=hdr.findIndex(h=>h.includes('high range'));
-  if(kwC<0||volC<0)return{};
-  const map={};
-  for(let i=hdrIdx+1;i<raw.length;i++){
-    const cells=splitRow(raw[i]);if(!cells.length||cells.every(c=>!c))continue;
-    const kw=(cells[kwC]||'').trim().toLowerCase();if(!kw||kw==='keyword')continue;
-    let vol=0;const rawVol=(cells[volC]||'').trim();
-    if(rawVol===''||rawVol==='-')vol=0;
-    else if(rawVol==='<10')vol=5;
-    else if(/^[\d,]+$/.test(rawVol))vol=parseInt(rawVol.replace(/,/g,''),10);
-    else{const m=rawVol.match(/^([\d,.]+)\s*[kK]?\s*[-–]\s*([\d,.]+)\s*[kK]?$/);if(m){const mult=/[kK]/.test(rawVol)?1000:1;const lo=parseFloat(m[1].replace(/,/g,''))*mult;const hi=parseFloat(m[2].replace(/,/g,''))*mult;vol=Math.round((lo+hi)/2);}else{const n=parseFloat(rawVol.replace(/[^0-9.]/g,''));if(!isNaN(n))vol=/[kK]/.test(rawVol)?Math.round(n*1000):Math.round(n);}}
-    const competition=compC>=0?(cells[compC]||'').trim():'';
-    const bidLo=bidLoC>=0?parseFloat((cells[bidLoC]||'').replace(/[^0-9.]/g,''))||0:0;
-    const bidHi=bidHiC>=0?parseFloat((cells[bidHiC]||'').replace(/[^0-9.]/g,''))||0:0;
-    if(kw)map[kw]={vol,competition,bidLo,bidHi,rawVol};
-  }
-  return map;
-}
-
-function handleKP(file){
-  if(!file)return;
-  // Use ArrayBuffer so we can detect and decode UTF-16 LE properly
-  rfBuf(file).then(buf=>{
-    const bytes=new Uint8Array(buf);
-    let text;
-    // Check for UTF-16 LE BOM (FF FE)
-    if(bytes[0]===0xFF&&bytes[1]===0xFE){
-      text=new TextDecoder('utf-16le').decode(buf);
-    // Check for UTF-16 BE BOM (FE FF)
-    }else if(bytes[0]===0xFE&&bytes[1]===0xFF){
-      text=new TextDecoder('utf-16be').decode(buf);
-    // UTF-8 BOM (EF BB BF)
-    }else if(bytes[0]===0xEF&&bytes[1]===0xBB&&bytes[2]===0xBF){
-      text=new TextDecoder('utf-8').decode(buf).slice(1);
-    }else{
-      text=new TextDecoder('utf-8').decode(buf);
-    }
-    const map=parseKP(text,file.name);const n=Object.keys(map).length;
-    if(!n){toast('No keyword volume data found in: '+file.name+' — check the format','err');return;}
-    A.kwVolMap={...A.kwVolMap,...map};A.kpLoaded=true;
-    saveKpData();updateKpStatusBar();
-    if(A.pagesTab==='ahrefs')renderAhrefsTable();
-    toast('✓ '+n.toLocaleString()+' keyword volumes loaded from Keyword Planner','ok');
-  }).catch(()=>toast('Failed to read KP file','err'));
-}
-
-function getKpVol(keyword){
-  if(!A.kpLoaded||!keyword)return null;
-  const k=keyword.toLowerCase().trim();
-  return A.kwVolMap[k]||null;
-}
-
 // ═══ SERPER ═══
 async function getApiKey(){return(await gv(SERP_SK+'key'))||SERPER_DEFAULT;}
 async function saveApiKey(){const key=document.getElementById('serper-key-input').value.trim();if(!key){toast('Enter a key','err');return;}await sv(SERP_SK+'key',key);showKeyStatus('✓ Key saved','var(--green)');toast('API key saved');}
@@ -1261,11 +1414,11 @@ async function saveSerpData(snapId,data){try{await sv(SERP_SK+snapId,JSON.string
 async function runSerpCheck(){
   const key=await getApiKey();if(!key){document.getElementById('serp-no-key').style.display='block';return;}document.getElementById('serp-no-key').style.display='none';
   const sb=snapB();if(!sb){toast('No Period B snapshot','err');return;}
-  const mB=buildKwMap(sb);const eligible=Object.values(mB).filter(k=>k.query&&k.position>=1&&k.position<=30).sort((a,b)=>b.impressions-a.impressions);
+  const mB=buildKwMap(sb);const eligible=Object.values(mB).filter(k=>k.query&&k.position>0).sort((a,b)=>b.impressions-a.impressions);
   if(!eligible.length){toast('No keywords in pos 1–30','err');return;}
   const ourDomain=A.sites[A.site].name,total=eligible.length;
   const pw=document.getElementById('serp-progress-wrap'),rb=document.getElementById('run-serp-btn');
-  pw.style.display='block';document.getElementById('comp-empty').style.display='none';document.getElementById('comp-content').style.display='none';
+  pw.style.display='block';document.getElementById('serp-empty').style.display='none';document.getElementById('serp-content').style.display='none';
   if(rb){rb.disabled=true;rb.textContent='Running…';}
   const results={};let done=0,errors=0;
   for(const kw of eligible){
@@ -1277,40 +1430,122 @@ async function runSerpCheck(){
   document.getElementById('serp-prog-bar').style.width='100%';document.getElementById('serp-prog-title').textContent='✓ Done — '+done+' keywords, '+errors+' errors';
   await saveSerpData(sb.id,results);const lr=document.getElementById('serp-last-run');if(lr)lr.textContent='Last run: '+new Date().toLocaleString();
   setTimeout(()=>{pw.style.display='none';if(rb){rb.disabled=false;rb.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:14px;height:14px"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Run SERP check';}},2500);
-  A.serpData=results;renderCompetitorData();toast('✓ SERP check done — '+done+' keywords');
+  A.serpData=results;renderSerpResults();document.getElementById('serp-export-btn').style.display='';toast('✓ SERP check done — '+done+' keywords');
 }
-let compSort={col:'impressions',dir:-1},compPg=1;const COMP_PER=50;
-function renderCompetitorData(){
-  const sb=snapB();if(!sb)return;if(!Object.keys(A.serpData||{}).length){document.getElementById('comp-empty').style.display='block';document.getElementById('comp-content').style.display='none';return;}
-  document.getElementById('comp-empty').style.display='none';document.getElementById('comp-content').style.display='block';
-  const mB=buildKwMap(sb),rows=Object.values(mB).filter(k=>k.query&&A.serpData[k.query]).map(k=>{const s=A.serpData[k.query];return{query:k.query,gscPos:k.position,livePos:s.livePos,bojoko:s.compPositions['bojoko.ca']||null,bonus:s.compPositions['bonus.ca']||null,features:s.features||[],clicks:k.clicks,impressions:k.impressions};});
-  const boj=rows.filter(r=>r.bojoko!==null).length,bon=rows.filter(r=>r.bonus!==null).length,tot=rows.length;
-  const bojAvg=boj?(rows.filter(r=>r.bojoko).reduce((s,r)=>s+r.bojoko,0)/boj).toFixed(1):'N/A';
-  const bonAvg=bon?(rows.filter(r=>r.bonus).reduce((s,r)=>s+r.bonus,0)/bon).toFixed(1):'N/A';
-  document.getElementById('comp-cards').innerHTML='<div class="comp-card"><div style="font-size:16px;font-weight:700;font-family:var(--mono)">bojoko.ca</div><div style="font-size:11px;color:var(--text3);margin-bottom:12px">'+boj+' of '+tot+' keywords</div><div class="comp-stat-row"><div class="comp-stat"><div class="comp-stat-lbl">Rankings</div><div class="comp-stat-val" style="color:var(--amber)">'+boj+'</div></div><div class="comp-stat"><div class="comp-stat-lbl">Avg Pos</div><div class="comp-stat-val">'+bojAvg+'</div></div><div class="comp-stat"><div class="comp-stat-lbl">Outranking us</div><div class="comp-stat-val" style="color:var(--red)">'+rows.filter(r=>r.bojoko&&r.livePos&&r.bojoko<r.livePos).length+'</div></div></div><div class="comp-bar"><div class="comp-pct-track"><div class="comp-pct-fill-b" style="width:'+(tot?boj/tot*100:0)+'%"></div></div><span style="font-size:11px;color:var(--text3);min-width:35px">'+(tot?Math.round(boj/tot*100):0)+'%</span></div></div><div class="comp-card"><div style="font-size:16px;font-weight:700;font-family:var(--mono)">bonus.ca</div><div style="font-size:11px;color:var(--text3);margin-bottom:12px">'+bon+' of '+tot+' keywords</div><div class="comp-stat-row"><div class="comp-stat"><div class="comp-stat-lbl">Rankings</div><div class="comp-stat-val" style="color:var(--purple)">'+bon+'</div></div><div class="comp-stat"><div class="comp-stat-lbl">Avg Pos</div><div class="comp-stat-val">'+bonAvg+'</div></div><div class="comp-stat"><div class="comp-stat-lbl">Outranking us</div><div class="comp-stat-val" style="color:var(--red)">'+rows.filter(r=>r.bonus&&r.livePos&&r.bonus<r.livePos).length+'</div></div></div><div class="comp-bar"><div class="comp-pct-track"><div class="comp-pct-fill-bo" style="width:'+(tot?bon/tot*100:0)+'%"></div></div><span style="font-size:11px;color:var(--text3);min-width:35px">'+(tot?Math.round(bon/tot*100):0)+'%</span></div></div>';
-  renderCompetitorTable();
-  requestAnimationFrame(()=>{const ts=document.getElementById('comp-top-scroll'),ti=document.getElementById('comp-top-inner'),tw=document.getElementById('comp-tbl-wrap'),tbl=document.getElementById('comp-table');if(!ts||!tw||!tbl)return;const sw=()=>{ti.style.width=tbl.scrollWidth+'px';};sw();new ResizeObserver(sw).observe(tbl);let syn=false;ts.addEventListener('scroll',()=>{if(syn)return;syn=true;tw.scrollLeft=ts.scrollLeft;syn=false;});tw.addEventListener('scroll',()=>{if(syn)return;syn=true;ts.scrollLeft=tw.scrollLeft;syn=false;});});
+let serpSort={col:'impressions',dir:-1},serpPg=1,serpShowMismatch=false;const SERP_PER=50;
+// ═══ SERP TRACKER ═══
+function renderSerpResults(){
+  const sb=snapB();if(!sb)return;
+  const mA=buildKwMap(snapA()),mB=buildKwMap(sb),sd=A.serpData||{};
+  if(!Object.keys(sd).length){document.getElementById('serp-empty').style.display='block';document.getElementById('serp-content').style.display='none';return;}
+  document.getElementById('serp-empty').style.display='none';document.getElementById('serp-content').style.display='block';
+  const allKws=Object.values(mB).filter(k=>k.query&&k.position>0);
+  const rows=allKws.map(k=>{
+    const s=sd[k.query]||null;
+    const posA=mA[k.query.toLowerCase().trim()]?.position||null;
+    const gscDelta=posA&&k.position?posA-k.position:null;
+    const livePos=s?.livePos||null;
+    const posDelta=livePos&&k.position?k.position-livePos:null;
+    return{query:k.query,page:k.page||'',gscPos:k.position,livePos,posDelta,gscDelta,bojoko:s?.compPositions?.['bojoko.ca']||null,bonus:s?.compPositions?.['bonus.ca']||null,features:s?.features||[],clicks:k.clicks,impressions:k.impressions,ctr:k.ctr,checked:!!s,error:s?.error||false};
+  });
+  const checked=rows.filter(r=>r.checked&&!r.error);
+  const top3=rows.filter(r=>r.gscPos<=3).length,top10=rows.filter(r=>r.gscPos<=10).length,blind=rows.filter(r=>r.gscPos>30&&r.gscPos<=100).length;
+  const withSnippet=checked.filter(r=>r.features.includes('snippet')).length;
+  const bojPresent=checked.filter(r=>r.bojoko!==null).length;
+  const beating=checked.filter(r=>(r.bojoko&&r.livePos&&r.bojoko<r.livePos)||(r.bonus&&r.livePos&&r.bonus<r.livePos)).length;
+  document.getElementById('serp-kpi-row').innerHTML=
+    mkKpi('Total keywords',rows.length,'blue',null,null,null,checked.length+' SERP-checked')+
+    mkKpi('Top 3',top3,'green',null,null,null,top10+' in top 10')+
+    mkKpi('Pos 31–100',blind,'amber',null,null,null,'Ahrefs blind spot')+
+    mkKpi('Featured snippet',withSnippet,'teal',null,null,null,checked.length+' checked pages')+
+    mkKpi('bojoko.ca present',bojPresent,'red',null,null,null,'of '+checked.length+' checked')+
+    mkKpi('Outranking us',beating,'red',null,null,null,'either competitor');
+  renderSerpTable(rows);requestAnimationFrame(()=>initSerpScrollSync());
 }
-function renderCompetitorTable(){
-  const srch=document.getElementById('comp-search')?.value.toLowerCase()||'',filter=document.getElementById('comp-filter')?.value||'all';
-  const sb=snapB();if(!sb||!A.serpData)return;const mB=buildKwMap(sb);
-  let rows=Object.values(mB).filter(k=>k.query&&A.serpData[k.query]).map(k=>{const s=A.serpData[k.query];return{query:k.query,gscPos:k.position,livePos:s.livePos,bojoko:s.compPositions?.['bojoko.ca']||null,bonus:s.compPositions?.['bonus.ca']||null,features:s.features||[],clicks:k.clicks,impressions:k.impressions};});
-  if(srch)rows=rows.filter(r=>r.query.toLowerCase().includes(srch));if(filter==='bojoko')rows=rows.filter(r=>r.bojoko!==null);if(filter==='bonus')rows=rows.filter(r=>r.bonus!==null);if(filter==='both')rows=rows.filter(r=>r.bojoko!==null&&r.bonus!==null);if(filter==='none')rows=rows.filter(r=>r.bojoko===null&&r.bonus===null);
-  const{col,dir}=compSort;rows.sort((a,b)=>{const av=a[col]??(dir>0?Infinity:-Infinity),bv=b[col]??(dir>0?Infinity:-Infinity);if(typeof av==='string')return av.localeCompare(bv)*dir;return(av-bv)*dir;});
-  const total=rows.length,start=(compPg-1)*COMP_PER,page=rows.slice(start,start+COMP_PER);
-  document.getElementById('comp-pinfo').textContent=(start+1)+'–'+Math.min(start+COMP_PER,total)+' of '+total.toLocaleString();document.getElementById('comp-prev').disabled=compPg<=1;document.getElementById('comp-next').disabled=start+COMP_PER>=total;
-  const tbody=document.getElementById('comp-tbody');if(!page.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:30px">No keywords</td></tr>';return;}
+function renderSerpTable(prebuilt){
+  const sb=snapB();if(!sb)return;
+  const mA=buildKwMap(snapA()),mB=buildKwMap(sb),sd=A.serpData||{};
+  let rows=prebuilt||(Object.values(mB).filter(k=>k.query&&k.position>0).map(k=>{
+    const s=sd[k.query]||null;const posA=mA[k.query.toLowerCase().trim()]?.position||null;
+    const gscDelta=posA&&k.position?posA-k.position:null;const livePos=s?.livePos||null;const posDelta=livePos&&k.position?k.position-livePos:null;
+    return{query:k.query,page:k.page||'',gscPos:k.position,livePos,posDelta,gscDelta,bojoko:s?.compPositions?.['bojoko.ca']||null,bonus:s?.compPositions?.['bonus.ca']||null,features:s?.features||[],clicks:k.clicks,impressions:k.impressions,ctr:k.ctr,checked:!!s,error:s?.error||false};
+  }));
+  const srch=(document.getElementById('serp-search')?.value||'').toLowerCase();
+  const posF=document.getElementById('serp-pos-filter')?.value||'';
+  const featF=document.getElementById('serp-feature-filter')?.value||'';
+  const compF=document.getElementById('serp-comp-filter')?.value||'';
+  const deltaF=document.getElementById('serp-delta-filter')?.value||'';
+  if(srch)rows=rows.filter(r=>r.query.toLowerCase().includes(srch)||(r.page&&r.page.toLowerCase().includes(srch)));
+  if(posF){const[lo,hi]=posF.split('-').map(Number);rows=rows.filter(r=>r.gscPos>=lo&&r.gscPos<=(hi||999));}
+  if(featF==='none')rows=rows.filter(r=>r.features.length===0);else if(featF)rows=rows.filter(r=>r.features.includes(featF));
+  if(compF==='bojoko')rows=rows.filter(r=>r.bojoko!==null);else if(compF==='bonus')rows=rows.filter(r=>r.bonus!==null);else if(compF==='both')rows=rows.filter(r=>r.bojoko!==null&&r.bonus!==null);else if(compF==='none')rows=rows.filter(r=>r.bojoko===null&&r.bonus===null);else if(compF==='beating-us')rows=rows.filter(r=>(r.bojoko&&r.livePos&&r.bojoko<r.livePos)||(r.bonus&&r.livePos&&r.bonus<r.livePos));
+  if(deltaF==='improved')rows=rows.filter(r=>r.gscDelta>0.5);else if(deltaF==='declined')rows=rows.filter(r=>r.gscDelta<-0.5);else if(deltaF==='new')rows=rows.filter(r=>!r.gscDelta&&r.gscPos>0);
+  if(serpShowMismatch)rows=rows.filter(r=>r.livePos&&Math.abs(r.posDelta||0)>=5);
+  const{col,dir}=serpSort;rows.sort((a,b)=>{const av=a[col]??(dir>0?Infinity:-Infinity),bv=b[col]??(dir>0?Infinity:-Infinity);if(typeof av==='string')return av.localeCompare(bv)*dir;return(av-bv)*dir;});
+  const total=rows.length;document.getElementById('serp-count-lbl').textContent=total.toLocaleString()+' keywords';
+  const start=(serpPg-1)*SERP_PER,page=rows.slice(start,start+SERP_PER);
+  document.getElementById('serp-pinfo').textContent=(start+1)+'\u2013'+Math.min(start+SERP_PER,total)+' of '+total.toLocaleString();
+  document.getElementById('serp-prev').disabled=serpPg<=1;document.getElementById('serp-next').disabled=start+SERP_PER>=total;
+  const tbody=document.getElementById('serp-tbody');
+  if(!page.length){tbody.innerHTML='<tr><td colspan="11" style="text-align:center;padding:30px;color:var(--text3)">No keywords match your filters</td></tr>';return;}
   tbody.innerHTML=page.map(r=>{
-    let lb='<span class="live-na">—</span>';if(r.livePos){const diff=r.gscPos?r.gscPos-r.livePos:0;const cls=diff>0?'live-up':diff<0?'live-dn':'live-same';lb='<span class="live-pos '+cls+'">'+r.livePos+'</span>';}
-    const bb=r.bojoko?'<span style="font-family:var(--mono);font-size:12px;font-weight:600;color:'+(r.bojoko<=3?'var(--red)':r.bojoko<=10?'var(--amber)':'var(--text3)')+'">'+r.bojoko+'</span>':'<span style="color:var(--text3);font-size:11px">—</span>';
-    const bnb=r.bonus?'<span style="font-family:var(--mono);font-size:12px;font-weight:600;color:'+(r.bonus<=3?'var(--red)':r.bonus<=10?'var(--amber)':'var(--text3)')+'">'+r.bonus+'</span>':'<span style="color:var(--text3);font-size:11px">—</span>';
-    const fb=r.features.length?r.features.map(f=>{const m={snippet:'✦ Snippet',paa:'💬 PAA',local:'📍 Local',video:'▶ Video'};const c={snippet:'serp-snippet',paa:'serp-paa',local:'serp-local',video:'serp-video'};return'<span class="serp-badge '+(c[f]||'serp-none')+'">'+(m[f]||f)+'</span>';}).join(' '):'<span class="serp-badge serp-none">None</span>';
-    return'<tr><td class="col-kw" title="'+esc(r.query)+'">'+esc(r.query)+'</td><td>'+posBadge(r.gscPos)+'</td><td>'+lb+'</td><td>'+bb+'</td><td>'+bnb+'</td><td>'+fb+'</td><td style="font-family:var(--mono);font-size:12px">'+r.clicks+'</td><td style="font-family:var(--mono);font-size:12px">'+fmtN(r.impressions)+'</td></tr>';
+    const gscBadge=posBadge(r.gscPos);
+    let liveBadge='<span style="color:var(--text3);font-size:11px;font-family:var(--mono)">\u2014</span>';
+    if(r.error)liveBadge='<span style="color:var(--text3);font-size:10px">error</span>';
+    else if(!r.checked)liveBadge='<span style="color:var(--text3);font-size:10px">not checked</span>';
+    else if(r.livePos)liveBadge=posBadge(r.livePos);
+    let driftHtml='<span style="color:var(--text3);font-size:11px;font-family:var(--mono)">\u2014</span>';
+    if(r.livePos&&r.gscPos){const d=r.posDelta,abs=Math.abs(d);if(abs<1)driftHtml='<span style="color:var(--text3);font-size:11px;font-family:var(--mono)">\u22480</span>';else if(d>0)driftHtml='<span style="color:var(--green);font-family:var(--mono);font-size:12px;font-weight:700">\u2191'+abs.toFixed(0)+'</span>';else driftHtml='<span style="color:var(--red);font-family:var(--mono);font-size:12px;font-weight:700">\u2193'+abs.toFixed(0)+'</span>';}
+    let gdHtml='<span style="color:var(--text3);font-size:11px;font-family:var(--mono)">\u2014</span>';
+    if(r.gscDelta!==null){if(r.gscDelta>0.5)gdHtml='<span class="d-up">\u2193 '+r.gscDelta.toFixed(1)+'</span>';else if(r.gscDelta<-0.5)gdHtml='<span class="d-dn">\u2191 '+Math.abs(r.gscDelta).toFixed(1)+'</span>';else gdHtml='<span class="d-flat">\u2248</span>';}
+    const fMap={snippet:'\u2746 Snippet',paa:'\ud83d\udcac PAA',local:'\ud83d\udccd Local',video:'\u25b6 Video'};
+    const fClass={snippet:'serp-snippet',paa:'serp-paa',local:'serp-local',video:'serp-video'};
+    const featHtml=r.features.length?r.features.map(f=>'<span class="serp-badge '+(fClass[f]||'serp-none')+'">'+(fMap[f]||f)+'</span>').join(' '):'<span style="color:var(--text3);font-size:11px">\u2014</span>';
+    const bojHtml=r.bojoko!=null?('<span style="font-family:var(--mono);font-size:12px;font-weight:700;color:'+(r.bojoko<=3?'var(--red)':r.bojoko<=10?'var(--amber)':'var(--text2)')+'">'+r.bojoko+'</span>'+(r.livePos&&r.bojoko<r.livePos?' <span style="color:var(--red);font-size:10px">\u25b2 ahead</span>':r.livePos&&r.bojoko>r.livePos?' <span style="color:var(--green);font-size:10px">\u25bc behind</span>':'')):'<span style="color:var(--text3);font-size:11px">\u2014</span>';
+    const bonHtml=r.bonus!=null?('<span style="font-family:var(--mono);font-size:12px;font-weight:700;color:'+(r.bonus<=3?'var(--red)':r.bonus<=10?'var(--amber)':'var(--text2)')+'">'+r.bonus+'</span>'+(r.livePos&&r.bonus<r.livePos?' <span style="color:var(--red);font-size:10px">\u25b2 ahead</span>':r.livePos&&r.bonus>r.livePos?' <span style="color:var(--green);font-size:10px">\u25bc behind</span>':'')):'<span style="color:var(--text3);font-size:11px">\u2014</span>';
+    const beating=(r.bojoko&&r.livePos&&r.bojoko<r.livePos)||(r.bonus&&r.livePos&&r.bonus<r.livePos);
+    return'<tr style="'+(beating?'background:rgba(255,107,107,.04);':'')+'">'+'<td class="col-kw" title="'+esc(r.query)+'">'+esc(r.query)+(r.page?'<div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(trimUrl(r.page))+'</div>':'')+'</td><td>'+gscBadge+'</td><td>'+liveBadge+'</td><td>'+driftHtml+'</td><td>'+gdHtml+'</td><td style="white-space:nowrap">'+featHtml+'</td><td>'+bojHtml+'</td><td>'+bonHtml+'</td><td style="font-family:var(--mono);font-size:12px">'+r.clicks+'</td><td style="font-family:var(--mono);font-size:12px">'+fmtN(r.impressions)+'</td><td>'+ctrCell(r.ctr)+'</td></tr>';
   }).join('');
 }
-function srtComp(col){if(compSort.col===col)compSort.dir*=-1;else{compSort.col=col;compSort.dir=col==='query'?1:-1;}compPg=1;['cq','cgsc','clive','cboj','cbon','ccl','cimp'].forEach(k=>{const el=document.getElementById('si-'+k);if(el){el.textContent='↕';el.classList.remove('on');}});const map={query:'cq',gscPos:'cgsc',livePos:'clive',bojoko:'cboj',bonus:'cbon',clicks:'ccl',impressions:'cimp'};const el=document.getElementById('si-'+(map[col]||col));if(el){el.textContent=compSort.dir===1?'↑':'↓';el.classList.add('on');}renderCompetitorTable();}
-function pgComp(d){compPg+=d;renderCompetitorTable();}
-async function loadSerpForView(){const sb=snapB();if(!sb)return;const stored=await getSerpData(sb.id);if(Object.keys(stored).length){A.serpData=stored;const ts=Object.values(stored).find(v=>v.timestamp)?.timestamp;if(ts){const lr=document.getElementById('serp-last-run');if(lr)lr.textContent='Last run: '+new Date(ts).toLocaleString();}renderCompetitorData();}}
+function srtSerp(col){
+  if(serpSort.col===col)serpSort.dir*=-1;else{serpSort.col=col;serpSort.dir=col==='query'?1:-1;}
+  serpPg=1;
+  ['sq','sgsc','slive','sdrift','sgd','sboj','sbon','scl','simp','sctr'].forEach(k=>{const el=document.getElementById('si-'+k);if(el){el.textContent='\u21f3';el.classList.remove('on');}});
+  const map={query:'sq',gscPos:'sgsc',livePos:'slive',posDelta:'sdrift',gscDelta:'sgd',bojoko:'sboj',bonus:'sbon',clicks:'scl',impressions:'simp',ctr:'sctr'};
+  const el=document.getElementById('si-'+(map[col]||col));if(el){el.textContent=serpSort.dir===1?'\u2191':'\u2193';el.classList.add('on');}
+  renderSerpTable();
+}
+function pgSerp(d){serpPg+=d;renderSerpTable();}
+function toggleSerpMismatch(){serpShowMismatch=!serpShowMismatch;document.getElementById('serp-mismatch-btn').classList.toggle('on',serpShowMismatch);serpPg=1;renderSerpTable();}
+function exportSerpCSV(){
+  const sb=snapB();if(!sb)return;
+  const mA=buildKwMap(snapA()),mB=buildKwMap(sb),sd=A.serpData||{};
+  const rows=Object.values(mB).filter(k=>k.query&&k.position>0).map(k=>{
+    const s=sd[k.query]||null;const posA=mA[k.query.toLowerCase().trim()]?.position||null;
+    return{query:k.query,page:k.page||'',gscPos:k.position,livePos:s?.livePos||'',gscDelta:posA&&k.position?posA-k.position:'',features:(s?.features||[]).join('|'),bojoko:s?.compPositions?.['bojoko.ca']||'',bonus:s?.compPositions?.['bonus.ca']||'',clicks:k.clicks,impressions:k.impressions,ctr:(k.ctr*100).toFixed(2)+'%'};
+  });
+  const hdrs=['keyword','page','gsc_pos_b','live_pos','gsc_delta','serp_features','bojoko_ca','bonus_ca','clicks_b','impressions_b','ctr_b'];
+  const csv=[hdrs.join(','),...rows.map(r=>['"'+r.query.replace(/"/g,'""')+'"','"'+r.page+'"',r.gscPos,r.livePos,r.gscDelta,r.features,r.bojoko,r.bonus,r.clicks,r.impressions,r.ctr].join(','))].join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='serp-tracker-'+A.site+'-'+new Date().toISOString().split('T')[0]+'.csv';a.click();toast('SERP data exported');
+}
+function initSerpScrollSync(){
+  const ts=document.getElementById('serp-top-scroll'),ti=document.getElementById('serp-top-inner'),tw=document.getElementById('serp-tbl-wrap'),tbl=document.getElementById('serp-table');
+  if(!ts||!tw||!tbl)return;const sw=()=>{ti.style.width=tbl.scrollWidth+'px';};sw();new ResizeObserver(sw).observe(tbl);
+  let syn=false;ts.addEventListener('scroll',()=>{if(syn)return;syn=true;tw.scrollLeft=ts.scrollLeft;syn=false;});tw.addEventListener('scroll',()=>{if(syn)return;syn=true;ts.scrollLeft=tw.scrollLeft;syn=false;});
+}
+async function loadSerpForView(){
+  const sb=snapB();
+  if(!sb){document.getElementById('serp-no-snap').style.display='block';return;}
+  document.getElementById('serp-no-snap').style.display='none';
+  const stored=await getSerpData(sb.id);
+  if(Object.keys(stored).length){A.serpData=stored;const ts=Object.values(stored).find(v=>v.timestamp)?.timestamp;if(ts){const lr=document.getElementById('serp-last-run');if(lr)lr.textContent='Last run: '+new Date(ts).toLocaleString();}renderSerpResults();document.getElementById('serp-export-btn').style.display='';}
+}
+function cancelSerpCheck(){A.serpCancelled=true;toast('Cancelling\u2026');}
+function renderCompetitorData(){renderSerpResults();}
+function renderCompetitorTable(){renderSerpTable();}
+function srtComp(col){srtSerp(col);}
+function pgComp(d){pgSerp(d);}
 </script>
+</body>
 </body>
 </html>
