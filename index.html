@@ -512,6 +512,9 @@ input[type=file]{display:none}
     <button class="nav-btn" onclick="goView('competitors',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Competitors
     </button>
+    <button class="nav-btn" onclick="goView('serp-intel',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>SERP Intel
+    </button>
     <button class="nav-btn" onclick="goView('imports',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Imports
     </button>
@@ -904,6 +907,116 @@ input[type=file]{display:none}
       </div>
       <div class="pager"><span class="pager-info" id="comp-pinfo"></span><button class="pager-btn" id="comp-prev" onclick="pgComp(-1)">← Prev</button><button class="pager-btn" id="comp-next" onclick="pgComp(1)">Next →</button></div>
     </div>
+  </div>
+</div>
+
+<!-- SERP INTEL -->
+<div class="view" id="v-serp-intel">
+  <div class="page-hdr">
+    <div>
+      <div class="page-title">SERP Intel</div>
+      <div class="page-sub" id="si-sub">Aggregated insights from live SERP checks — featured snippets, PAA questions, related searches and more.</div>
+    </div>
+    <div style="display:flex;gap:9px;align-items:center">
+      <span id="si-last-run" style="font-size:12px;color:var(--text3)"></span>
+      <button class="btn btn-primary btn-sm" onclick="goView('competitors',null)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:14px;height:14px"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Run SERP check first
+      </button>
+    </div>
+  </div>
+
+  <div id="si-no-data" style="padding:60px;text-align:center;color:var(--text3)">
+    <div style="font-size:32px;margin-bottom:12px">🔍</div>
+    <div style="font-size:15px;font-weight:600;margin-bottom:6px;color:var(--text2)">No SERP data yet</div>
+    <div style="font-size:13px">Go to <strong style="color:var(--text)">Competitors → Run SERP check</strong> first, then come back here to see aggregated SERP intel across all your keywords.</div>
+  </div>
+
+  <div id="si-content" style="display:none">
+
+    <!-- Summary stat cards -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px" id="si-stat-cards"></div>
+
+    <!-- Two-column layout: Featured Snippets + PAA -->
+    <div class="two-col" style="margin-bottom:16px">
+
+      <!-- Featured Snippet ownership -->
+      <div class="card">
+        <div class="card-hdr">
+          <div>
+            <div class="card-title">✦ Featured snippet ownership</div>
+            <div class="card-sub">Which domain owns the answer box for your keywords</div>
+          </div>
+          <span class="tag tg-amber" id="si-snippet-count">0 snippets</span>
+        </div>
+        <div class="card-body" style="padding:10px 0" id="si-snippets-list"></div>
+      </div>
+
+      <!-- PAA Questions -->
+      <div class="card">
+        <div class="card-hdr">
+          <div>
+            <div class="card-title">💬 Top People Also Ask questions</div>
+            <div class="card-sub">Most frequent questions across your keywords — content opportunities</div>
+          </div>
+          <span class="tag tg-blue" id="si-paa-count">0 questions</span>
+        </div>
+        <div class="card-body" style="padding:10px 0" id="si-paa-list"></div>
+      </div>
+
+    </div>
+
+    <!-- Related Searches -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-hdr">
+        <div>
+          <div class="card-title">🔗 Related searches — keyword opportunities</div>
+          <div class="card-sub">Google's own suggestions, aggregated across all checked keywords</div>
+        </div>
+        <span class="tag tg-green" id="si-related-count">0 queries</span>
+      </div>
+      <div class="card-body">
+        <div id="si-related-tags" style="display:flex;flex-wrap:wrap;gap:7px"></div>
+      </div>
+    </div>
+
+    <!-- Per-keyword SERP detail table -->
+    <div class="card">
+      <div class="card-hdr">
+        <div>
+          <div class="card-title">Keyword SERP breakdown</div>
+          <div class="card-sub">Full SERP features per keyword — click any row to expand</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <div class="fi-wrap"><span class="fi-icon">🔍</span><input class="fi" type="text" id="si-search" placeholder="Filter keywords…" style="width:200px;padding-left:34px" oninput="renderSerpIntel()"></div>
+          <select class="fi" id="si-filter" onchange="renderSerpIntel()">
+            <option value="">All keywords</option>
+            <option value="snippet">Has featured snippet</option>
+            <option value="we-own">We own snippet</option>
+            <option value="comp-owns">Competitor owns snippet</option>
+            <option value="paa">Has PAA</option>
+            <option value="related">Has related searches</option>
+          </select>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table style="min-width:800px">
+          <thead>
+            <tr>
+              <th>Keyword</th>
+              <th>GSC Pos</th>
+              <th>Live Pos</th>
+              <th>Featured Snippet</th>
+              <th>PAA questions</th>
+              <th>Related searches</th>
+              <th>Knowledge graph</th>
+            </tr>
+          </thead>
+          <tbody id="si-tbody"></tbody>
+        </table>
+      </div>
+      <div class="pager"><span class="pager-info" id="si-pinfo"></span><button class="pager-btn" id="si-prev" onclick="pgSI(-1)">← Prev</button><button class="pager-btn" id="si-next" onclick="pgSI(1)">Next →</button></div>
+    </div>
+
   </div>
 </div>
 
@@ -1769,6 +1882,7 @@ function goView(v, el) {
   if (v==='pages')        renderPages();
   if (v==='imports')      renderSnapList();
   if (v==='competitors')  loadSerpDataForView();
+  if (v==='serp-intel')   loadSerpIntelView();
   if (v==='settings')     loadApiKeyToInput();
 }
 
@@ -2557,20 +2671,19 @@ function parseSerpResponse(query, data, ourDomain) {
   const ourDomainClean = ourDomain.replace(/^https?:\/\/(www\.)?/, '').replace(/\/.*/, '');
   const ourHit         = organic.find(r => r.link && r.link.includes(ourDomainClean));
 
-  // Track our specific competitor domains
+  // Tracked competitor positions
   const compPositions  = {};
   COMPETITORS.forEach(comp => {
     const hit = organic.find(r => r.link && r.link.includes(comp));
     compPositions[comp] = hit ? hit.position : null;
   });
 
-  // Top 5 organic results excluding: us, our tracked competitors, and known excluded domains
+  // Top 5 organic excluding us, tracked competitors, and known noise domains
   const allExcluded = [ourDomainClean, ...COMPETITORS, ...EXCLUDE_DOMAINS];
   const top5Organic = organic
     .filter(r => {
       if (!r.link) return false;
-      const linkLower = r.link.toLowerCase();
-      return !allExcluded.some(ex => linkLower.includes(ex));
+      return !allExcluded.some(ex => r.link.toLowerCase().includes(ex));
     })
     .slice(0, 5)
     .map(r => ({
@@ -2580,20 +2693,61 @@ function parseSerpResponse(query, data, ourDomain) {
       title:    r.title || '',
     }));
 
+  // ── Featured Snippet ──────────────────────────────────────
+  const answerBox = data.answerBox || null;
+  let snippetOwner = null, snippetText = null, snippetLink = null, weOwnSnippet = false;
+  if (answerBox) {
+    snippetLink  = answerBox.link  || answerBox.url || '';
+    snippetText  = answerBox.snippet || answerBox.answer || answerBox.title || '';
+    snippetOwner = snippetLink
+      ? snippetLink.replace(/^https?:\/\/(www\.)?/, '').split('/')[0]
+      : 'Unknown';
+    weOwnSnippet = snippetLink ? snippetLink.includes(ourDomainClean) : false;
+  }
+
+  // ── People Also Ask ───────────────────────────────────────
+  const paaQuestions = (data.peopleAlsoAsk || []).map(q => ({
+    question: q.question || '',
+    snippet:  q.snippet  || '',
+    link:     q.link     || '',
+  })).filter(q => q.question);
+
+  // ── Related Searches ──────────────────────────────────────
+  const relatedSearches = (data.relatedSearches || [])
+    .map(r => r.query || r.text || r)
+    .filter(Boolean);
+
+  // ── Knowledge Graph ───────────────────────────────────────
+  const kg = data.knowledgeGraph || null;
+  const knowledgeGraph = kg ? {
+    title:       kg.title       || '',
+    type:        kg.type        || '',
+    description: kg.description || '',
+    website:     kg.website     || '',
+  } : null;
+
+  // ── SERP Features list ────────────────────────────────────
   const features = [];
-  if (data.answerBox)                         features.push('snippet');
-  if (data.peopleAlsoAsk?.length > 0)         features.push('paa');
-  if (data.localResults?.length > 0)          features.push('local');
-  if (organic.some(r => r.type === 'video'))  features.push('video');
+  if (answerBox)                              features.push('snippet');
+  if (paaQuestions.length > 0)               features.push('paa');
+  if (data.localResults?.length > 0)         features.push('local');
+  if (organic.some(r => r.type === 'video')) features.push('video');
+  if (knowledgeGraph)                         features.push('kg');
+  if (data.topStories?.length > 0)           features.push('news');
 
   return {
     query,
     livePos:     ourHit ? ourHit.position : null,
     compPositions,
-    top5Organic,   // top 5 clean organic competitors for this keyword
+    top5Organic,
+    // Full SERP Intel data
+    snippet: answerBox ? { owner: snippetOwner, text: snippetText, link: snippetLink, weOwn: weOwnSnippet } : null,
+    paaQuestions,
+    relatedSearches,
+    knowledgeGraph,
     features,
-    timestamp:   Date.now(),
-    error:       false,
+    timestamp: Date.now(),
+    error:     false,
   };
 }
 
@@ -2884,7 +3038,181 @@ function srtComp(col){
 }
 function pgComp(d){compPg+=d;renderCompetitorTable();}
 
-// Auto-load saved SERP data when competitors view is opened
+// ══════════════════════════════════════════════════════════════
+// SERP INTEL VIEW
+// ══════════════════════════════════════════════════════════════
+let siPg = 1;
+const SI_PER = 50;
+let siFiltered = [];
+
+async function loadSerpIntelView() {
+  const sb = snapB();
+  if (!sb) return;
+  const stored = await getSerpData(sb.id);
+  if (Object.keys(stored).length) {
+    A.serpData = stored;
+    const ts = Object.values(stored).find(v => v.timestamp)?.timestamp;
+    if (ts) {
+      const el = document.getElementById('si-last-run');
+      if (el) el.textContent = `Last check: ${new Date(ts).toLocaleString()}`;
+    }
+  }
+  renderSerpIntel();
+}
+
+function renderSerpIntel() {
+  const serpData = A.serpData || {};
+  const entries = Object.values(serpData).filter(s => !s.error);
+
+  if (!entries.length) {
+    document.getElementById('si-no-data').style.display = 'block';
+    document.getElementById('si-content').style.display = 'none';
+    return;
+  }
+  document.getElementById('si-no-data').style.display = 'none';
+  document.getElementById('si-content').style.display = 'block';
+
+  const mB = buildKwMap(snapB());
+  const search = document.getElementById('si-search')?.value.toLowerCase() || '';
+  const filter = document.getElementById('si-filter')?.value || '';
+
+  // ── Aggregate stats ────────────────────────────────────────
+  const withSnippet    = entries.filter(s => s.snippet);
+  const weOwnSnippet   = withSnippet.filter(s => s.snippet?.weOwn);
+  const compOwnsSnip   = withSnippet.filter(s => !s.snippet?.weOwn);
+  const withPAA        = entries.filter(s => s.paaQuestions?.length);
+  const withRelated    = entries.filter(s => s.relatedSearches?.length);
+  const withKG         = entries.filter(s => s.knowledgeGraph);
+
+  // Summary cards
+  document.getElementById('si-stat-cards').innerHTML = [
+    { label: 'Keywords checked',    val: entries.length,          color: 'var(--blue)',   sub: `of ${Object.keys(mB).length} total` },
+    { label: 'Featured snippets',   val: withSnippet.length,      color: 'var(--amber)',  sub: `${weOwnSnippet.length} owned by us` },
+    { label: 'PAA present',         val: withPAA.length,          color: 'var(--green)',  sub: `${withPAA.reduce((s,e)=>s+(e.paaQuestions?.length||0),0)} total questions` },
+    { label: 'Related searches',    val: withRelated.length,      color: 'var(--purple)', sub: `${withRelated.reduce((s,e)=>s+(e.relatedSearches?.length||0),0)} unique queries` },
+  ].map(c => `<div class="kpi" style="cursor:default"><div class="kpi-lbl">${c.label}</div><div class="kpi-val" style="color:${c.color}">${c.val}</div><div class="kpi-prev">${c.sub}</div></div>`).join('');
+
+  // ── Featured Snippets breakdown ────────────────────────────
+  document.getElementById('si-snippet-count').textContent = `${withSnippet.length} snippets`;
+  const domainSnipCounts = {};
+  withSnippet.forEach(s => {
+    const owner = s.snippet.weOwn ? '✅ insidecasino (us)' : (s.snippet.owner || 'unknown');
+    domainSnipCounts[owner] = (domainSnipCounts[owner] || 0) + 1;
+  });
+  const sortedSnips = Object.entries(domainSnipCounts).sort((a,b) => b[1]-a[1]);
+  document.getElementById('si-snippets-list').innerHTML = sortedSnips.length
+    ? sortedSnips.slice(0, 12).map(([domain, count]) => {
+        const isUs = domain.startsWith('✅');
+        const isComp = COMPETITORS.some(c => domain.includes(c));
+        const color = isUs ? 'var(--green)' : isComp ? 'var(--red)' : 'var(--text2)';
+        const pct = Math.round(count / withSnippet.length * 100);
+        return `<div style="display:flex;align-items:center;gap:12px;padding:9px 18px;border-bottom:1px solid var(--border)">
+          <div style="flex:1;font-size:13px;color:${color};font-family:var(--mono)">${esc(domain)}</div>
+          <div style="font-size:12px;color:var(--text3);min-width:60px;text-align:right">${count} keyword${count!==1?'s':''}</div>
+          <div style="width:80px;background:var(--bg4);border-radius:2px;height:4px;overflow:hidden">
+            <div style="height:4px;background:${color};width:${pct}%;border-radius:2px"></div>
+          </div>
+          <div style="font-size:11px;color:var(--text3);min-width:30px;text-align:right">${pct}%</div>
+        </div>`;
+      }).join('')
+    : '<div style="padding:18px;color:var(--text3);font-size:13px">No featured snippets found in checked keywords</div>';
+
+  // ── PAA Questions ──────────────────────────────────────────
+  document.getElementById('si-paa-count').textContent = `${withPAA.reduce((s,e)=>s+(e.paaQuestions?.length||0),0)} questions`;
+  const qCounts = {};
+  entries.forEach(s => (s.paaQuestions||[]).forEach(q => {
+    const k = q.question.toLowerCase().trim();
+    if (k) qCounts[k] = (qCounts[k] || { question: q.question, count: 0, link: q.link });
+    if (k) qCounts[k].count++;
+  }));
+  const topQs = Object.values(qCounts).sort((a,b) => b.count - a.count).slice(0, 15);
+  document.getElementById('si-paa-list').innerHTML = topQs.length
+    ? topQs.map(q => `<div style="padding:9px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px">
+        <div style="flex:1;font-size:13px;color:var(--text)">${esc(q.question)}</div>
+        <div style="font-size:11px;color:var(--text3);white-space:nowrap">appears in ${q.count} SERP${q.count!==1?'s':''}</div>
+        ${q.link ? `<a href="${esc(q.link)}" target="_blank" style="font-size:11px;color:var(--blue);text-decoration:none;white-space:nowrap">↗ top result</a>` : ''}
+      </div>`).join('')
+    : '<div style="padding:18px;color:var(--text3);font-size:13px">No PAA questions found</div>';
+
+  // ── Related Searches ───────────────────────────────────────
+  const relatedCounts = {};
+  entries.forEach(s => (s.relatedSearches||[]).forEach(r => {
+    const k = r.toLowerCase().trim();
+    if (k) relatedCounts[k] = (relatedCounts[k] || 0) + 1;
+  }));
+  const topRelated = Object.entries(relatedCounts).sort((a,b) => b[1]-a[1]).slice(0, 50);
+  document.getElementById('si-related-count').textContent = `${topRelated.length} queries`;
+  document.getElementById('si-related-tags').innerHTML = topRelated
+    .map(([q, count]) => {
+      const heat = count >= 5 ? 'tg-amber' : count >= 3 ? 'tg-blue' : 'tg-gray';
+      return `<span class="tag ${heat}" style="cursor:pointer;font-size:12px" title="Appears in ${count} SERPs" onclick="prompt('Copy this keyword:','${q.replace(/'/g,"\\'")}')">${esc(q)} <span style="opacity:.7;font-size:10px">${count}</span></span>`;
+    }).join('');
+
+  // ── Per-keyword table ──────────────────────────────────────
+  let rows = entries.map(s => ({
+    ...s,
+    gscPos: mB[s.query?.toLowerCase().trim()]?.position || null,
+  }));
+
+  if (search) rows = rows.filter(r => r.query?.toLowerCase().includes(search));
+  if (filter === 'snippet')    rows = rows.filter(r => r.snippet);
+  if (filter === 'we-own')     rows = rows.filter(r => r.snippet?.weOwn);
+  if (filter === 'comp-owns')  rows = rows.filter(r => r.snippet && !r.snippet.weOwn);
+  if (filter === 'paa')        rows = rows.filter(r => r.paaQuestions?.length);
+  if (filter === 'related')    rows = rows.filter(r => r.relatedSearches?.length);
+
+  rows.sort((a,b) => (b.paaQuestions?.length||0) - (a.paaQuestions?.length||0));
+
+  siFiltered = rows;
+  const total = rows.length;
+  const start = (siPg - 1) * SI_PER;
+  const page  = rows.slice(start, start + SI_PER);
+
+  document.getElementById('si-pinfo').textContent = `${start+1}–${Math.min(start+SI_PER,total)} of ${total.toLocaleString()}`;
+  document.getElementById('si-prev').disabled = siPg <= 1;
+  document.getElementById('si-next').disabled = start + SI_PER >= total;
+
+  const tbody = document.getElementById('si-tbody');
+  if (!page.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:30px">No keywords match</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = page.map(r => {
+    const snippetCell = r.snippet
+      ? `<div style="font-size:12px">
+          <span style="color:${r.snippet.weOwn?'var(--green)':'var(--red)'};font-weight:600">${r.snippet.weOwn ? '✅ Us' : esc(r.snippet.owner||'—')}</span>
+          ${r.snippet.text ? `<div style="color:var(--text3);font-size:11px;margin-top:3px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(r.snippet.text)}">"${esc(r.snippet.text.slice(0,80))}…"</div>` : ''}
+        </div>`
+      : '<span style="color:var(--text3);font-size:12px">None</span>';
+
+    const paaCell = r.paaQuestions?.length
+      ? `<div style="font-size:12px;color:var(--blue)">${r.paaQuestions.length} question${r.paaQuestions.length!==1?'s':''}
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">${esc(r.paaQuestions[0]?.question?.slice(0,60)||'')}${r.paaQuestions[0]?.question?.length>60?'…':''}</div>
+        </div>`
+      : '<span style="color:var(--text3);font-size:12px">None</span>';
+
+    const relatedCell = r.relatedSearches?.length
+      ? `<span style="font-size:12px;color:var(--purple)">${r.relatedSearches.length} queries</span>`
+      : '<span style="color:var(--text3);font-size:12px">None</span>';
+
+    const kgCell = r.knowledgeGraph
+      ? `<span style="font-size:12px;color:var(--amber)" title="${esc(r.knowledgeGraph.description||'')}">${esc(r.knowledgeGraph.title||'Present')} ${r.knowledgeGraph.type?`<span style="color:var(--text3)">(${esc(r.knowledgeGraph.type)})</span>`:''}</span>`
+      : '<span style="color:var(--text3);font-size:12px">None</span>';
+
+    return `<tr>
+      <td class="col-kw" title="${esc(r.query)}">${esc(r.query)}</td>
+      <td>${r.gscPos ? posBadge(r.gscPos) : '<span style="color:var(--text3)">—</span>'}</td>
+      <td>${r.livePos ? posBadge(r.livePos) : '<span style="color:var(--text3)">—</span>'}</td>
+      <td>${snippetCell}</td>
+      <td>${paaCell}</td>
+      <td>${relatedCell}</td>
+      <td>${kgCell}</td>
+    </tr>`;
+  }).join('');
+}
+
+function pgSI(d) { siPg += d; renderSerpIntel(); }
 async function loadSerpDataForView() {
   const sb = snapB();
   if (!sb) return;
