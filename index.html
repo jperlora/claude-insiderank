@@ -29,6 +29,29 @@ body{background:var(--bg0);color:var(--text);font-family:var(--font);min-height:
 .sidebar{background:var(--bg1);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
 .main-col{display:flex;flex-direction:column;min-height:100vh;overflow:hidden}
 
+/* ─── LOGIN SCREEN ─────────────────────────────── */
+.login-screen{position:fixed;inset:0;background:var(--bg0);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
+.login-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--rxl);padding:40px 44px;width:100%;max-width:400px;box-shadow:var(--shadow-lg)}
+.login-logo{display:flex;align-items:center;gap:12px;margin-bottom:32px}
+.login-logo-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--blue),var(--green));border-radius:11px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:#fff;flex-shrink:0}
+.login-logo-text{font-size:20px;font-weight:700;letter-spacing:-.3px;color:var(--text)}
+.login-logo-sub{font-size:12px;color:var(--text3);margin-top:2px}
+.login-title{font-size:22px;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:-.4px}
+.login-sub{font-size:13px;color:var(--text3);margin-bottom:28px;line-height:1.5}
+.login-field{margin-bottom:16px}
+.login-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;font-weight:500;margin-bottom:6px;display:block}
+.login-input{width:100%;background:var(--bg3);border:1.5px solid var(--border2);border-radius:var(--r);padding:11px 14px;color:var(--text);font-size:14px;font-family:var(--font);outline:none;transition:border .15s}
+.login-input:focus{border-color:var(--blue)}
+.login-input::placeholder{color:var(--text3)}
+.login-btn{width:100%;padding:12px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .15s;margin-top:4px}
+.login-btn:hover{background:#4a8ef0}
+.login-btn:active{transform:scale(.99)}
+.login-btn:disabled{opacity:.6;cursor:not-allowed}
+.login-error{background:var(--red-d);border:1px solid rgba(255,107,107,.3);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--red);margin-top:14px;display:none}
+.login-footer{margin-top:24px;font-size:11px;color:var(--text3);text-align:center;line-height:1.6}
+.app{display:none} /* hidden until authenticated */
+.app.unlocked{display:grid}
+
 /* SIDEBAR */
 .logo-area{padding:18px 16px 14px;border-bottom:1px solid var(--border)}
 .logo-mark{display:flex;align-items:center;gap:10px}
@@ -425,7 +448,36 @@ input[type=file]{display:none}
 </style>
 </head>
 <body>
-<div class="app">
+<!-- ════ LOGIN SCREEN ════ -->
+<div id="login-screen" class="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon">IR</div>
+      <div>
+        <div class="login-logo-text">Inside Rank</div>
+        <div class="login-logo-sub">GSC ranking intel · insidecasino.ca</div>
+      </div>
+    </div>
+    <div class="login-title">Welcome back</div>
+    <div class="login-sub">Enter the team password to access the dashboard.</div>
+    <div class="login-field">
+      <label class="login-label" for="login-email">Email</label>
+      <input class="login-input" type="email" id="login-email" placeholder="your@insidecasino.ca" autocomplete="username">
+    </div>
+    <div class="login-field">
+      <label class="login-label" for="login-pass">Password</label>
+      <input class="login-input" type="password" id="login-pass" placeholder="••••••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" id="login-btn" onclick="doLogin()">Sign in</button>
+    <div class="login-error" id="login-error">Incorrect password. Please try again.</div>
+    <div class="login-footer">
+      This tool is private and intended for InsideCasino team members only.<br>
+      Contact <strong style="color:var(--text2)">teams@insidecasino.ca</strong> for access.
+    </div>
+  </div>
+</div>
+
+<div class="app" id="app-root">
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
@@ -474,7 +526,7 @@ input[type=file]{display:none}
     <div class="user-row">
       <div class="user-avatar">T</div>
       <div class="user-info"><div class="user-email">teams@insidecasino.ca</div><div class="user-role">Team member</div></div>
-      <button class="signout-btn" title="Sign out" onclick="toast('Signed out')">
+      <button class="signout-btn" title="Sign out" onclick="signOut()">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
       </button>
     </div>
@@ -883,7 +935,7 @@ input[type=file]{display:none}
   <div class="set-card">
     <div class="set-title">Account</div>
     <div class="set-sub">Signed in as <code style="color:var(--teal)">teams@insidecasino.ca</code></div>
-    <button class="btn btn-ghost" onclick="toast('Signed out')">
+    <button class="btn btn-ghost" onclick="signOut()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sign out
     </button>
   </div>
@@ -947,10 +999,12 @@ const SK = 'ir_v4b_';
 // BOOT
 // ══════════════════════════════════════════════════════════════
 addEventListener('DOMContentLoaded', async () => {
+  // Auth check runs in its own IIFE at bottom of script.
+  // Only initialise app data if already authenticated.
+  if (!isAuthenticated()) return;
   await load();
   autoPickPeriods();
   renderAll();
-  // Init top scrollbar sync after table is in DOM
   requestAnimationFrame(initKwScrollSync);
 });
 
@@ -2783,6 +2837,145 @@ async function loadSerpDataForView() {
   }
 }
 
+// ══════════════════════════════════════════════════════════════
+// AUTH — password-gated login screen
+// ══════════════════════════════════════════════════════════════
+// Credentials (edit to change):
+//   Email:    any @insidecasino.ca address
+//   Password: InsideRank2026!
+// The password is stored as a SHA-256 hash — never in plain text.
+const AUTH = {
+  // Allowed email domains (case-insensitive)
+  domains: ['insidecasino.ca'],
+  // SHA-256 hash of the team password "InsideRank2026!"
+  // To change: run sha256('newpassword') and replace this value
+  pwHash:  '8b787ae4e70fa70a46c2d21bcd309e32f61a641618ad68eaea2c948870f48b93',
+  // Session key in sessionStorage (clears on tab/browser close)
+  sessionKey: 'ir_auth_v1',
+};
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+function isAuthenticated() {
+  try { return sessionStorage.getItem(AUTH.sessionKey) === 'ok'; }
+  catch(e) { return false; }
+}
+
+function setAuthenticated(email) {
+  try {
+    sessionStorage.setItem(AUTH.sessionKey, 'ok');
+    sessionStorage.setItem(AUTH.sessionKey + '_email', email);
+  } catch(e) {}
+}
+
+function getSessionEmail() {
+  try { return sessionStorage.getItem(AUTH.sessionKey + '_email') || 'teams@insidecasino.ca'; }
+  catch(e) { return 'teams@insidecasino.ca'; }
+}
+
+async function doLogin() {
+  const emailEl = document.getElementById('login-email');
+  const passEl  = document.getElementById('login-pass');
+  const btn     = document.getElementById('login-btn');
+  const errEl   = document.getElementById('login-error');
+
+  const email    = (emailEl.value || '').trim().toLowerCase();
+  const password = passEl.value || '';
+
+  // Validate email domain
+  const domain = email.split('@')[1] || '';
+  if (!email || !AUTH.domains.some(d => domain === d || domain.endsWith('.' + d))) {
+    errEl.textContent = 'Please use your @insidecasino.ca email address.';
+    errEl.style.display = 'block';
+    emailEl.focus();
+    return;
+  }
+
+  if (!password) {
+    errEl.textContent = 'Please enter the team password.';
+    errEl.style.display = 'block';
+    passEl.focus();
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
+  errEl.style.display = 'none';
+
+  const hash = await sha256(password);
+
+  if (hash === AUTH.pwHash) {
+    setAuthenticated(email);
+    // Update the displayed email in sidebar/settings to match login email
+    ['user-email','login-email-display'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = email;
+    });
+    showApp();
+  } else {
+    btn.disabled = false;
+    btn.textContent = 'Sign in';
+    errEl.textContent = 'Incorrect password. Please try again.';
+    errEl.style.display = 'block';
+    passEl.value = '';
+    passEl.focus();
+
+    // Brief shake animation on the box
+    const box = document.querySelector('.login-box');
+    box.style.animation = 'loginShake .4s ease';
+    box.addEventListener('animationend', () => box.style.animation = '', { once: true });
+  }
+}
+
+function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  const app = document.getElementById('app-root');
+  app.classList.add('unlocked');
+  // Update displayed email to logged-in user
+  const email = getSessionEmail();
+  const emailDisplay = document.querySelector('.user-email');
+  if (emailDisplay) emailDisplay.textContent = email;
+  // Initialise app data (only runs once)
+  if (!app.dataset.loaded) {
+    app.dataset.loaded = '1';
+    load().then(() => { autoPickPeriods(); renderAll(); requestAnimationFrame(initKwScrollSync); });
+  }
+}
+
+function signOut() {
+  try {
+    sessionStorage.removeItem(AUTH.sessionKey);
+    sessionStorage.removeItem(AUTH.sessionKey + '_email');
+  } catch(e) {}
+  // Show login screen
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app-root').classList.remove('unlocked');
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-email').value = '';
+  document.getElementById('login-error').style.display = 'none';
+}
+
+// Boot — check session before loading the app
+(async () => {
+  if (isAuthenticated()) {
+    showApp();
+  }
+  // Login screen is already visible by default (app is hidden via CSS)
+})();
+
 </script>
+
+<style>
+@keyframes loginShake {
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-8px)}
+  40%{transform:translateX(8px)}
+  60%{transform:translateX(-5px)}
+  80%{transform:translateX(5px)}
+}
+</style>
 </body>
 </html>
