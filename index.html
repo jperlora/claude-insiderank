@@ -2458,19 +2458,28 @@ async function loadApiKeyToInput() {
   showKeyStatus(stored ? '✓ Custom API key saved' : '✓ Default API key active', 'var(--green)');
 }
 
-// ── SERPER CALL via Claude API tool_use ─────────────────────
-// The artifact iframe only allows fetch() to api.anthropic.com.
-// We use the Anthropic API's computer_use / bash tool to have Claude
-// actually execute the HTTP request server-side and return real data.
+// ── SERPER CALL — direct fetch (works on Netlify, CORS supported by Serper) ──
+// When running as a standalone page (Netlify), fetch() to google.serper.dev
+// works fine — Serper explicitly allows browser CORS requests.
+// The Claude API proxy is only needed inside the Claude.ai artifact sandbox.
 async function callSerper(query, serperKey) {
-  const response = await fetch('/.netlify/functions/serper', {
+  const res = await fetch('https://google.serper.dev/search', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query }),
+    headers: {
+      'X-API-KEY': serperKey,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ q: query, gl: 'ca', hl: 'en', num: 20 }),
   });
-  
-  if (!response.ok) throw new Error('Serper API failed');
-  return response.json();
+
+  if (!res.ok) {
+    const txt = await res.text().catch(() => '');
+    if (res.status === 429) throw new Error('RATE_LIMIT');
+    if (res.status === 401 || res.status === 403) throw new Error('BAD_KEY');
+    throw new Error(`HTTP ${res.status}: ${txt.slice(0, 120)}`);
+  }
+
+  return res.json();
 }
 
 function parseSerpResponse(query, data, ourDomain) {
@@ -2493,7 +2502,7 @@ function parseSerpResponse(query, data, ourDomain) {
 async function testApiKey() {
   const key = document.getElementById('serper-key-input').value.trim() || await getApiKey();
   if (!key) { toast('Enter a key first', 'err'); return; }
-  showKeyStatus('Testing connection (this takes ~5 seconds)…', 'var(--text3)');
+  showKeyStatus('Testing connection…', 'var(--text3)');
   try {
     const data = await callSerper('casino canada', key);
     const top  = data.organic?.[0];
@@ -2617,7 +2626,7 @@ async function runSerpCheck() {
     }
 
     done++;
-    await sleep(2000); // Claude API + Serper: allow 2s between calls
+    await sleep(1100); // Serper rate limit: ~1 req/sec per API key
   }
 
   progBar.style.width   = '100%';
