@@ -1641,13 +1641,17 @@ async function loadApiKeyToInput(){const stored=await gv(SERP_SK+'key')||'';cons
 async function testApiKey(){const key=document.getElementById('serper-key-input').value.trim()||await getApiKey();if(!key){toast('Enter a key','err');return;}showKeyStatus('Testing…','var(--text3)');try{const res=await fetchSerp('casino canada',key);if(res?.organic?.length){showKeyStatus('✓ Key works — '+res.organic.length+' results','var(--green)');toast('✓ Serper key working!');}else{showKeyStatus('⚠ Connected, 0 results','var(--amber)');}}catch(e){showKeyStatus('✗ '+e.message,'var(--red)');toast('Test failed','err');}}
 async function fetchSerp(query,apiKey){
   const key=apiKey||await getApiKey();if(!key)throw new Error('No API key');
-  const prompt='You are a SERP data relay. Call the Serper.dev API and return the raw JSON.\n\nPOST https://google.serper.dev/search\nHeaders: X-API-KEY: '+key+', Content-Type: application/json\nBody: '+JSON.stringify({q:query,gl:'ca',hl:'en',num:20})+'\n\nReturn ONLY the raw JSON starting with {. No markdown, no code blocks.';
-  const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,messages:[{role:'user',content:prompt}]})});
-  if(!res.ok)throw new Error('Proxy error '+res.status);
-  const claude=await res.json();const raw=claude.content?.find(b=>b.type==='text')?.text?.trim();if(!raw)throw new Error('Empty response');
-  const clean=raw.replace(/^```json?\s*/i,'').replace(/```\s*$/i,'').trim();
-  let parsed;try{parsed=JSON.parse(clean);}catch(e){throw new Error('Parse failed: '+clean.slice(0,100));}
-  if(parsed.error)throw new Error('Serper: '+parsed.error);return parsed;
+  const res=await fetch('https://google.serper.dev/search',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','X-API-KEY':key},
+    body:JSON.stringify({q:query,gl:'ca',hl:'en',num:20})
+  });
+  if(res.status===401||res.status===403)throw new Error('Invalid API key — check Settings');
+  if(res.status===429)throw new Error('Rate limit hit — slow down or upgrade your Serper plan');
+  if(!res.ok){const t=await res.text();throw new Error('Serper error '+res.status+': '+t.slice(0,120));}
+  const data=await res.json();
+  if(data.error)throw new Error('Serper: '+data.error);
+  return data;
 }
 function parseSerpResult(query,data,ourDomain){
   const organic=data.organic||[];const ourD=ourDomain.replace(/^https?:\/\/(www\.)?/,'').replace(/\/.*/,'');
