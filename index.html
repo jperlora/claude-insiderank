@@ -448,7 +448,7 @@ input[type=file]{display:none}
     <button class="nav-btn" onclick="goView('help',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Help</button>
     <button class="nav-btn" onclick="goView('settings',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</button>
   </div>
-  <button class="sync-badge" id="sync-sidebar-badge" onclick="goView('settings',null);setTimeout(()=>document.getElementById('sync-anchor').scrollIntoView({behavior:'smooth'}),200)">
+  <button class="sync-badge" id="sync-sidebar-badge" onclick="if(isAdmin()){goView('settings',null);setTimeout(()=>document.getElementById('sync-anchor').scrollIntoView({behavior:'smooth'}),200);}">
     <span class="sync-dot"></span><span id="sync-sidebar-txt">Team sync: off</span>
   </button>
   <div class="sidebar-foot">
@@ -784,29 +784,23 @@ input[type=file]{display:none}
 
   <!-- STEP 3: TEAM SYNC -->
   <div class="help-sec">
-    <div class="help-sec-title">&#9314; Step 3 — Share data with your team (Supabase sync)</div>
+    <div class="help-sec-title">&#9314; Step 3 — Sharing data with your team (Supabase sync)</div>
     <div class="help-body">
-      By default, snapshots only exist in your own browser. To share them with the whole team, Inside Rank connects to a shared Supabase database.
+      By default, snapshots only exist in your own browser. Inside Rank uses a shared Supabase database to sync snapshots across the team automatically.
       <br><br>
-      <strong>One-time setup (done by Joy or the team admin):</strong>
+      <strong>For Joy (admin) — one-time setup:</strong>
       <ul>
-        <li>Go to <strong>Settings → Team sync</strong></li>
-        <li>Run the SQL shown there in your Supabase project's SQL editor — this creates the required table</li>
-        <li>Enter your Supabase project URL and anon key, then click <strong>Connect &amp; test</strong></li>
+        <li>Go to <strong>Settings → Team sync</strong> — you'll see the full admin panel</li>
+        <li>Run the SQL shown there in your Supabase SQL editor to create the required table</li>
+        <li>After importing a GSC ZIP, click <strong>↑ Sync</strong> next to each snapshot to push it to the team</li>
       </ul>
-      <strong>Pushing snapshots to the team:</strong>
+      <strong>For all other team members — nothing to set up:</strong>
       <ul>
-        <li>After importing a ZIP, go to <strong>Imports</strong> and click the <strong>&#8593; Sync</strong> button next to any snapshot</li>
-        <li>That snapshot is now in the shared database</li>
+        <li>Log in with your email and the team password</li>
+        <li>Snapshots shared by Joy appear automatically in the <strong>Imports</strong> tab with a <span style="background:rgba(46,232,180,.14);color:var(--green);border:1px solid rgba(46,232,180,.28);padding:1px 8px;border-radius:20px;font-size:11px;font-weight:600">&#127381; Team</span> badge</li>
+        <li>The connection is set up automatically — no URL, no key, no settings to configure</li>
       </ul>
-      <strong>For everyone else on the team:</strong>
-      <ul>
-        <li>Open Inside Rank — you'll see a login screen. Enter your email and the team password (ask Joy for it)</li>
-        <li>After logging in, go to <strong>Settings → Team sync</strong> and enter the same Supabase URL and anon key</li>
-        <li>Click <strong>Connect &amp; test</strong> — team snapshots will pull automatically every time you open the tool</li>
-        <li>Team snapshots show a <span class="tag tg-green" style="font-size:9px;vertical-align:middle">&#127381; Team</span> badge in the Imports list</li>
-      </ul>
-      <div class="help-tip">&#128274; Your GSC data is stored in your own Supabase project — Inside Rank never stores it on any external server.</div>
+      <div class="help-tip">&#128274; Your GSC data stays in your own Supabase project. Inside Rank never stores it externally.</div>
     </div>
   </div>
 
@@ -897,7 +891,7 @@ input[type=file]{display:none}
         <li><strong>My keyword shows "Lost" but I know it's still ranking.</strong> This usually means it fell below position 30 in Period B but is still ranking at 31–100. Check the Pos 31–100 KPI card on the Overview. You can also filter the Keywords tab by "31–100 (Ahrefs blind)" to see them all.</li>
         <li><strong>The URL column is blank for some keywords.</strong> GSC Queries exports don't include URL data by default. Import a Pages CSV alongside your Queries CSV (or use the full ZIP export) — the tool will cross-reference and fill in URLs automatically.</li>
         <li><strong>Can I compare more than two periods?</strong> Yes — import as many snapshots as you want, then use the Period A and Period B pickers in the top bar to choose any two.</li>
-        <li><strong>Team members can't see my snapshots.</strong> Make sure you clicked <strong>↑ Sync</strong> next to the snapshot in the Imports tab after connecting Supabase. Also confirm team members have entered the same Supabase URL and anon key in their Settings.</li>
+        <li><strong>Team members can't see my snapshots.</strong> Make sure you clicked <strong>↑ Sync</strong> next to the snapshot in the Imports tab. Team members connect automatically — they don't need to enter any credentials. If they still can't see it, ask them to click <strong>Refresh team snapshots</strong> in Settings.</li>
         <li><strong>The Overview shows 0 clicks/impressions.</strong> This happens when you import a single Queries CSV without a Chart.csv. The tool totals from the top-1,000 rows — if your site has very low traffic it may still show correctly, but for large sites use the full ZIP export.</li>
         <li><strong>Position numbers look like averages, not exact ranks.</strong> That's correct — GSC reports the average position across all times a keyword appeared in results during the period. A keyword at "4.3" means it appeared sometimes at position 3, sometimes at position 5, averaging 4.3.</li>
       </ul>
@@ -912,14 +906,25 @@ input[type=file]{display:none}
   <!-- TEAM SYNC -->
   <div class="set-card" id="sync-anchor">
     <div class="set-title">&#127381; Team sync — Supabase</div>
-    <div class="set-sub">Connect your Supabase project. One person imports → everyone sees the same snapshots automatically.</div>
-    <div class="sync-status-row"><span class="sync-dot-lg off" id="sync-dot-lg"></span><span id="sync-status-txt" style="font-size:13px;color:var(--text2)">Not connected</span><span style="margin-left:auto;font-size:11px;color:var(--text3)" id="sync-last-pull"></span></div>
-    <div style="margin-bottom:8px"><div style="font-size:11px;color:var(--text3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;font-weight:500">Supabase project URL</div><input type="text" class="api-key-input" id="sb-url-input" placeholder="https://xxxx.supabase.co" style="margin-bottom:10px"><div style="font-size:11px;color:var(--text3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;font-weight:500">Anon / public key</div><input type="password" class="api-key-input" id="sb-key-input" placeholder="eyJhbGci…"></div>
-    <div style="display:flex;gap:8px;margin-bottom:12px"><button class="btn btn-green" onclick="connectSupabase()">Connect &amp; test</button><button class="btn btn-ghost" onclick="pullSharedSnaps()">Pull team snapshots</button><button class="btn btn-danger btn-sm" onclick="disconnectSupabase()">Disconnect</button></div>
-    <div id="sb-status" style="font-size:12px;margin-bottom:14px"></div>
-    <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:14px 16px;margin-bottom:10px">
-      <div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px">Required SQL — run once in Supabase SQL editor</div>
-      <pre style="font-size:10px;color:var(--teal);line-height:1.8;overflow-x:auto;white-space:pre-wrap">CREATE TABLE IF NOT EXISTS public.insiderank_snapshots (
+    <!-- ADMIN view -->
+    <div id="sync-admin-panel" style="display:none">
+      <div class="set-sub">You're the admin. Update credentials here if the Supabase project changes — all other team members connect automatically using the hardcoded values.</div>
+      <div class="sync-status-row"><span class="sync-dot-lg off" id="sync-dot-lg"></span><span id="sync-status-txt" style="font-size:13px;color:var(--text2)">Not connected</span><span style="margin-left:auto;font-size:11px;color:var(--text3)" id="sync-last-pull"></span></div>
+      <div style="margin-bottom:8px">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;font-weight:500">Supabase project URL</div>
+        <input type="text" class="api-key-input" id="sb-url-input" placeholder="https://rnjhfubkeciriiomuwei.supabase.co" style="margin-bottom:10px">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;font-weight:500">Anon / public key</div>
+        <input type="password" class="api-key-input" id="sb-key-input" placeholder="eyJhbGci…">
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <button class="btn btn-green" onclick="connectSupabase()">Connect &amp; test</button>
+        <button class="btn btn-ghost" onclick="pullSharedSnaps()">Pull team snapshots</button>
+        <button class="btn btn-danger btn-sm" onclick="disconnectSupabase()">Disconnect</button>
+      </div>
+      <div id="sb-status" style="font-size:12px;margin-bottom:14px"></div>
+      <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:14px 16px;margin-bottom:10px">
+        <div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px">Required SQL — run once in Supabase SQL editor</div>
+        <pre style="font-size:10px;color:var(--teal);line-height:1.8;overflow-x:auto;white-space:pre-wrap">CREATE TABLE IF NOT EXISTS public.insiderank_snapshots (
   id TEXT PRIMARY KEY,
   site TEXT NOT NULL,
   label TEXT,
@@ -931,10 +936,27 @@ input[type=file]{display:none}
 );
 ALTER TABLE insiderank_snapshots ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "allow_all" ON insiderank_snapshots FOR ALL USING (true) WITH CHECK (true);</pre>
-      <button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="copySQL()">Copy SQL</button>
+        <button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="copySQL()">Copy SQL</button>
+      </div>
+      <div style="font-size:11px;color:var(--text3);line-height:1.8">&#9432; Your GSC data stays in your own Supabase project — Inside Rank never stores it.</div>
+      <div id="shared-snaps-wrap" style="display:none"><div style="font-size:13px;font-weight:600;color:var(--text);margin:14px 0 8px">Team snapshots in Supabase</div><div class="shared-list" id="shared-snaps-list"></div></div>
     </div>
-    <div style="font-size:11px;color:var(--text3);line-height:1.8">&#9432; Your GSC data stays in your own Supabase project — Inside Rank never stores it.</div>
-    <div id="shared-snaps-wrap" style="display:none"><div style="font-size:13px;font-weight:600;color:var(--text);margin:14px 0 8px">Team snapshots in Supabase</div><div class="shared-list" id="shared-snaps-list"></div></div>
+    <!-- MEMBER view -->
+    <div id="sync-member-panel" style="display:none">
+      <div class="set-sub">Team sync is managed by the admin. Your connection is set up automatically — no action needed.</div>
+      <div class="sync-status-row">
+        <span class="sync-dot-lg off" id="sync-dot-lg-m"></span>
+        <span id="sync-status-txt-m" style="font-size:13px;color:var(--text2)">Connecting…</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--text3)" id="sync-last-pull-m"></span>
+      </div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:14px">
+        Snapshots are shared by <strong style="color:var(--text)">teams@insidecasino.ca</strong> and pull automatically every time you open the tool. You'll see them in the <strong style="color:var(--text)">Imports</strong> tab with a <span style="background:rgba(46,232,180,.14);color:var(--green);border:1px solid rgba(46,232,180,.28);padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600">&#127381; Team</span> badge.
+      </div>
+      <button class="btn btn-ghost" onclick="pullSharedSnaps()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.27"/></svg>
+        Refresh team snapshots
+      </button>
+    </div>
   </div>
   <!-- SERPER -->
   <div class="set-card">
@@ -972,10 +994,18 @@ const A={
   modalFor:'A',pagesTab:'expanded',
   ahSort:{col:'traffic',dir:-1},ahPg:1,AH_PER:50,
   openKwDropdown:null,
-  sbUrl:'',sbKey:'',sbConnected:false,serpData:{}
+  sbUrl:'',sbKey:'',sbConnected:false,serpData:{},currentEmail:''
 };
 const CHARTS={};
 const SK='ir_v4b_';const SB_SK='ir_sb_';const SERP_SK='ir_serp_';
+
+// ═══ HARDCODED CONFIG — edit these two lines only ═══
+const ADMIN_EMAIL='teams@insidecasino.ca';
+const SB_URL='https://rnjhfubkeciriiomuwei.supabase.co';
+const SB_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuamhmdWJrZWNpcmlpb211d2VpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDI1MjUsImV4cCI6MjA5NDIxODUyNX0.aRN_C4U3u79w85tciYX3k8-HMPQsl7e2543mal6ftp0';
+// ════════════════════════════════════════════════════
+
+function isAdmin(){return(A.currentEmail||'').toLowerCase()===ADMIN_EMAIL.toLowerCase();}
 const SERPER_DEFAULT='b7e4d301d6e20226da8828dff4b9d6b10a600b0d';
 
 // ═══ BOOT ═══
@@ -1009,9 +1039,9 @@ function saveSession(email){
 function clearSession(){localStorage.removeItem(AUTH_SK);}
 
 function showApp(email){
+  A.currentEmail=email;
   document.getElementById('login-screen').style.display='none';
   document.getElementById('sidebar-email').textContent=email;
-  // Set avatar initial
   const av=document.querySelector('.user-avatar');if(av)av.textContent=(email[0]||'T').toUpperCase();
 }
 function showLogin(){document.getElementById('login-screen').style.display='flex';}
@@ -1108,9 +1138,19 @@ function snapB(){return getSnap(A.pB[A.site]);}
 
 // ═══ SUPABASE ═══
 async function loadSbCreds(){
-  const url=await gv(SB_SK+'url'),key=await gv(SB_SK+'key');
+  // Non-admins always use hardcoded constants — zero setup needed
+  if(!isAdmin()){
+    if(SB_URL&&SB_ANON_KEY){
+      A.sbUrl=SB_URL;A.sbKey=SB_ANON_KEY;A.sbConnected=true;
+      updateSyncUI(true);await pullSharedSnaps(true);
+    }
+    return;
+  }
+  // Admin: prefer saved creds (in case they updated via Settings), fall back to hardcoded
+  const url=(await gv(SB_SK+'url'))||SB_URL;
+  const key=(await gv(SB_SK+'key'))||SB_ANON_KEY;
   if(url)A.sbUrl=url;if(key)A.sbKey=key;
-  if(url&&key){A.sbConnected=true;updateSyncUI(true);await pullSharedSnaps(true);}
+  if(A.sbUrl&&A.sbKey){A.sbConnected=true;updateSyncUI(true);await pullSharedSnaps(true);}
 }
 async function saveSbCreds(){await sv(SB_SK+'url',A.sbUrl);await sv(SB_SK+'key',A.sbKey);}
 function sbH(){return{'Content-Type':'application/json',apikey:A.sbKey,Authorization:'Bearer '+A.sbKey,Prefer:'return=representation'};}
@@ -1143,7 +1183,10 @@ async function pullSharedSnaps(silent=false){
     });
     if(added>0){if(A.snaps[A.site])A.snaps[A.site].sort((a,b)=>(a.start||a.label).localeCompare(b.start||b.label));await save();autoPickPeriods();renderAll();renderSnapList();if(!silent)toast('✓ Pulled '+added+' team snapshot'+(added>1?'s':''),'ok');}
     else if(!silent)toast('Team snapshots up to date');
-    const el=document.getElementById('sync-last-pull');if(el)el.textContent='Last pull: '+new Date().toLocaleString();
+    const el=document.getElementById('sync-last-pull');
+    const ts=new Date().toLocaleString();
+    if(el)el.textContent='Last pull: '+ts;
+    localStorage.setItem('ir_last_pull',ts);
     renderSharedList(rows);
   }catch(e){if(!silent)toast('Sync pull failed: '+e.message,'err');}
 }
@@ -1165,12 +1208,46 @@ async function disconnectSupabase(){
   A.sbUrl='';A.sbKey='';A.sbConnected=false;await dv(SB_SK+'url');await dv(SB_SK+'key');
   updateSyncUI(false);document.getElementById('sb-url-input').value='';document.getElementById('sb-key-input').value='';sbSt('Disconnected','var(--text3)');toast('Disconnected');
 }
+function renderSettingsSyncPanel(){
+  const admin=isAdmin();
+  const ap=document.getElementById('sync-admin-panel');
+  const mp=document.getElementById('sync-member-panel');
+  if(ap)ap.style.display=admin?'block':'none';
+  if(mp)mp.style.display=admin?'none':'block';
+  if(admin){
+    // Pre-fill admin inputs with current values
+    const ui=document.getElementById('sb-url-input'),ki=document.getElementById('sb-key-input');
+    if(ui&&A.sbUrl)ui.value=A.sbUrl;if(ki&&A.sbKey)ki.value=A.sbKey;
+  }
+  updateSyncUI(A.sbConnected);
+}
 function updateSyncUI(on){
-  const badge=document.getElementById('sync-sidebar-badge'),dot=document.getElementById('sync-dot-lg'),txt=document.getElementById('sync-sidebar-txt'),stxt=document.getElementById('sync-status-txt');
-  if(on){badge.classList.add('connected');badge.querySelector('.sync-dot').style.background='var(--green)';if(txt)txt.textContent='Team sync: on';if(dot){dot.classList.remove('off');dot.classList.add('on');}if(stxt){stxt.textContent='Connected to Supabase';stxt.style.color='var(--green)';}}
-  else{badge.classList.remove('connected');badge.querySelector('.sync-dot').style.background='';if(txt)txt.textContent='Team sync: off';if(dot){dot.classList.remove('on');dot.classList.add('off');}if(stxt){stxt.textContent='Not connected';stxt.style.color='var(--text2)';}}
-  const ui=document.getElementById('sb-url-input'),ki=document.getElementById('sb-key-input');
-  if(ui&&A.sbUrl)ui.value=A.sbUrl;if(ki&&A.sbKey)ki.value=A.sbKey;
+  const badge=document.getElementById('sync-sidebar-badge');
+  const txt=document.getElementById('sync-sidebar-txt');
+  if(on){
+    if(badge)badge.classList.add('connected');
+    if(badge)badge.querySelector('.sync-dot').style.background='var(--green)';
+    if(txt)txt.textContent='Team sync: on';
+  } else {
+    if(badge)badge.classList.remove('connected');
+    if(badge)badge.querySelector('.sync-dot').style.background='';
+    if(txt)txt.textContent='Team sync: off';
+  }
+  // Admin panel elements
+  const dot=document.getElementById('sync-dot-lg');
+  const stxt=document.getElementById('sync-status-txt');
+  if(dot){dot.classList.toggle('on',on);dot.classList.toggle('off',!on);}
+  if(stxt){stxt.textContent=on?'Connected to Supabase':'Not connected';stxt.style.color=on?'var(--green)':'var(--text2)';}
+  // Member panel elements
+  const dotM=document.getElementById('sync-dot-lg-m');
+  const stxtM=document.getElementById('sync-status-txt-m');
+  if(dotM){dotM.classList.toggle('on',on);dotM.classList.toggle('off',!on);}
+  if(stxtM){stxtM.textContent=on?'Connected — snapshots sync automatically':'Not connected';stxtM.style.color=on?'var(--green)':'var(--text2)';}
+  // Last pull timestamps
+  const lp=document.getElementById('sync-last-pull');
+  const lpM=document.getElementById('sync-last-pull-m');
+  const ts=localStorage.getItem('ir_last_pull');
+  if(ts){if(lp)lp.textContent='Last pull: '+ts;if(lpM)lpM.textContent='Last pull: '+ts;}
 }
 function sbSt(msg,color){const el=document.getElementById('sb-status');if(el)el.innerHTML='<span style="color:'+color+'">'+msg+'</span>';}
 function renderSharedList(rows){
@@ -1330,7 +1407,7 @@ function goView(v,el){
   if(v==='pages')renderPages();
   if(v==='imports')renderSnapList();
   if(v==='competitors')loadSerpForView();
-  if(v==='settings'){loadApiKeyToInput();updateSyncUI(A.sbConnected);}
+  if(v==='settings'){loadApiKeyToInput();renderSettingsSyncPanel();}
 }
 function renderAll(){updateTopbar();renderOverview();}
 function updateTopbar(){const a=snapA(),b=snapB();document.getElementById('pa-val').textContent=a?a.label:'No snapshot';document.getElementById('pa-sub').textContent=a?a.start+' → '+a.end:'—';document.getElementById('pb-val').textContent=b?b.label:'No snapshot';document.getElementById('pb-sub').textContent=b?b.start+' → '+b.end:'—';}
