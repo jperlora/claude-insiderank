@@ -1,5 +1,4 @@
 exports.handler = async (event) => {
-  // Only accept POST requests
   if (event.httpMethod !== 'POST') {
     return { 
       statusCode: 405, 
@@ -8,10 +7,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    // Get the search query from the request
     const { query } = JSON.parse(event.body);
-    
-    // Get the API key from Netlify environment variables (kept secret)
     const apiKey = process.env.SERPER_API_KEY;
 
     if (!apiKey) {
@@ -21,7 +17,6 @@ exports.handler = async (event) => {
       };
     }
 
-    // Call Serper API
     const response = await fetch('https://google.serper.dev/search', {
       method: 'POST',
       headers: {
