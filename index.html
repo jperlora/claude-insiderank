@@ -1158,41 +1158,25 @@ function updateKpStatusBar(){
 }
 
 function parseKP(text,fname){
-  // Decode UTF-16 LE if needed (BOM = 0xFF 0xFE, shows as \xff\xfe or spaced-out chars)
-  let src=text;
-  // If every other char is a space/null, it's UTF-16 decoded as UTF-8 — strip the spaces
-  // Detect: first 20 non-whitespace pairs look like "K e y w o r d"
-  const sample=text.slice(0,100);
-  const isUtf16Mangled=/^[\s\S](?:\x00| )/.test(sample)||/(?:^|\n)K e y/.test(sample)||(sample.charCodeAt(0)===255&&sample.charCodeAt(1)===254);
-  if(isUtf16Mangled){
-    // Remove BOM bytes if present, then strip the interleaved null/space bytes
-    src=text.replace(/^\xff\xfe/,'').replace(/\x00/g,'');
-    // If still spaced out (every char followed by space from UTF-16), collapse
-    if(/^K e y|^\s*K e y/.test(src.slice(0,20))){
-      src=src.split('').filter((_,i)=>i%2===0).join('');
-    }
-  }
-  // Detect delimiter: tab or comma
-  const firstDataLine=src.split(/\r?\n/).find(l=>l.trim()&&!l.trim().startsWith('"Keyword Stats')&&!l.trim().match(/^\d{4}|^November|^January|^"Nov/i));
-  const delim=firstDataLine&&firstDataLine.includes('\t')?'\t':',';
-  const splitRow=line=>delim==='\t'?line.split('\t').map(c=>c.trim().replace(/^"|"$/g,'')):pcr(line);
+  // Strip BOM character \ufeff if present (TextDecoder leaves it in)
+  let src=text.replace(/^\ufeff/,'');
+  // Split into lines
   const raw=src.split(/\r?\n/).map(l=>l.trim()).filter(l=>l);
   if(raw.length<2)return{};
-  // Find header row — skip title row ("Keyword Stats…"), date row, blank rows
+  // Find header row first (skip title "Keyword Stats…" and date range rows)
   let hdrIdx=-1;
   for(let i=0;i<Math.min(15,raw.length);i++){
-    const cells=splitRow(raw[i]);const first=(cells[0]||'').toLowerCase().trim();
-    // Header row starts with "keyword" and has "monthly" or "competition" somewhere
-    if(first==='keyword'||first==='keywords'||first==='search term'){
-      const row=raw[i].toLowerCase();if(row.includes('monthly')||row.includes('competition')||row.includes('search')){hdrIdx=i;break;}
-      // Even without those, if first col is exactly "keyword" that's the header
-      if(first==='keyword'){hdrIdx=i;break;}
-    }
+    const cells=raw[i].split('\t');
+    const first=(cells[0]||'').replace(/^"|"$/g,'').toLowerCase().trim();
+    if(first==='keyword'||first==='keywords'||first==='search term'){hdrIdx=i;break;}
   }
   if(hdrIdx<0)return{};
+  // Detect delimiter using the HEADER row (guaranteed to have all columns)
+  const delim=raw[hdrIdx].includes('\t')?'\t':',';
+  const splitRow=line=>delim==='\t'?line.split('\t').map(c=>c.trim().replace(/^"|"$/g,'')):pcr(line);
   const hdr=splitRow(raw[hdrIdx]).map(h=>h.toLowerCase().trim());
   const kwC=hdr.findIndex(h=>h==='keyword'||h==='keywords'||h==='search term');
-  const volC=hdr.findIndex(h=>h.includes('avg')&&h.includes('monthly')||h.includes('avg. monthly')||h==='avg. monthly searches'||h.includes('monthly searches'));
+  const volC=hdr.findIndex(h=>(h.includes('avg')&&h.includes('monthly'))||h==='avg. monthly searches'||h.includes('monthly searches'));
   const compC=hdr.findIndex(h=>h==='competition'&&!h.includes('index'));
   const bidLoC=hdr.findIndex(h=>h.includes('low range'));
   const bidHiC=hdr.findIndex(h=>h.includes('high range'));
@@ -1205,7 +1189,7 @@ function parseKP(text,fname){
     if(rawVol===''||rawVol==='-')vol=0;
     else if(rawVol==='<10')vol=5;
     else if(/^[\d,]+$/.test(rawVol))vol=parseInt(rawVol.replace(/,/g,''),10);
-    else{const m=rawVol.match(/^([\d,.]+)\s*[kK]?\s*[-–]\s*([\d,.]+)\s*[kK]?$/);if(m){const mult=rawVol.toLowerCase().includes('k')?1000:1;const lo=parseFloat(m[1].replace(/,/g,''))*mult;const hi=parseFloat(m[2].replace(/,/g,''))*mult;vol=Math.round((lo+hi)/2);}else{const n=parseFloat(rawVol.replace(/[^0-9.]/g,''));if(!isNaN(n))vol=rawVol.toLowerCase().includes('k')?Math.round(n*1000):Math.round(n);}}
+    else{const m=rawVol.match(/^([\d,.]+)\s*[kK]?\s*[-–]\s*([\d,.]+)\s*[kK]?$/);if(m){const mult=/[kK]/.test(rawVol)?1000:1;const lo=parseFloat(m[1].replace(/,/g,''))*mult;const hi=parseFloat(m[2].replace(/,/g,''))*mult;vol=Math.round((lo+hi)/2);}else{const n=parseFloat(rawVol.replace(/[^0-9.]/g,''));if(!isNaN(n))vol=/[kK]/.test(rawVol)?Math.round(n*1000):Math.round(n);}}
     const competition=compC>=0?(cells[compC]||'').trim():'';
     const bidLo=bidLoC>=0?parseFloat((cells[bidLoC]||'').replace(/[^0-9.]/g,''))||0:0;
     const bidHi=bidHiC>=0?parseFloat((cells[bidHiC]||'').replace(/[^0-9.]/g,''))||0:0;
