@@ -209,6 +209,12 @@ select.fi{cursor:pointer}
 .ah-table tbody tr:last-child td{border-bottom:none}
 .ah-table tbody tr:hover td{background:rgba(255,255,255,.03)}
 .ah-url-cell{max-width:280px}
+.ah-topkw-cell{min-width:200px;max-width:260px}
+.ah-kw-primary{font-size:12px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.ah-kw-secondary{display:flex;align-items:center;gap:5px;margin-top:3px;font-size:11px;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ah-kw-secondary .pb{transform:scale(0.85);transform-origin:left center}
+.ah-kw-more{display:inline-flex;align-items:center;gap:3px;padding:1px 7px;border-radius:4px;background:var(--bg4);border:1px solid var(--border2);color:var(--text3);font-size:10px;cursor:pointer;font-family:var(--mono);font-weight:600;transition:all .15s;white-space:nowrap;margin-top:5px}
+.ah-kw-more:hover{border-color:var(--border3);color:var(--text);background:var(--bg5)}
 .ah-url-link{font-family:var(--mono);font-size:11px;color:var(--teal);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;text-decoration:none}
 .ah-url-link:hover{text-decoration:underline;color:var(--blue)}
 .ah-pgtype{font-size:10px;color:var(--text3);margin-top:3px}
@@ -490,9 +496,8 @@ input[type=file]{display:none}
           <th onclick="srtAh('trafficChg')" style="min-width:90px">Change<span class="si" id="si-ahtrc">&#8597;</span></th>
           <th onclick="srtAh('keywords')" style="min-width:80px">Keywords<span class="si" id="si-ahkw">&#8597;</span></th>
           <th onclick="srtAh('kwChg')" style="min-width:80px">KW change<span class="si" id="si-ahkwc">&#8597;</span></th>
-          <th onclick="srtAh('topKw')" style="min-width:160px">Top keyword<span class="si" id="si-ahtk">&#8597;</span></th>
+          <th onclick="srtAh('topKw')" style="min-width:220px">Top keywords<span class="si" id="si-ahtk">&#8597;</span></th>
           <th onclick="srtAh('topKwVol')" style="min-width:80px">Volume<span class="si" id="si-ahvol">&#8597;</span></th>
-          <th style="min-width:100px">Top keywords</th>
         </tr></thead><tbody id="ah-body"></tbody></table>
       </div>
       <div class="pager"><span class="pager-info" id="ah-pinfo"></span><button class="pager-btn" id="ah-prev" onclick="pgAh(-1)">&#8592; Prev</button><button class="pager-btn" id="ah-next" onclick="pgAh(1)">Next &#8594;</button></div>
@@ -998,6 +1003,8 @@ function buildAhData(){
     pg.kwCount=pg.kws.length;
     const topKw=[...pg.kws].filter(k=>k.posB>0).sort((a,b)=>b.imB-a.imB)[0]||null;
     pg.topKw=topKw?.query||'';pg.topKwPos=topKw?.posB||null;
+    // Store top 3 for inline display + full list for dropdown
+    pg.topKws=[...pg.kws].filter(k=>k.posB>0).sort((a,b)=>b.imB-a.imB).slice(0,15);
     if(topKw){
       const kpData=getKpVol(topKw.query);
       if(kpData&&kpData.vol>0){pg.topKwVol=kpData.vol;pg.topKwVolReal=true;pg.topKwComp=kpData.competition;}
@@ -1033,20 +1040,48 @@ function renderAhrefsTable(){
     const stH=r.pageStatus==='new'?'<span class="st-new">New</span>':r.pageStatus==='lost'?'<span class="st-lost">Lost</span>':r.pageStatus==='up'?'<span class="st-up">↑</span>':r.pageStatus==='down'?'<span class="st-dn">↓</span>':'<span class="st-stable">—</span>';
     const tcH=r.trA===0&&r.trB>0?'<span class="pct-up">+100%</span>':r.trA>0?'<span class="'+(r.trafficChg>=0?'pct-up':'pct-dn')+'">'+(r.trafficChg>=0?'+':'')+r.trafficChg.toFixed(1)+'%</span>':'<span class="pct-na">—</span>';
     const kcH=r.kwA===0&&r.kwB>0?'<span class="pct-up">+100%</span>':r.kwA>0?'<span class="'+(r.kwChg>=0?'pct-up':'pct-dn')+'">'+(r.kwChg>=0?'+':'')+r.kwChg.toFixed(1)+'%</span>':'<span class="pct-na">—</span>';
-    const tkH=r.topKw?'<div style="font-size:12px;font-weight:500;color:var(--text);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(r.topKw)+'">'+esc(r.topKw)+'</div>'+(r.topKwPos?posBadge(r.topKwPos):''):'-';
-    const volH=r.topKwVol>0?(r.topKwVolReal?'<span class="vol-real">'+fmtN(r.topKwVol)+'<span class="vol-src" style="color:var(--green)">KP</span></span>'+(r.topKwComp?'<div style="font-size:9px;color:var(--text3);margin-top:2px">'+esc(r.topKwComp)+' comp</div>':''):'<span class="vol-est">~'+fmtN(r.topKwVol)+'</span>'):'<span class="vol-est">—</span>';
-    return'<tr><td class="ah-url-cell"><a class="ah-url-link" href="'+esc(url)+'" target="_blank" rel="noopener" title="'+esc(r.page)+'">'+esc(trimUrl(r.page))+'</a><div class="ah-pgtype">'+esc(r.category)+'</div></td><td>'+stH+'</td><td><div class="tr-bar-wrap"><span style="font-family:var(--mono);font-size:12px;min-width:28px">'+r.trB+'</span><div class="tr-bar-bg"><div class="tr-bar-fill" style="width:'+trPct+'%"></div></div></div></td><td>'+tcH+'</td><td style="font-family:var(--mono);font-size:12px">'+r.kwB+'</td><td>'+kcH+'</td><td>'+tkH+'</td><td>'+volH+'</td><td class="rel-cell"><button class="kw-expand-btn" onclick="toggleKwDrop(event,\''+esc(r.page).replace(/'/g,"\\'")+'\')">'+r.kwB+' kw ▾</button></td></tr>';
+    // Build inline top-keywords cell (primary + 2 secondary + "N more" button)
+    const allKws=r.topKws||[];
+    let tkH='<span style="color:var(--text3);font-size:11px">—</span>';
+    if(allKws.length>0){
+      const primary=allKws[0];
+      const kp0=getKpVol(primary.query);
+      const vol0=kp0&&kp0.vol>0?'<span style="color:var(--green);font-size:10px;font-weight:700;margin-left:2px">'+fmtN(kp0.vol)+'<sup style="font-size:8px">KP</sup></span>':'';
+      let html='<div class="ah-kw-primary"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px" title="'+esc(primary.query)+'">'+esc(primary.query)+'</span>'+posBadge(primary.posB)+vol0+'</div>';
+      // Up to 2 secondary keywords
+      const secondary=allKws.slice(1,3);
+      secondary.forEach(kw=>{
+        const kpS=getKpVol(kw.query);
+        const volS=kpS&&kpS.vol>0?'<span style="color:var(--green);font-size:10px;font-weight:600;margin-left:2px">'+fmtN(kpS.vol)+'</span>':'';
+        html+='<div class="ah-kw-secondary"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:145px" title="'+esc(kw.query)+'">'+esc(kw.query)+'</span>'+posBadge(kw.posB)+volS+'</div>';
+      });
+      // "N more" button if >3 keywords
+      if(allKws.length>3){
+        html+='<button class="ah-kw-more rel-cell" onclick="toggleKwDrop(event,\''+esc(r.page).replace(/'/g,"\\'")+'\')">+'+( allKws.length-3)+' more ▾</button>';
+      }
+      tkH=html;
+    }
+    return'<tr><td class="ah-url-cell"><a class="ah-url-link" href="'+esc(url)+'" target="_blank" rel="noopener" title="'+esc(r.page)+'">'+esc(trimUrl(r.page))+'</a><div class="ah-pgtype">'+esc(r.category)+'</div></td><td>'+stH+'</td><td><div class="tr-bar-wrap"><span style="font-family:var(--mono);font-size:12px;min-width:28px">'+r.trB+'</span><div class="tr-bar-bg"><div class="tr-bar-fill" style="width:'+trPct+'%"></div></div></div></td><td>'+tcH+'</td><td style="font-family:var(--mono);font-size:12px">'+r.kwB+'</td><td>'+kcH+'</td><td class="ah-topkw-cell rel-cell">'+tkH+'</td><td>'+volH+'</td></tr>';
   }).join('');
 }
 function toggleKwDrop(e,page){
   e.stopPropagation();document.querySelectorAll('.kw-dropdown').forEach(d=>d.remove());
   if(A.openKwDropdown===page){A.openKwDropdown=null;return;}
-  A.openKwDropdown=page;const cell=e.currentTarget.closest('.rel-cell');
+  A.openKwDropdown=page;
+  // Find the nearest cell that can hold the dropdown (rel-cell or ah-topkw-cell)
+  const cell=e.currentTarget.closest('.ah-topkw-cell')||e.currentTarget.closest('.rel-cell')||e.currentTarget.parentElement;
   const sa=snapA(),sb=snapB(),mA=buildKwMap(sa),mB=buildKwMap(sb);
   const kws=compareKws(mA,mB).filter(r=>r.page===page&&r.posB>0).sort((a,b)=>b.imB-a.imB).slice(0,15);
   if(!kws.length){toast('No keywords for this page');A.openKwDropdown=null;return;}
   const drop=document.createElement('div');drop.className='kw-dropdown';
-  drop.innerHTML='<div class="kw-drop-hdr">Top keywords — '+esc(trimUrl(page))+(A.kpLoaded?' · <span style="color:var(--green);font-weight:600">KP volumes active</span>':'')+'</div>'+kws.map(r=>{const kp=getKpVol(r.query);const volStr=kp&&kp.vol>0?'<span style="color:var(--green);font-weight:600">'+fmtN(kp.vol)+'<span style="font-size:9px;vertical-align:super"> KP</span></span>':'<span style="color:var(--text3)">~'+fmtN(r.imB)+' imp</span>';return'<div class="kw-drop-row"><span class="kw-drop-query">'+esc(r.query)+'</span>'+posBadge(r.posB)+volStr+'</div>';}).join('');
+  drop.innerHTML='<div class="kw-drop-hdr">All ranking keywords — '+esc(trimUrl(page))+(A.kpLoaded?' · <span style="color:var(--green);font-weight:600">KP volumes</span>':'')+'</div>'+kws.map((r,i)=>{
+    const kp=getKpVol(r.query);
+    const volStr=kp&&kp.vol>0?'<span style="color:var(--green);font-weight:600">'+fmtN(kp.vol)+'<span style="font-size:9px;vertical-align:super"> KP</span></span>':'<span style="color:var(--text3)">~'+fmtN(r.imB)+' imp</span>';
+    const rowStyle=i<3?'background:rgba(255,255,255,.03);':'';
+    return'<div class="kw-drop-row" style="'+rowStyle+'"><span class="kw-drop-query">'+esc(r.query)+'</span>'+posBadge(r.posB)+volStr+'</div>';
+  }).join('');
+  // Position relative to cell
+  cell.style.position='relative';
   cell.appendChild(drop);
 }
 function srtAh(col){if(A.ahSort.col===col)A.ahSort.dir*=-1;else{A.ahSort.col=col;A.ahSort.dir=col==='url'||col==='status'||col==='topKw'?1:-1;}A.ahPg=1;['ahurl','ahst','ahtr','ahtrc','ahkw','ahkwc','ahtk','ahvol'].forEach(k=>{const el=document.getElementById('si-'+k);if(el){el.textContent='↕';el.classList.remove('on');}});const map={url:'ahurl',status:'ahst',traffic:'ahtr',trafficChg:'ahtrc',keywords:'ahkw',kwChg:'ahkwc',topKw:'ahtk',topKwVol:'ahvol'};const el=document.getElementById('si-'+(map[col]||col));if(el){el.textContent=A.ahSort.dir===1?'↑':'↓';el.classList.add('on');}renderAhrefsTable();}
