@@ -365,7 +365,53 @@ input[type=file]{display:none}
   .imp-cards,.imp-cards{grid-template-columns:1fr}
   .pr-metrics{display:none}
 }
-/* ═══ LOGIN SCREEN ═══ */
+/* ═══ PAGE PERFORMANCE ═══ */
+.pp-upload-zone{border:2px dashed var(--border2);border-radius:var(--rl);padding:28px 22px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:12px}
+.pp-upload-zone:hover,.pp-upload-zone.drag{border-color:var(--blue);background:var(--blue-d)}
+.pp-upload-icon{font-size:28px;margin-bottom:8px}
+.pp-upload-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px}
+.pp-upload-sub{font-size:12px;color:var(--text3);line-height:1.6}
+.pp-period-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.pp-period-card{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rl);padding:16px 18px}
+.pp-period-label{font-size:11px;text-transform:uppercase;letter-spacing:.6px;font-weight:600;margin-bottom:10px}
+.pp-period-label.a{color:var(--text3)}
+.pp-period-label.b{color:var(--blue)}
+.pp-status{font-size:12px;color:var(--text3);margin-top:6px;line-height:1.6}
+.pp-status.loaded{color:var(--green)}
+.pp-kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.perf-tbl{width:100%;border-collapse:collapse;font-size:13px;min-width:1000px}
+.perf-tbl thead th{padding:10px 14px;text-align:left;color:var(--text2);font-size:10px;text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:2px solid var(--border2);white-space:nowrap;cursor:pointer;user-select:none;background:var(--bg2);position:sticky;top:0;z-index:2;transition:color .15s}
+.perf-tbl thead th:hover{color:var(--text)}
+.perf-tbl tbody td{padding:11px 14px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+.perf-tbl tbody tr:last-child td{border-bottom:none}
+.perf-tbl tbody tr:hover td{background:rgba(255,255,255,.03)}
+.pp-url{font-family:var(--mono);font-size:11px;color:var(--teal);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px;display:block;text-decoration:none}
+.pp-url:hover{color:var(--blue);text-decoration:underline}
+.pp-cat{font-size:10px;color:var(--text3);margin-top:2px}
+.pp-metric{font-family:var(--mono);font-size:13px;font-weight:600}
+.pp-pct{font-size:11px;font-family:var(--mono);font-weight:600;white-space:nowrap}
+.pp-pct.up{color:var(--green)}.pp-pct.dn{color:var(--red)}.pp-pct.na{color:var(--text3)}
+.pp-bounce-bar{display:flex;align-items:center;gap:7px}
+.pp-bounce-track{width:50px;height:4px;background:var(--bg5);border-radius:2px;flex-shrink:0}
+.pp-bounce-fill{height:4px;border-radius:2px}
+.pp-time{font-family:var(--mono);font-size:12px}
+.kw-pill-wrap{display:flex;flex-direction:column;gap:3px}
+.kw-pill{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);white-space:nowrap}
+.kw-pill-query{overflow:hidden;text-overflow:ellipsis;max-width:160px}
+.pp-how-to-mini{font-size:11px;color:var(--text3);line-height:1.7;margin-bottom:10px;padding:8px 10px;background:var(--bg4);border-radius:6px;border:1px solid var(--border)}
+.pp-how-to-mini strong{color:var(--text2)}
+.pp-how-to-mini em{color:var(--teal);font-style:normal;font-weight:500}
+.pp-more-btn{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:4px;background:var(--bg4);border:1px solid var(--border2);color:var(--text3);font-size:10px;cursor:pointer;font-family:var(--mono);font-weight:600;transition:all .15s;white-space:nowrap;margin-top:3px}
+.pp-more-btn:hover{border-color:var(--border3);color:var(--text);background:var(--bg5)}
+.ga4-how-to{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rl);padding:18px 20px;margin-bottom:18px}
+.ga4-how-to-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.ga4-steps{counter-reset:ga4step;list-style:none;padding:0}
+.ga4-steps li{counter-increment:ga4step;display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--text2);line-height:1.7}
+.ga4-steps li:last-child{border-bottom:none}
+.ga4-steps li::before{content:counter(ga4step);width:20px;height:20px;border-radius:50%;background:var(--blue-d);border:1px solid rgba(91,159,255,.3);color:var(--blue);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.ga4-steps strong{color:var(--text)}
+.ga4-steps code{font-family:var(--mono);font-size:10px;color:var(--teal);background:var(--bg4);padding:1px 5px;border-radius:3px}
+@media(max-width:1080px){.pp-period-grid{grid-template-columns:1fr}.pp-kpi{grid-template-columns:repeat(2,1fr)}.pp-how-to-mini{display:none}}
 .login-screen{position:fixed;inset:0;background:var(--bg0);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
 .login-card{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:40px 40px 36px;width:100%;max-width:420px;box-shadow:0 24px 64px rgba(0,0,0,.6)}
 .login-logo{display:flex;align-items:center;gap:12px;margin-bottom:32px}
@@ -444,6 +490,7 @@ input[type=file]{display:none}
     <button class="nav-btn" onclick="goView('keywords',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Keywords</button>
     <button class="nav-btn" onclick="goView('pages',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Pages</button>
     <button class="nav-btn" onclick="goView('competitors',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>SERP Tracker</button>
+    <button class="nav-btn" onclick="goView('performance',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Page Performance</button>
     <button class="nav-btn" onclick="goView('imports',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Imports</button>
     <button class="nav-btn" onclick="goView('help',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Help</button>
     <button class="nav-btn" onclick="goView('settings',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</button>
@@ -700,6 +747,172 @@ input[type=file]{display:none}
   </div>
 </div>
 
+<!-- PAGE PERFORMANCE -->
+<div class="view" id="v-performance">
+  <div class="page-hdr">
+    <div>
+      <div class="page-title">Page Performance</div>
+      <div class="page-sub">GA4 engagement metrics joined with GSC ranking data — visitors, views, time on page, and ranking keywords per page, with period-over-period comparisons.</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-shrink:0">
+      <button class="btn btn-ghost btn-sm" onclick="exportPerfCSV()" id="perf-export-btn" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV
+      </button>
+    </div>
+  </div>
+
+  <!-- How to export from GA4 -->
+  <div class="ga4-how-to" id="ga4-howto">
+    <div class="ga4-how-to-title">&#128202; Two GA4 reports — which gives you what</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+      <div style="background:var(--bg4);border:1px solid rgba(91,159,255,.25);border-radius:var(--r);padding:14px">
+        <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:8px">&#128196; Report 1 — Landing pages <span style="background:var(--green-d);color:var(--green);border:1px solid rgba(46,232,180,.3);padding:1px 7px;border-radius:4px;font-size:10px;font-weight:600;margin-left:4px">You already have this</span></div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8">Reports → Engagement → <strong style="color:var(--text)">Landing pages</strong><br>Gives you: <span style="color:var(--green)">✓ Sessions &nbsp; ✓ Active users &nbsp; ✓ Time on page</span><br><span style="color:var(--red)">✗ Views (not in this report)</span></div>
+      </div>
+      <div style="background:var(--bg4);border:1px solid rgba(255,184,63,.25);border-radius:var(--r);padding:14px">
+        <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:8px">&#128202; Report 2 — Pages and screens <span style="background:var(--amber-d);color:var(--amber);border:1px solid rgba(255,184,63,.3);padding:1px 7px;border-radius:4px;font-size:10px;font-weight:600;margin-left:4px">Upload for Views</span></div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8">Reports → Engagement → <strong style="color:var(--text)">Pages and screens</strong><br>Gives you: <span style="color:var(--green)">✓ Views</span><br><span style="color:var(--text3)">Upload Period B below to fill the Views column</span></div>
+      </div>
+    </div>
+    <ol class="ga4-steps">
+      <li><strong>Sessions + Time on page:</strong> Reports → Engagement → <strong>Landing pages</strong> → set date range → download → <code>Download CSV</code>. Export two — Period A and Period B.</li>
+      <li><strong>Views:</strong> Reports → Engagement → <strong>Pages and screens</strong> → same date ranges → <code>Download CSV</code>. Upload Period B below as "Pages &amp; Screens".</li>
+
+    </ol>
+
+  </div>
+
+  <!-- Upload cards — 2x2 grid -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px">
+
+    <!-- A: Landing pages -->
+    <div class="pp-period-card">
+      <div class="pp-period-label a">&#128197; Period A — Landing pages <span style="font-size:9px;font-weight:500;opacity:.7">(previous period)</span></div>
+      <div class="pp-how-to-mini">
+        <strong>How to export:</strong> GA4 → Reports → Engagement → Landing pages → set your <em>previous</em> date range → download icon → Download CSV
+      </div>
+      <div class="pp-upload-zone" id="ga4a-drop" onclick="document.getElementById('ga4a-input').click()" ondragover="doDragOver(event,'ga4a-drop')" ondragleave="doDragLeave('ga4a-drop')" ondrop="doGa4Drop(event,'A')">
+        <div class="pp-upload-icon">&#128229;</div>
+        <div class="pp-upload-title">Drop GA4 CSV here</div>
+        <div class="pp-upload-sub">Fills: Visitors Δ · Time on page Δ</div>
+      </div>
+      <input type="file" id="ga4a-input" accept=".csv" onchange="handleGa4('A',this.files[0]);this.value=''">
+      <div class="pp-status" id="ga4a-status">No file uploaded — needed for comparison columns</div>
+    </div>
+
+    <!-- A: Pages & screens -->
+    <div class="pp-period-card" style="border-color:rgba(255,184,63,.2)">
+      <div class="pp-period-label" style="color:var(--amber)">&#128197; Period A — Pages &amp; screens <span style="font-size:9px;font-weight:500;opacity:.7">(previous period)</span></div>
+      <div class="pp-how-to-mini">
+        <strong>How to export:</strong> GA4 → Reports → Engagement → Pages and screens → set your <em>previous</em> date range → download icon → Download CSV
+      </div>
+      <div class="pp-upload-zone" id="ga4psa-drop" onclick="document.getElementById('ga4psa-input').click()" ondragover="doDragOver(event,'ga4psa-drop')" ondragleave="doDragLeave('ga4psa-drop')" ondrop="doGa4Drop(event,'PSA')">
+        <div class="pp-upload-icon">&#128202;</div>
+        <div class="pp-upload-title">Drop GA4 CSV here</div>
+        <div class="pp-upload-sub">Fills: Views Δ comparison column</div>
+      </div>
+      <input type="file" id="ga4psa-input" accept=".csv" onchange="handleGa4('PSA',this.files[0]);this.value=''">
+      <div class="pp-status" id="ga4psa-status">No file uploaded — needed for Views change %</div>
+    </div>
+
+    <!-- B: Landing pages -->
+    <div class="pp-period-card" style="border-color:rgba(91,159,255,.25)">
+      <div class="pp-period-label b">&#128198; Period B — Landing pages <span style="font-size:9px;font-weight:500;opacity:.7">(current period)</span></div>
+      <div class="pp-how-to-mini">
+        <strong>How to export:</strong> GA4 → Reports → Engagement → Landing pages → set your <em>current</em> date range → download icon → Download CSV
+      </div>
+      <div class="pp-upload-zone" id="ga4b-drop" onclick="document.getElementById('ga4b-input').click()" ondragover="doDragOver(event,'ga4b-drop')" ondragleave="doDragLeave('ga4b-drop')" ondrop="doGa4Drop(event,'B')">
+        <div class="pp-upload-icon">&#128229;</div>
+        <div class="pp-upload-title">Drop GA4 CSV here</div>
+        <div class="pp-upload-sub">Required · Visitors · Time on page</div>
+      </div>
+      <input type="file" id="ga4b-input" accept=".csv" onchange="handleGa4('B',this.files[0]);this.value=''">
+      <div class="pp-status" id="ga4b-status">No file uploaded</div>
+    </div>
+
+    <!-- B: Pages & screens -->
+    <div class="pp-period-card" style="border-color:rgba(91,159,255,.25)">
+      <div class="pp-period-label b">&#128198; Period B — Pages &amp; screens <span style="font-size:9px;font-weight:500;opacity:.7">(current period)</span></div>
+      <div class="pp-how-to-mini">
+        <strong>How to export:</strong> GA4 → Reports → Engagement → Pages and screens → set your <em>current</em> date range → download icon → Download CSV
+      </div>
+      <div class="pp-upload-zone" id="ga4ps-drop" onclick="document.getElementById('ga4ps-input').click()" ondragover="doDragOver(event,'ga4ps-drop')" ondragleave="doDragLeave('ga4ps-drop')" ondrop="doGa4Drop(event,'PS')">
+        <div class="pp-upload-icon">&#128202;</div>
+        <div class="pp-upload-title">Drop GA4 CSV here</div>
+        <div class="pp-upload-sub">Fills: Views column</div>
+      </div>
+      <input type="file" id="ga4ps-input" accept=".csv" onchange="handleGa4('PS',this.files[0]);this.value=''">
+      <div class="pp-status" id="ga4ps-status">No file uploaded — needed for Views column</div>
+    </div>
+
+  </div>
+
+  <!-- empty state -->
+  <div id="perf-empty" style="text-align:center;padding:50px 20px;color:var(--text3)">
+    <div style="font-size:36px;margin-bottom:12px;opacity:.25">&#128202;</div>
+    <div style="font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px">Upload GA4 exports to get started</div>
+    <div style="font-size:13px;color:var(--text3);max-width:400px;margin:0 auto">Upload at least a Period B file above. GSC keyword data is joined automatically from whichever snapshot you've set as Period B.</div>
+  </div>
+
+  <!-- results -->
+  <div id="perf-content" style="display:none">
+    <!-- KPI row -->
+    <div class="pp-kpi" id="perf-kpi-row"></div>
+
+    <!-- filters -->
+    <div class="filters" style="margin-bottom:14px">
+      <div class="fi-wrap">
+        <span class="fi-icon">&#128269;</span>
+        <input class="fi" type="text" id="perf-search" placeholder="Search pages…" style="width:220px;padding-left:26px" oninput="renderPerfTable()">
+      </div>
+      <select class="fi" id="perf-cat" onchange="renderPerfTable()">
+        <option value="">All page types</option>
+      </select>
+      <select class="fi" id="perf-sort" onchange="renderPerfTable()">
+        <option value="visitors">Sort: Visitors</option>
+        <option value="visitorsDelta">Sort: Visitor change</option>
+        <option value="views">Sort: Views</option>
+        <option value="timeOnPage">Sort: Time on page</option>
+        <option value="kwCount">Sort: Ranking keywords</option>
+      </select>
+      <select class="fi" id="perf-kw-filter" onchange="renderPerfTable()">
+        <option value="">All pages</option>
+        <option value="ranked">Has ranking keywords</option>
+        <option value="top10">Has top-10 keyword</option>
+        <option value="no-kw">No ranking data</option>
+      </select>
+      <span style="margin-left:auto;font-size:11px;color:var(--text3)" id="perf-count-lbl"></span>
+    </div>
+
+    <!-- table -->
+    <div class="card">
+      <div id="perf-top-scroll" style="overflow-x:auto;overflow-y:hidden;height:14px;border-bottom:1px solid var(--border)"><div id="perf-top-inner" style="height:1px"></div></div>
+      <div class="tbl-wrap" id="perf-tbl-wrap">
+        <table class="perf-tbl" id="perf-table">
+          <thead><tr>
+            <th onclick="srtPerf('url')" style="min-width:240px">Page<span class="si" id="si-purl">&#8597;</span></th>
+            <th onclick="srtPerf('visitors')" style="min-width:90px">Visitors<span class="si" id="si-pvis">&#8597;</span></th>
+            <th onclick="srtPerf('visitorsDeltaPct')" style="min-width:90px">Visitors &#916;<span class="si" id="si-pvisd">&#8597;</span></th>
+            <th onclick="srtPerf('views')" style="min-width:80px">Views<span class="si" id="si-pviews">&#8597;</span></th>
+            <th onclick="srtPerf('viewsDeltaPct')" style="min-width:80px">Views &#916;<span class="si" id="si-pviewsd">&#8597;</span></th>
+            <th onclick="srtPerf('timeOnPage')" style="min-width:110px">Time on page<span class="si" id="si-ptime">&#8597;</span></th>
+            <th style="min-width:220px">Ranking keywords</th>
+          </tr></thead>
+          <tbody id="perf-tbody"></tbody>
+        </table>
+      </div>
+      <div class="pager">
+        <span class="pager-info" id="perf-pinfo"></span>
+        <button class="pager-btn" id="perf-prev" onclick="pgPerf(-1)">&#8592; Prev</button>
+        <button class="pager-btn" id="perf-next" onclick="pgPerf(1)">Next &#8594;</button>
+      </div>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);line-height:1.8">
+      &#9432; <strong style="color:var(--text2)">Visitors</strong> = GA4 sessions. <strong style="color:var(--text2)">Views</strong> = GA4 screenPageViews. <strong style="color:var(--text2)">Ranking keywords</strong> = from your GSC Period B snapshot, matched by URL. Change % shown only when Period A GA4 file is uploaded.
+    </div>
+  </div>
+</div>
+
 <!-- IMPORTS -->
 <div class="view" id="v-imports">
   <div class="page-hdr"><div><div class="page-title">Imports &amp; snapshots</div><div class="page-sub" id="imp-sub">Each GSC export becomes a snapshot. Pick any two to compare.</div></div></div>
@@ -791,14 +1004,16 @@ input[type=file]{display:none}
       <strong>For Joy (admin) — one-time setup:</strong>
       <ul>
         <li>Go to <strong>Settings → Team sync</strong> — you'll see the full admin panel</li>
-        <li>Run the SQL shown there in your Supabase SQL editor to create the required table</li>
+        <li>Run the SQL shown there in your Supabase SQL editor to create the required tables (there are now two: one for GSC snapshots, one for GA4 data)</li>
         <li>After importing a GSC ZIP, click <strong>↑ Sync</strong> next to each snapshot to push it to the team</li>
+        <li>After uploading GA4 CSVs in Page Performance, they are pushed to the team <strong>automatically</strong> — no extra step needed</li>
       </ul>
       <strong>For all other team members — nothing to set up:</strong>
       <ul>
         <li>Log in with your email and the team password</li>
-        <li>Snapshots shared by Joy appear automatically in the <strong>Imports</strong> tab with a <span style="background:rgba(46,232,180,.14);color:var(--green);border:1px solid rgba(46,232,180,.28);padding:1px 8px;border-radius:20px;font-size:11px;font-weight:600">&#127381; Team</span> badge</li>
-        <li>The connection is set up automatically — no URL, no key, no settings to configure</li>
+        <li>GSC snapshots and GA4 data both appear automatically — check the <strong>Page Performance</strong> tab to see the GA4 data loaded</li>
+        <li>Cards showing a <span style="background:rgba(46,232,180,.14);color:var(--green);border:1px solid rgba(46,232,180,.28);padding:1px 8px;border-radius:20px;font-size:11px;font-weight:600">🌐 Team</span> badge were synced by the admin</li>
+        <li>Use <strong>Settings → Refresh GA4 data</strong> to force a manual pull if data seems stale</li>
       </ul>
       <div class="help-tip">&#128274; Your GSC data stays in your own Supabase project. Inside Rank never stores it externally.</div>
     </div>
@@ -815,6 +1030,7 @@ input[type=file]{display:none}
           &nbsp;&nbsp;— <strong>Expanded view:</strong> Pages grouped by category (Casino Reviews, Slots, Payment Methods, etc.). Click any row to expand it and see all keywords for that page.<br>
           &nbsp;&nbsp;— <strong>Ahrefs-style table:</strong> Flat table showing URL, Page type, Status, Traffic, Change %, Keywords, KW change, Top keywords (primary + 2 secondary inline, with a "+N more" dropdown), and estimated volume.</li>
         <li><strong>SERP Tracker</strong> — Pulls live Google rankings for <em>every</em> keyword in Period B (not just top 30). Shows your real position right now, Drift (how much your live position differs from the GSC average), GSC Δ (movement A→B), SERP features (Snippet, PAA, Local, Video), and bojoko.ca / bonus.ca positions side by side. Rows where a competitor is beating you are highlighted red. Filterable by position range, SERP feature, competitor presence, GSC movement, and position mismatch. Exportable to CSV.</li>
+        <li><strong>Page Performance</strong> — Combines GA4 engagement data with GSC ranking data into one page-level table. Shows Visitors, Views, Time on page (all with period-over-period change columns), and the ranking keywords for each page pulled from your GSC snapshot. Requires uploading GA4 CSV exports separately — see the full guide further down this Help page.</li>
         <li><strong>Imports</strong> — Upload GSC exports and manage snapshots. Set which snapshot is Period A and which is Period B.</li>
         <li><strong>Settings</strong> — Configure team sync (Supabase), Serper.dev API key, and active site.</li>
       </ul>
@@ -898,6 +1114,144 @@ input[type=file]{display:none}
     </div>
   </div>
 
+  <!-- ═══ PAGE PERFORMANCE ═══ -->
+  <div class="help-sec" style="border-color:rgba(91,159,255,.25);background:linear-gradient(135deg,var(--bg2),rgba(91,159,255,.04))">
+    <div class="help-sec-title" style="font-size:18px;letter-spacing:-.3px">&#128202; Page Performance — complete guide</div>
+    <div class="help-body" style="color:var(--text2)">
+      The Page Performance tab combines <strong style="color:var(--text)">Google Analytics 4 (GA4)</strong> engagement data with your <strong style="color:var(--text)">GSC ranking data</strong> to give you a single view of every page: how many people visited, how long they stayed, and which keywords are driving them there — all with period-over-period comparisons.
+    </div>
+  </div>
+
+  <div class="help-sec">
+    <div class="help-sec-title">&#128202; What data sources does it use?</div>
+    <div class="help-body">
+      The tab joins two completely separate data sources on the page URL:
+      <ul>
+        <li><strong>Google Analytics 4 (GA4)</strong> — provides Visitors (sessions), Views (pageviews), and Time on page. You export this yourself as CSVs from the GA4 interface.</li>
+        <li><strong>GSC snapshots</strong> — provides Ranking keywords, average position, and position change. These are the same snapshots you import on the Imports tab — no extra work needed for this part.</li>
+      </ul>
+      <div class="help-tip">&#9432; The tool matches pages between GA4 and GSC by their URL path (e.g. <code style="color:var(--teal);font-size:11px">/casinos/reviews/winspirit/</code>). If a page appears in GA4 but has no GSC keywords, the Ranking keywords column will be blank for that row — this is normal for pages that don't rank organically.</div>
+    </div>
+  </div>
+
+  <div class="help-sec">
+    <div class="help-sec-title">&#128229; What files do you need to upload?</div>
+    <div class="help-body">
+      The tab has four upload cards arranged in a 2×2 grid. Here is what each one is for and exactly how to get it:
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0">
+        <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:14px">
+          <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">&#128197; Period A — Landing pages</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.8"><strong style="color:var(--text)">What it fills:</strong> Visitors Δ, Time on page Δ<br><strong style="color:var(--text)">Where:</strong> GA4 → Reports → Engagement → <strong style="color:var(--teal)">Landing pages</strong><br><strong style="color:var(--text)">Date range:</strong> your <em>previous/baseline</em> period<br><strong style="color:var(--text)">How:</strong> click the download icon (↓) → Download CSV</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid rgba(255,184,63,.2);border-radius:var(--r);padding:14px">
+          <div style="font-size:12px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">&#128197; Period A — Pages &amp; screens</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.8"><strong style="color:var(--text)">What it fills:</strong> Views Δ (comparison column)<br><strong style="color:var(--text)">Where:</strong> GA4 → Reports → Engagement → <strong style="color:var(--teal)">Pages and screens</strong><br><strong style="color:var(--text)">Date range:</strong> same <em>previous/baseline</em> period<br><strong style="color:var(--text)">How:</strong> click the download icon (↓) → Download CSV</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid rgba(91,159,255,.25);border-radius:var(--r);padding:14px">
+          <div style="font-size:12px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">&#128198; Period B — Landing pages <span style="color:var(--red);font-size:10px">Required</span></div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.8"><strong style="color:var(--text)">What it fills:</strong> Visitors, Time on page (current values)<br><strong style="color:var(--text)">Where:</strong> GA4 → Reports → Engagement → <strong style="color:var(--teal)">Landing pages</strong><br><strong style="color:var(--text)">Date range:</strong> your <em>current</em> period<br><strong style="color:var(--text)">How:</strong> click the download icon (↓) → Download CSV</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid rgba(91,159,255,.25);border-radius:var(--r);padding:14px">
+          <div style="font-size:12px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">&#128198; Period B — Pages &amp; screens</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.8"><strong style="color:var(--text)">What it fills:</strong> Views (current values)<br><strong style="color:var(--text)">Where:</strong> GA4 → Reports → Engagement → <strong style="color:var(--teal)">Pages and screens</strong><br><strong style="color:var(--text)">Date range:</strong> same <em>current</em> period<br><strong style="color:var(--text)">How:</strong> click the download icon (↓) → Download CSV</div>
+        </div>
+      </div>
+
+      <strong>Minimum to get started:</strong> You only need <strong>Period B — Landing pages</strong> to see data. Everything else adds comparison columns. Upload just that one file and the table will populate with current Visitors, Time on page, and Ranking keywords immediately.
+      <div class="help-tip">&#128161; <strong>Match your date ranges to your GSC snapshots.</strong> For example, if your GSC Period B snapshot covers Feb 19 – May 18, set the same date range when downloading your GA4 CSVs. This ensures the GA4 engagement data and GSC ranking data reflect the same time window.</div>
+    </div>
+  </div>
+
+  <div class="help-sec">
+    <div class="help-sec-title">&#128250; Step-by-step: exporting from GA4</div>
+    <div class="help-body">
+      <strong>Landing pages report (for Visitors and Time on page):</strong>
+      <ol style="padding-left:20px;margin:10px 0;line-height:2.1;font-size:13px">
+        <li>Go to <a href="https://analytics.google.com" target="_blank" style="color:var(--blue)">analytics.google.com</a> and select your property (<strong>Inside Casino Canada GA4</strong>)</li>
+        <li>In the left menu click <strong>Reports</strong> → <strong>Engagement</strong> → <strong>Landing pages</strong></li>
+        <li>In the top right, click the <strong>date range</strong> (e.g. "Feb 19 – May 18, 2026") and set it to your desired period</li>
+        <li>Make sure the segment filter at the top shows <strong>Organic traffic</strong> — if not, add it by clicking the <strong>+ Add comparison</strong> button and selecting Organic traffic. This ensures the numbers match your GSC data.</li>
+        <li>Click the <strong>download icon</strong> (looks like ↓ with a line) in the top right of the report → select <strong>Download CSV</strong></li>
+        <li>The file will be named something like <code style="color:var(--teal);font-size:11px">Landing_page_Feb_19__2026_to_May_18__2026.csv</code></li>
+        <li>Repeat for the other date range (Period A)</li>
+      </ol>
+      <strong>Pages and screens report (for Views):</strong>
+      <ol style="padding-left:20px;margin:10px 0;line-height:2.1;font-size:13px">
+        <li>Same steps as above but at step 2, click <strong>Pages and screens</strong> instead of Landing pages</li>
+        <li>Set the same date range and Organic traffic segment</li>
+        <li>Download CSV — the file will include a Views column</li>
+        <li>Repeat for Period A if you want the Views change % column</li>
+      </ol>
+      <div class="help-tip">&#9888; <strong>Important:</strong> GA4 exports only the first 5,000 rows by default. If your site has more than 5,000 landing pages, not all pages will be included. For most affiliate sites this won't be an issue.</div>
+    </div>
+  </div>
+
+  <div class="help-sec">
+    <div class="help-sec-title">&#128200; Understanding the columns</div>
+    <div class="help-body">
+      <ul>
+        <li><strong>Page</strong> — the URL path of the landing page (e.g. <code style="color:var(--teal);font-size:11px">/casinos/reviews/winspirit/</code>) and its inferred category (Casino Reviews, Slots, Payment Methods, etc.). Clicking the URL opens the live page.</li>
+        <li><strong>Visitors</strong> — total GA4 sessions for that landing page in Period B. A "session" is one visit by one user — if the same person visits twice they count as 2. The grey "prev: X" underneath shows the Period A value for easy reference.</li>
+        <li><strong>Visitors Δ</strong> — the percentage change in visitors from Period A to Period B. <span style="color:var(--green)">Green = more visitors</span>. <span style="color:var(--red)">Red = fewer visitors</span>. Only shows when Period A Landing pages is uploaded.</li>
+        <li><strong>Views</strong> — total pageviews for that page in Period B. Unlike Visitors, if one person views the same page 3 times in a session that counts as 3 views. Comes from the Pages and screens report. Shows "—" until Period B Pages and screens is uploaded.</li>
+        <li><strong>Views Δ</strong> — percentage change in views from Period A to B. Only shows when both Period A and Period B Pages and screens files are uploaded.</li>
+        <li><strong>Time on page</strong> — GA4's "Average engagement time per session" — how long visitors typically spend on that page. Formatted as minutes and seconds (e.g. 1m 30s). Longer time generally means better engagement. The grey "prev:" value shows the Period A figure.</li>
+        <li><strong>Ranking keywords</strong> — pulled from your GSC Period B snapshot, matched to the page URL. Shows the top 2 ranking keywords with their current position badge and position change arrow (↓ improved, ↑ declined). Click the "+N more" button to see all ranking keywords for that page in a dropdown with impressions data.</li>
+      </ul>
+
+      <strong>Position badges:</strong>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 4px">
+        <span class="pb pb1">3.2</span><span style="font-size:12px;color:var(--text3)">Positions 1–3 (top 3)</span>
+        <span class="pb pb2">7.8</span><span style="font-size:12px;color:var(--text3)">Positions 4–10</span>
+        <span class="pb pb3">18.1</span><span style="font-size:12px;color:var(--text3)">Positions 11–30</span>
+        <span class="pb pb4">45.0</span><span style="font-size:12px;color:var(--text3)">Positions 31–100</span>
+      </div>
+      <div style="font-size:12px;color:var(--text3);margin-top:4px">The position number is GSC's average position across Period B — lower is better (position 1 = top of Google).</div>
+    </div>
+  </div>
+
+  <div class="help-sec">
+    <div class="help-sec-title">&#127919; KPI cards at the top</div>
+    <div class="help-body">
+      The four summary cards above the table show totals and averages across all pages in your filtered view:
+      <ul>
+        <li><strong>Total visitors</strong> — sum of all sessions across all pages. The ↑/↓ delta and percentage show the change vs Period A when that file is uploaded.</li>
+        <li><strong>Total views</strong> — sum of all pageviews. Delta only appears when both Period A and Period B Pages and screens files are uploaded.</li>
+        <li><strong>Avg time on page</strong> — average engagement time across all pages. Delta shows when Period A Landing pages is uploaded.</li>
+        <li><strong>Pages with GSC data</strong> — how many of your GA4 pages were successfully matched to GSC keyword data. If this number is much lower than the total, it usually means your GA4 URLs have trailing slashes and your GSC URLs don't (or vice versa) — the tool handles this automatically in most cases.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="help-sec">
+    <div class="help-sec-title">&#128269; Filters and sorting</div>
+    <div class="help-body">
+      <ul>
+        <li><strong>Search</strong> — filters by URL path or keyword name. Type <code style="color:var(--teal);font-size:11px">/casinos</code> to see only casino pages, or type a keyword like <code style="color:var(--teal);font-size:11px">interac</code> to find pages ranking for that term.</li>
+        <li><strong>All page types</strong> — filters by category inferred from the URL structure (Casino Reviews, Slots, Payment Methods, Software, Bonuses, Ontario Casinos, etc.).</li>
+        <li><strong>Sort</strong> — sort by Visitors, Visitor change, Views, Time on page, or number of Ranking keywords. Default is Visitors (highest first).</li>
+        <li><strong>All pages / Has ranking keywords / Has top-10 keyword / No ranking data</strong> — filter to focus on pages with strong GSC presence, pages in the top 10, or pages with no organic keyword data at all (useful for identifying pages that get traffic from other sources).</li>
+      </ul>
+      <strong>Tip:</strong> Sort by <strong>Visitor change</strong> (descending) to see your biggest-growing pages. Sort by <strong>Visitors</strong> with the <strong>Has top-10 keyword</strong> filter to see your highest-traffic, best-ranking pages — those are your most valuable assets to protect and grow.
+    </div>
+  </div>
+
+  <div class="help-sec">
+    <div class="help-sec-title">&#10067; Page Performance — common questions</div>
+    <div class="help-body">
+      <ul>
+        <li><strong>Ranking keywords column shows "No GSC match" for most pages.</strong> This means the tool couldn't match the GA4 URL to a GSC URL. The most common cause: GA4 uses trailing slashes (<code style="color:var(--teal);font-size:11px">/casinos/</code>) and GSC doesn't, or vice versa. The tool tries both variants automatically — if it's still not matching, check that your GSC Period B snapshot is set correctly in the top bar.</li>
+        <li><strong>Views column shows "—".</strong> You need to upload the Pages and screens CSV (Period B). That's the only GA4 report that includes the Views column — the Landing pages report doesn't have it by default.</li>
+        <li><strong>Views Δ column shows "—".</strong> You also need the Pages and screens CSV for Period A (the previous period card in the top-right of the upload grid). Upload that file and the change column will populate.</li>
+        <li><strong>The numbers don't match what I see in GA4.</strong> Make sure you're exporting with the <strong>Organic traffic</strong> segment applied. Without it, GA4 includes all traffic sources (direct, paid, social, email) and the numbers will be much higher than what GSC shows. Also double-check your date ranges match your GSC snapshot periods exactly.</li>
+        <li><strong>Some pages in GA4 don't appear in the table.</strong> The table is built from the Period B Landing pages file — pages that appear in your GA4 Pages and screens report but not in Landing pages won't show up. Use the Landing pages report (not Pages and screens) as your primary upload for Period B.</li>
+        <li><strong>Time on page shows 0s for some pages.</strong> This is normal for pages where GA4 couldn't measure engagement time — usually pages where the visitor left without any interaction, or single-page sessions where GA4 couldn't calculate duration. It doesn't necessarily mean the page performed poorly.</li>
+        <li><strong>Can I export this data?</strong> Yes — click the <strong>Export CSV</strong> button in the top right of the Page Performance tab. The export includes all columns: URL, category, visitors (current and prev), views (current and prev), time on page (current and prev), ranking keyword count, top keyword, and its position.</li>
+      </ul>
+    </div>
+  </div>
+
 </div>
 
 <!-- SETTINGS -->
@@ -935,7 +1289,19 @@ input[type=file]{display:none}
   synced_at TIMESTAMPTZ DEFAULT NOW()
 );
 ALTER TABLE insiderank_snapshots ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "allow_all" ON insiderank_snapshots FOR ALL USING (true) WITH CHECK (true);</pre>
+CREATE POLICY "allow_all" ON insiderank_snapshots FOR ALL USING (true) WITH CHECK (true);
+
+CREATE TABLE IF NOT EXISTS public.insiderank_ga4 (
+  id TEXT PRIMARY KEY,
+  site TEXT NOT NULL,
+  period TEXT NOT NULL,
+  label TEXT,
+  rows_json JSONB NOT NULL,
+  synced_by TEXT,
+  synced_at TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE insiderank_ga4 ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "allow_all_ga4" ON insiderank_ga4 FOR ALL USING (true) WITH CHECK (true);</pre>
         <button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="copySQL()">Copy SQL</button>
       </div>
       <div style="font-size:11px;color:var(--text3);line-height:1.8">&#9432; Your GSC data stays in your own Supabase project — Inside Rank never stores it.</div>
@@ -955,6 +1321,10 @@ CREATE POLICY "allow_all" ON insiderank_snapshots FOR ALL USING (true) WITH CHEC
       <button class="btn btn-ghost" onclick="pullSharedSnaps()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.27"/></svg>
         Refresh team snapshots
+      </button>
+      <button class="btn btn-ghost" onclick="pullGa4FromSupabase()" style="margin-left:8px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.27"/></svg>
+        Refresh GA4 data
       </button>
     </div>
   </div>
@@ -1106,7 +1476,7 @@ function togglePw(){
 
 // ═══ BOOT (called after successful auth) ═══
 async function bootApp(){
-  await load();await loadSbCreds();autoPickPeriods();renderAll();
+  await load();await loadSbCreds();await loadGa4FromStorage();autoPickPeriods();renderAll();
   requestAnimationFrame(initKwScrollSync);
   document.addEventListener('click',e=>{if(!e.target.closest('.rel-cell')){document.querySelectorAll('.kw-dropdown').forEach(d=>d.remove());A.openKwDropdown=null;}});
 }
@@ -1256,7 +1626,7 @@ function renderSharedList(rows){
   if(wrap)wrap.style.display='block';
   list.innerHTML=rows.map(r=>'<div class="shared-item"><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500">'+esc(r.label||r.id)+'</div><div style="font-size:11px;color:var(--text3);font-family:var(--mono)">'+esc(r.site)+' · '+(r.start_date||'?')+' → '+(r.end_date||'?')+' · by '+esc(r.synced_by||'unknown')+'</div></div><button class="btn btn-ghost btn-sm" onclick="deleteTeamSnap(\''+r.id+'\')">Remove</button></div>').join('');
 }
-function copySQL(){const sql='CREATE TABLE IF NOT EXISTS public.insiderank_snapshots (\n  id TEXT PRIMARY KEY,\n  site TEXT NOT NULL,\n  label TEXT,\n  start_date TEXT,\n  end_date TEXT,\n  snapshot_json JSONB NOT NULL,\n  synced_by TEXT,\n  synced_at TIMESTAMPTZ DEFAULT NOW()\n);\nALTER TABLE insiderank_snapshots ENABLE ROW LEVEL SECURITY;\nCREATE POLICY "allow_all" ON insiderank_snapshots FOR ALL USING (true) WITH CHECK (true);';navigator.clipboard.writeText(sql).then(()=>toast('SQL copied')).catch(()=>toast('Copy failed','err'));}
+function copySQL(){const sql='CREATE TABLE IF NOT EXISTS public.insiderank_snapshots (\n  id TEXT PRIMARY KEY,\n  site TEXT NOT NULL,\n  label TEXT,\n  start_date TEXT,\n  end_date TEXT,\n  snapshot_json JSONB NOT NULL,\n  synced_by TEXT,\n  synced_at TIMESTAMPTZ DEFAULT NOW()\n);\nALTER TABLE insiderank_snapshots ENABLE ROW LEVEL SECURITY;\nCREATE POLICY "allow_all" ON insiderank_snapshots FOR ALL USING (true) WITH CHECK (true);\n\nCREATE TABLE IF NOT EXISTS public.insiderank_ga4 (\n  id TEXT PRIMARY KEY,\n  site TEXT NOT NULL,\n  period TEXT NOT NULL,\n  label TEXT,\n  rows_json JSONB NOT NULL,\n  synced_by TEXT,\n  synced_at TIMESTAMPTZ DEFAULT NOW()\n);\nALTER TABLE insiderank_ga4 ENABLE ROW LEVEL SECURITY;\nCREATE POLICY "allow_all_ga4" ON insiderank_ga4 FOR ALL USING (true) WITH CHECK (true);';navigator.clipboard.writeText(sql).then(()=>toast('SQL copied')).catch(()=>toast('Copy failed','err'));}
 
 // ═══ CSV PARSING ═══
 function pcr(line){const c=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){inQ=!inQ;}else if(ch===','&&!inQ){c.push(cur.trim().replace(/^"|"$/g,''));cur='';}else{cur+=ch;}}c.push(cur.trim().replace(/^"|"$/g,''));return c;}
@@ -1407,6 +1777,7 @@ function goView(v,el){
   if(v==='pages')renderPages();
   if(v==='imports')renderSnapList();
   if(v==='competitors')loadSerpForView();
+  if(v==='performance')renderPerfView();
   if(v==='settings'){loadApiKeyToInput();renderSettingsSyncPanel();}
 }
 function renderAll(){updateTopbar();renderOverview();}
@@ -1797,7 +2168,545 @@ function renderCompetitorData(){renderSerpResults();}
 function renderCompetitorTable(){renderSerpTable();}
 function srtComp(col){srtSerp(col);}
 function pgComp(d){pgSerp(d);}
+// ═══ PAGE PERFORMANCE ═══
+const GA4_SK='ir_ga4_';
+const GA4 = { A: null, B: null, PS: null, PSA: null }; // PS = Pages & screens B, PSA = Pages & screens A
+let perfSort={col:'visitors',dir:-1}, perfPg=1, perfShowMismatch=false;
+const PERF_PER=50;
+
+// ── GA4 CSV Parser ──
+function parseGA4(text, filename){
+  const src2 = text.replace(/^\ufeff/, '');
+  const allLines = src2.split(/\r?\n/);
+
+  // ── Find header row ──
+  // GA4 exports: # comment lines at top, then header line (no blank gap in this format)
+  // Header is first non-# line that starts with a known URL column name
+  let hdrIdx = -1;
+  for(let i = 0; i < allLines.length; i++){
+    const raw = allLines[i];
+    if(!raw.trim() || raw.trim().startsWith('#')) continue;
+    const lc = raw.toLowerCase();
+    if(lc.startsWith('landing page') || lc.startsWith('page path') || lc.startsWith('page title')){
+      hdrIdx = i; break;
+    }
+  }
+  if(hdrIdx < 0) return null;
+
+  // Extract date range from # metadata lines above header
+  let dateRange = '';
+  for(let i = 0; i < hdrIdx; i++){
+    const l = allLines[i];
+    // Format: "# Start date: 20260219" and "# End date: 20260518"
+    const sM = l.match(/start date:\s*(\d{4})(\d{2})(\d{2})/i);
+    const eM = l.match(/end date:\s*(\d{4})(\d{2})(\d{2})/i);
+    if(sM) dateRange = sM[1]+'-'+sM[2]+'-'+sM[3] + (dateRange.includes('→') ? '' : ' → ');
+    if(eM) dateRange = (dateRange||'') + (dateRange?'':' → ') + eM[1]+'-'+eM[2]+'-'+eM[3];
+    // Also try "Nov 19, 2025 – Feb 18, 2026" style
+    const dm = l.match(/(\w{3,9}\s+\d{1,2},?\s+\d{4})\s*[-–]\s*(\w{3,9}\s+\d{1,2},?\s+\d{4})/);
+    if(dm && !dateRange) dateRange = dm[0];
+  }
+  // Clean up
+  dateRange = dateRange.replace(/\s*→\s*$/, '').replace(/^\s*→\s*/, '').trim();
+
+  // ── Parse header ──
+  const hdr = allLines[hdrIdx].split(',').map(h => h.replace(/"/g,'').trim().toLowerCase());
+  console.log('[GA4] Header columns:', hdr);
+
+  // Exact-first column finder
+  const fc = (...terms) => {
+    for(const t of terms){ const i=hdr.findIndex(h=>h===t); if(i>=0)return i; }
+    for(const t of terms){ const i=hdr.findIndex(h=>h.startsWith(t)); if(i>=0)return i; }
+    for(const t of terms){ if(t.length<4)continue; const i=hdr.findIndex(h=>h.includes(t)); if(i>=0)return i; }
+    return -1;
+  };
+
+  const urlC      = fc('landing page','page path','page title');
+  const sessC     = fc('sessions');
+  const activeC   = fc('active users');
+  const newUsersC = fc('new users');
+  // Views — this report may NOT have it; Pages and screens report does
+  const viewsC    = fc('views','screen page views','pageviews');
+  // Bounce rate — this report may NOT have it; needs engaged sessions to calculate
+  const engagedC  = fc('engaged sessions');
+  const bounceC   = fc('bounce rate','bounce');
+  const timeC     = fc('average engagement time per session','average engagement time per active user','average engagement time','avg. engagement time','engagement time');
+  const keyEvC    = fc('key events');
+
+  console.log('[GA4] urlC='+urlC+' sessC='+sessC+' viewsC='+viewsC+' bounceC='+bounceC+' engagedC='+engagedC+' timeC='+timeC);
+  if(urlC < 0) return null;
+
+  const parseN = v => {
+    if(v===undefined||v===null) return 0;
+    return parseFloat(String(v).replace(/"/g,'').replace(/,/g,'').replace(/%/g,'').trim())||0;
+  };
+
+  const rows = [];
+  for(let i = hdrIdx+1; i < allLines.length; i++){
+    const raw = allLines[i];
+    const trimmed = raw.trim();
+    if(!trimmed) continue;                              // skip blank lines (don't stop — no blank separator in this format)
+    if(trimmed.startsWith('#')) continue;               // skip # metadata lines throughout
+    if(/^totals?/i.test(trimmed)) continue;            // skip totals row
+
+    const cells = raw.split(',');
+    const rawUrl = (cells[urlC]||'').replace(/"/g,'').trim();
+    if(!rawUrl) continue;
+    if(rawUrl==='(not set)'||rawUrl==='(not provided)') continue; // skip unresolved
+    if(/^(account|property|metric|date range|segment|filter):/i.test(rawUrl)) continue;
+    if(rawUrl.toLowerCase()==='landing page'||rawUrl.toLowerCase()==='page path') continue;
+
+    let path = rawUrl;
+    if(path.startsWith('http')){ try{ path=new URL(path).pathname; }catch(e){} }
+    if(!path.startsWith('/')) path='/'+path;
+    path = path.replace(/\/+$/,'') || '/'; // normalise trailing slash
+
+    const sessions  = sessC >= 0 ? parseN(cells[sessC]) : 0;
+    const active    = activeC >= 0 ? parseN(cells[activeC]) : 0;
+    const newUsers  = newUsersC >= 0 ? parseN(cells[newUsersC]) : 0;
+    const views     = viewsC >= 0 ? parseN(cells[viewsC]) : 0;
+    const keyEvents = keyEvC >= 0 ? parseN(cells[keyEvC]) : 0;
+
+    // Bounce rate: direct if available, else 1 - engaged/sessions
+    let bounceRate = 0;
+    if(bounceC >= 0){
+      bounceRate = parseN(cells[bounceC]);
+      if(bounceRate > 1) bounceRate /= 100;
+    } else if(engagedC >= 0 && sessions > 0){
+      const engaged = parseN(cells[engagedC]);
+      bounceRate = Math.max(0, Math.min(1, 1 - engaged/sessions));
+    }
+
+    // Time on page
+    let timeOnPage = 0;
+    if(timeC >= 0){
+      const tv = (cells[timeC]||'').replace(/"/g,'').trim();
+      const mSec=tv.match(/^(\d+)m\s*(\d+)s$/);
+      const hMin=tv.match(/^(\d+)h\s*(\d+)m/);
+      const col=tv.match(/^(\d+):(\d+):(\d+)$/);
+      const mOnly=tv.match(/^(\d+)m$/);
+      if(hMin) timeOnPage=parseInt(hMin[1])*3600+parseInt(hMin[2])*60;
+      else if(mSec) timeOnPage=parseInt(mSec[1])*60+parseInt(mSec[2]);
+      else if(col) timeOnPage=parseInt(col[1])*3600+parseInt(col[2])*60+parseInt(col[3]);
+      else if(mOnly) timeOnPage=parseInt(mOnly[1])*60;
+      else timeOnPage=parseN(tv);
+    }
+
+    rows.push({ url: path, visitors: sessions, active, newUsers, views, bounceRate, timeOnPage, keyEvents });
+  }
+
+  if(!rows.length) return null;
+
+  // What columns did we actually find?
+  const hasViews   = viewsC >= 0;
+  const hasBounce  = bounceC >= 0 || engagedC >= 0;
+  const colInfo = {
+    sess:   sessC>=0 ? hdr[sessC] : 'not found',
+    views:  viewsC>=0 ? hdr[viewsC] : 'not in this report',
+    bounce: bounceC>=0 ? hdr[bounceC] : (engagedC>=0?'calc from "'+hdr[engagedC]+'"':'not in this report'),
+    time:   timeC>=0 ? hdr[timeC] : 'not found'
+  };
+  return { rows, dateRange, filename, colInfo, hasViews, hasBounce };
+}
+
+function doGa4Drop(e, period){ e.preventDefault(); const zid='ga4'+(period==='PS'?'ps':period==='PSA'?'psa':period.toLowerCase())+'-drop'; doDragLeave(zid); const f=e.dataTransfer.files[0]; if(f) handleGa4(period,f); }
+
+// ── GA4 Supabase sync ──
+const GA4_TABLE = 'insiderank_ga4';
+
+async function pushGa4ToSupabase(period, parsed){
+  if(!A.sbConnected || !A.sbUrl || !A.sbKey) return;
+  try {
+    const payload = {
+      id: A.site + '_' + period,
+      site: A.site,
+      period,
+      label: parsed.dateRange || period,
+      rows_json: parsed,
+      synced_by: document.getElementById('sidebar-email')?.textContent || '',
+      synced_at: new Date().toISOString()
+    };
+    const r = await fetch(`${A.sbUrl}/rest/v1/${GA4_TABLE}`, {
+      method: 'POST',
+      headers: {...sbH(), Prefer: 'resolution=merge-duplicates'},
+      body: JSON.stringify(payload)
+    });
+    if(r.ok) toast('✓ GA4 Period ' + period + ' synced to team', 'ok');
+    else { const t = await r.text(); console.warn('GA4 sync failed:', t); }
+  } catch(e){ console.warn('GA4 Supabase push failed:', e.message); }
+}
+
+async function pullGa4FromSupabase(silent=false){
+  if(!A.sbConnected || !A.sbUrl || !A.sbKey) return;
+  try {
+    const r = await fetch(`${A.sbUrl}/rest/v1/${GA4_TABLE}?site=eq.${A.site}&select=*`, {headers: sbH()});
+    if(!r.ok){ if(!silent) toast('GA4 pull failed: HTTP '+r.status, 'err'); return; }
+    const rows = await r.json();
+    let loaded = 0;
+    for(const row of rows){
+      const p = row.period;
+      if(!GA4[p] || !GA4[p].rows?.length){
+        GA4[p] = row.rows_json;
+        try { await sv(GA4_SK+p, JSON.stringify(GA4[p])); } catch(e){}
+        const elId = 'ga4'+(p==='PS'?'ps':p==='PSA'?'psa':p.toLowerCase())+'-status';
+        const el = document.getElementById(elId);
+        if(el && GA4[p]){
+          el.innerHTML = '✓ <strong>'+GA4[p].rows.length.toLocaleString()+' pages</strong>'+(GA4[p].dateRange?' · '+GA4[p].dateRange:'')+'<span style="margin-left:8px;background:rgba(46,232,180,.14);color:var(--green);border:1px solid rgba(46,232,180,.28);padding:1px 7px;border-radius:4px;font-size:10px;font-weight:600">🌐 Team</span>';
+          el.className = 'pp-status loaded';
+        }
+        loaded++;
+      }
+    }
+    if(loaded > 0){ renderPerfView(); if(!silent) toast('✓ Pulled GA4 data for '+loaded+' period'+(loaded>1?'s':''), 'ok'); }
+  } catch(e){ if(!silent) toast('GA4 pull failed: '+e.message, 'err'); }
+}
+
+async function handleGa4(period, file){
+  if(!file) return;
+  const text = await rfText(file);
+  const parsed = parseGA4(text, file.name);
+  if(!parsed || !parsed.rows.length){
+    toast('Could not parse GA4 file — check the browser console for column details', 'err');
+    const elId = 'ga4'+(period==='PS'?'ps':period==='PSA'?'psa':period.toLowerCase())+'-status';
+    const el = document.getElementById(elId);
+    if(el){
+      el.innerHTML = '✗ Could not read data.<br><span style="font-size:11px">Make sure you exported from <strong>Reports → Engagement → Landing pages</strong> and downloaded as CSV (not Google Sheets).</span>';
+      el.className = 'pp-status';
+    }
+    return;
+  }
+  GA4[period] = parsed;
+  try { await sv(GA4_SK+period, JSON.stringify(parsed)); } catch(e){}
+  const elId = 'ga4'+(period==='PS'?'ps':period==='PSA'?'psa':period.toLowerCase())+'-status';
+  const el = document.getElementById(elId);
+  if(el){
+    const ci = parsed.colInfo || {};
+    const colDebug = Object.entries(ci).map(([k,v])=>`${k}: "${v}"`).join(' · ');
+    el.innerHTML = '✓ <strong>'+parsed.rows.length.toLocaleString()+' pages</strong>'+(parsed.dateRange?' · '+parsed.dateRange:'')+'<br><span style="font-size:10px;color:var(--text3)">Columns → '+colDebug+'</span>';
+    el.className = 'pp-status loaded';
+  }
+  if(GA4.A || GA4.B || GA4.PS || GA4.PSA){ const h=document.getElementById('ga4-howto'); if(h) h.style.display='none'; }
+  // Push to Supabase so team sees it
+  await pushGa4ToSupabase(period, parsed);
+  renderPerfView();
+  toast('✓ GA4 Period '+period+' loaded — '+parsed.rows.length.toLocaleString()+' pages', 'ok');
+}
+
+async function loadGa4FromStorage(){
+  // First load from localStorage
+  for(const p of ['A','B','PS','PSA']){
+    try {
+      const raw = await gv(GA4_SK+p);
+      if(raw){
+        GA4[p] = JSON.parse(raw);
+        const elId = 'ga4'+(p==='PS'?'ps':p==='PSA'?'psa':p.toLowerCase())+'-status';
+        const el = document.getElementById(elId);
+        if(el && GA4[p]){
+          el.innerHTML = '✓ <strong>'+GA4[p].rows.length.toLocaleString()+' pages</strong>'+(GA4[p].dateRange?' · '+GA4[p].dateRange:'');
+          el.className = 'pp-status loaded';
+        }
+      }
+    } catch(e){}
+  }
+  // Then pull from Supabase (fills any periods not in local storage)
+  await pullGa4FromSupabase(true);
+}
+
+// ── Build joined dataset ──
+function buildPerfRows(){
+  const sb = snapB();
+  const ga4B = GA4.B;
+  const ga4A = GA4.A;
+  if(!ga4B) return [];
+
+  // Normalise URL for matching — strip trailing slash, lowercase, strip domain prefix
+  const normUrl = u => {
+    if(!u) return '';
+    let s = String(u).toLowerCase().trim();
+    if(s.startsWith('http')){ try{ s = new URL(s).pathname; }catch(e){} }
+    s = s.replace(/\/+$/,''); // strip trailing slash
+    if(!s) s = '/';
+    return s;
+  };
+
+  // Build GA4 lookup maps — keyed by normalised URL
+  const mapB = {};
+  ga4B.rows.forEach(r => { mapB[normUrl(r.url)] = r; });
+  const mapA = {};
+  if(ga4A) ga4A.rows.forEach(r => { mapA[normUrl(r.url)] = r; });
+
+  // Build GSC keyword map per URL — keyed by normalised URL
+  const kwByUrl = {};
+  if(sb){
+    const mA = buildKwMap(snapA()), mB = buildKwMap(sb);
+    compareKws(mA, mB).forEach(r => {
+      if(!r.page || !r.posB) return;
+      const key = normUrl(r.page);
+      if(!kwByUrl[key]) kwByUrl[key] = [];
+      kwByUrl[key].push(r);
+    });
+    Object.values(kwByUrl).forEach(arr => arr.sort((a,b) => b.imB - a.imB));
+  }
+
+  // Build Pages & screens lookup for Views (separate report)
+  const mapPS = {};
+  if(GA4.PS) GA4.PS.rows.forEach(r => { mapPS[normUrl(r.url)] = r; });
+
+  // Build Pages & screens Period A lookup for Views change
+  const mapPSA = {};
+  if(GA4.PSA) GA4.PSA.rows.forEach(r => { mapPSA[normUrl(r.url)] = r; });
+
+  // Merge: start from GA4 B rows, join A, PS, PSA, and GSC by normalised URL
+  const rows = ga4B.rows.map(b => {
+    const key = normUrl(b.url);
+    const a   = mapA[key]   || null;
+    const ps  = mapPS[key]  || mapPS[key.endsWith('/')?key.slice(0,-1):key+'/']  || null;
+    const psa = mapPSA[key] || mapPSA[key.endsWith('/')?key.slice(0,-1):key+'/'] || null;
+
+    // Views: from Pages & screens B if uploaded, else landing pages B (may be 0)
+    const views  = ps  ? ps.views  : b.views;
+    // Views for Period A: from Pages & screens A if uploaded, else landing pages A
+    const viewsA = psa ? psa.views : (a ? a.views : null);
+
+    // Bounce rate: from PS if available, else calculated from landing pages
+    const bounceRate  = ps  ? ps.bounceRate  : b.bounceRate;
+    const bounceRateA = psa ? psa.bounceRate : (a ? a.bounceRate : null);
+
+    // GSC keyword match
+    let kws = kwByUrl[key] || [];
+    if(!kws.length){
+      const alt = key.endsWith('/') ? key.slice(0,-1) : key+'/';
+      kws = kwByUrl[alt] || [];
+    }
+
+    const visDelta       = a ? b.visitors - a.visitors : null;
+    const visDeltaPct    = (a && a.visitors > 0) ? (b.visitors - a.visitors) / a.visitors * 100 : null;
+    const viewsDelta     = (viewsA !== null && views > 0) ? views - viewsA : null;
+    const viewsDeltaPct  = (viewsA !== null && viewsA > 0) ? (views - viewsA) / viewsA * 100 : null;
+    const bounceDelta    = (bounceRateA !== null) ? bounceRate - bounceRateA : null;
+    const timeDelta      = a ? b.timeOnPage - a.timeOnPage : null;
+
+    const topKw    = kws[0] || null;
+    const kwCount  = kws.length;
+    const hasTop10 = kws.some(k => k.posB <= 10);
+
+    return {
+      url: b.url,
+      category: inferCat(b.url),
+      visitors: b.visitors, visitorsA: a?.visitors||null, visitorsDelta: visDelta, visitorsDeltaPct: visDeltaPct,
+      views, viewsA, viewsDelta, viewsDeltaPct,
+      bounceRate, bounceRateA, bounceDelta,
+      timeOnPage: b.timeOnPage, timeOnPageA: a?.timeOnPage||null, timeDelta,
+      kws, kwCount, topKw, hasTop10,
+      hasViewsData: ps !== null || b.views > 0
+    };
+  });
+
+  return rows;
+}
+
+// ── Render ──
+function renderPerfView(){
+  // Load from storage if not in memory
+  if(!GA4.A && !GA4.B){
+    loadGa4FromStorage().then(() => {
+      if(GA4.A || GA4.B) renderPerfView();
+    });
+    return;
+  }
+  const rows = buildPerfRows();
+  if(!rows.length){
+    document.getElementById('perf-empty').style.display='block';
+    document.getElementById('perf-content').style.display='none';
+    return;
+  }
+  document.getElementById('perf-empty').style.display='none';
+  document.getElementById('perf-content').style.display='block';
+  document.getElementById('perf-export-btn').style.display='';
+  document.getElementById('ga4-howto').style.display='none';
+
+  // Populate category filter
+  const catSel = document.getElementById('perf-cat');
+  if(catSel.options.length <= 1){
+    const cats = [...new Set(rows.map(r => r.category))].sort();
+    cats.forEach(c => { const o = document.createElement('option'); o.value=c; o.textContent=c; catSel.appendChild(o); });
+  }
+
+  // KPIs
+  const totVis = rows.reduce((s,r) => s+r.visitors, 0);
+  const totViews = rows.reduce((s,r) => s+r.views, 0);
+  const avgTime = rows.length ? rows.reduce((s,r) => s+r.timeOnPage, 0) / rows.length : 0;
+  const withKw = rows.filter(r => r.kwCount > 0).length;
+  // Prev-period totals for KPI comparison
+  const totVisA   = rows.reduce((s,r) => s + (r.visitorsA||0), 0);
+  const totViewsA = rows.reduce((s,r) => s + (r.viewsA||0), 0);
+  const avgTimeRows = rows.filter(r => r.timeOnPageA !== null);
+  const avgTimeA  = avgTimeRows.length ? avgTimeRows.reduce((s,r) => s+(r.timeOnPageA||0), 0) / avgTimeRows.length : 0;
+  const hasPrevVis   = rows.some(r => r.visitorsA !== null);
+  const hasPrevViews = rows.some(r => r.viewsA !== null && r.viewsA > 0);
+  const hasPrevTime  = avgTimeRows.length > 0;
+
+  document.getElementById('perf-kpi-row').innerHTML =
+    mkKpi('Total visitors',    fmtN(totVis),    'blue',  hasPrevVis   ? totVisA   : undefined, hasPrevVis   ? totVis    : undefined, true, hasPrevVis   ? 'prev: '+fmtN(totVisA)    : rows.length+' pages') +
+    mkKpi('Total views',       fmtN(totViews),  'teal',  hasPrevViews ? totViewsA : undefined, hasPrevViews ? totViews  : undefined, true, hasPrevViews ? 'prev: '+fmtN(totViewsA) : 'upload Period A Pages & screens for Δ') +
+    mkKpi('Avg time on page',  fmtTime(avgTime),'amber', hasPrevTime  ? avgTimeA  : undefined, hasPrevTime  ? avgTime   : undefined, true, hasPrevTime  ? 'prev: '+fmtTime(avgTimeA): 'avg engagement') +
+    mkKpi('Pages with GSC data', withKw, 'green', null, null, null, 'of '+rows.length+' total pages');
+
+  renderPerfTable(rows);
+  requestAnimationFrame(initPerfScrollSync);
+}
+
+function renderPerfTable(prebuilt){
+  let rows = prebuilt || buildPerfRows();
+  if(!rows.length) return;
+
+  const srch = (document.getElementById('perf-search')?.value||'').toLowerCase();
+  const cat  = document.getElementById('perf-cat')?.value||'';
+  const sortK = document.getElementById('perf-sort')?.value||'visitors';
+  const kwF  = document.getElementById('perf-kw-filter')?.value||'';
+
+  if(srch) rows = rows.filter(r => r.url.toLowerCase().includes(srch) || r.kws.some(k => k.query.toLowerCase().includes(srch)));
+  if(cat) rows = rows.filter(r => r.category === cat);
+  if(kwF === 'ranked') rows = rows.filter(r => r.kwCount > 0);
+  else if(kwF === 'top10') rows = rows.filter(r => r.hasTop10);
+  else if(kwF === 'no-kw') rows = rows.filter(r => r.kwCount === 0);
+
+  // Sort
+  const {col, dir} = perfSort;
+  rows.sort((a,b) => {
+    const av = a[col] ?? (dir > 0 ? Infinity : -Infinity);
+    const bv = b[col] ?? (dir > 0 ? Infinity : -Infinity);
+    if(typeof av === 'string') return av.localeCompare(bv) * dir;
+    return (av - bv) * dir;
+  });
+
+  const total = rows.length;
+  document.getElementById('perf-count-lbl').textContent = total.toLocaleString() + ' pages';
+  const start = (perfPg - 1) * PERF_PER;
+  const page = rows.slice(start, start + PERF_PER);
+  document.getElementById('perf-pinfo').textContent = (start+1) + '–' + Math.min(start+PERF_PER, total) + ' of ' + total.toLocaleString();
+  document.getElementById('perf-prev').disabled = perfPg <= 1;
+  document.getElementById('perf-next').disabled = start + PERF_PER >= total;
+
+  const siteBase = 'https://' + A.sites[A.site].name;
+  const tbody = document.getElementById('perf-tbody');
+  const hasA = !!(GA4.A || GA4.PSA); // change columns show if either Period A file is present
+
+  if(!page.length){ tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--text3)">No pages match your filters</td></tr>'; return; }
+
+  // Change column helper — goodDir='up' means increase is good (visitors/views), 'down' means decrease is good (bounce)
+  const chgCell = (pct, abs, goodDir) => {
+    if(!hasA || pct === null) return '<span style="color:var(--text3);font-size:11px">—</span>';
+    const positive = pct >= 0;
+    const good = goodDir === 'up' ? positive : !positive;
+    const cls = good ? 'up' : 'dn';
+    return '<span class="pp-pct '+cls+'">'+(positive?'+':'')+pct.toFixed(1)+'%</span>'
+      + (abs !== null ? '<br><span style="font-size:10px;color:var(--text3)">'+(abs>=0?'+':'')+Math.round(abs)+'</span>' : '');
+  };
+
+  tbody.innerHTML = page.map(r => {
+
+    let kwHtml = '<span style="color:var(--text3);font-size:11px">No GSC match</span>';
+    if(r.kws.length > 0){
+      const top2 = r.kws.slice(0, 2);
+      const rest = r.kws.length - 2;
+      kwHtml = '<div class="kw-pill-wrap">'
+        + top2.map(k => {
+            const dp = k.dpos !== null ? (k.dpos > 0.5 ? '<span class="d-up" style="font-size:10px">↓'+k.dpos.toFixed(0)+'</span>' : k.dpos < -0.5 ? '<span class="d-dn" style="font-size:10px">↑'+Math.abs(k.dpos).toFixed(0)+'</span>' : '') : '';
+            return '<div class="kw-pill"><span class="kw-pill-query" title="'+esc(k.query)+'">'+esc(k.query)+'</span>'+posBadge(k.posB)+dp+'</div>';
+          }).join('')
+        + (rest > 0 ? '<button class="pp-more-btn" onclick="togglePpKwDrop(event,\''+esc(r.url).replace(/'/g,"\\'")+'\')">+'+rest+' more ▾</button>' : '')
+        + '</div>';
+    }
+
+    return '<tr>'
+      + '<td><a class="pp-url" href="'+siteBase+esc(r.url)+'" target="_blank" rel="noopener" title="'+esc(r.url)+'">'+esc(r.url)+'</a><div class="pp-cat">'+esc(r.category)+'</div></td>'
+      + '<td><span class="pp-metric">'+fmtN(r.visitors)+'</span>'+(hasA&&r.visitorsA!==null?'<br><span style="font-size:10px;color:var(--text3)">prev: '+fmtN(r.visitorsA)+'</span>':'')+'</td>'
+      + '<td>'+chgCell(r.visitorsDeltaPct, r.visitorsDelta, 'up')+'</td>'
+      + '<td><span class="pp-metric">'+fmtN(r.views)+'</span>'+(hasA&&r.viewsA!==null?'<br><span style="font-size:10px;color:var(--text3)">prev: '+fmtN(r.viewsA)+'</span>':'')+'</td>'
+      + '<td>'+chgCell(r.viewsDeltaPct, r.viewsDelta, 'up')+'</td>'
+      + '<td><span class="pp-time">'+fmtTime(r.timeOnPage)+'</span>'+(hasA&&r.timeOnPageA!==null?'<br><span style="font-size:10px;color:var(--text3)">prev: '+fmtTime(r.timeOnPageA)+'</span>':'')+'</td>'
+      + '<td class="rel-cell">'+kwHtml+'</td>'
+      + '</tr>';
+  }).join('');
+}
+
+// ── Keyword dropdown for Performance table ──
+function togglePpKwDrop(e, url){
+  e.stopPropagation();
+  document.querySelectorAll('.kw-dropdown').forEach(d => d.remove());
+  if(A.openKwDropdown === url){ A.openKwDropdown = null; return; }
+  A.openKwDropdown = url;
+  const cell = e.currentTarget.closest('.rel-cell') || e.currentTarget.parentElement;
+  const rows = buildPerfRows();
+  const row = rows.find(r => r.url === url);
+  if(!row || !row.kws.length){ toast('No keywords for this page'); A.openKwDropdown = null; return; }
+  const drop = document.createElement('div');
+  drop.className = 'kw-dropdown';
+  drop.innerHTML = '<div class="kw-drop-hdr">All ranking keywords — ' + esc(trimUrl(url)) + '</div>' +
+    row.kws.map(k => {
+      const dpos = k.dpos !== null ? (k.dpos > 0.5 ? '<span class="d-up">↓'+k.dpos.toFixed(1)+'</span>' : k.dpos < -0.5 ? '<span class="d-dn">↑'+Math.abs(k.dpos).toFixed(1)+'</span>' : '<span class="d-flat">≈</span>') : '—';
+      return '<div class="kw-drop-row"><span class="kw-drop-query">'+esc(k.query)+'</span>'+posBadge(k.posB)+dpos+'<span class="kw-drop-imp" style="min-width:60px">'+fmtN(k.imB)+' imp</span></div>';
+    }).join('');
+  cell.style.position = 'relative';
+  cell.appendChild(drop);
+}
+
+// ── Sort / paginate ──
+function srtPerf(col){
+  if(perfSort.col === col) perfSort.dir *= -1;
+  else { perfSort.col = col; perfSort.dir = col==='url' ? 1 : -1; }
+  perfPg = 1;
+  ['purl','pvis','pvisd','pviews','pviewsd','ptime'].forEach(k => {
+    const el = document.getElementById('si-'+k); if(el){ el.textContent='↕'; el.classList.remove('on'); }
+  });
+  const map = {url:'purl',visitors:'pvis',visitorsDeltaPct:'pvisd',views:'pviews',viewsDeltaPct:'pviewsd',timeOnPage:'ptime'};
+  const el = document.getElementById('si-'+(map[col]||col));
+  if(el){ el.textContent = perfSort.dir===1?'↑':'↓'; el.classList.add('on'); }
+  renderPerfTable();
+}
+function pgPerf(d){ perfPg += d; renderPerfTable(); }
+
+// ── Scroll sync ──
+function initPerfScrollSync(){
+  const ts=document.getElementById('perf-top-scroll'),ti=document.getElementById('perf-top-inner'),tw=document.getElementById('perf-tbl-wrap'),tbl=document.getElementById('perf-table');
+  if(!ts||!tw||!tbl)return;
+  const sw=()=>{ti.style.width=tbl.scrollWidth+'px';};sw();new ResizeObserver(sw).observe(tbl);
+  let syn=false;ts.addEventListener('scroll',()=>{if(syn)return;syn=true;tw.scrollLeft=ts.scrollLeft;syn=false;});tw.addEventListener('scroll',()=>{if(syn)return;syn=true;ts.scrollLeft=tw.scrollLeft;syn=false;});
+}
+
+// ── Time formatter ──
+function fmtTime(sec){
+  if(!sec) return '0s';
+  sec = Math.round(sec);
+  const h = Math.floor(sec/3600), m = Math.floor((sec%3600)/60), s = sec%60;
+  if(h > 0) return h+'h '+m+'m';
+  if(m > 0) return m+'m '+s+'s';
+  return s+'s';
+}
+
+// ── Export ──
+function exportPerfCSV(){
+  const rows = buildPerfRows();
+  if(!rows.length){ toast('No data to export','err'); return; }
+  const hdrs = ['url','category','visitors_b','visitors_a','visitors_change_pct','views_b','views_a','views_change_pct','bounce_rate_b','bounce_rate_a','time_on_page_b_sec','time_on_page_a_sec','ranking_keywords','top_keyword','top_kw_pos_b','top_kw_pos_a'];
+  const csv = [hdrs.join(','), ...rows.map(r => [
+    '"'+r.url+'"', '"'+r.category+'"',
+    r.visitors, GA4.A ? (GA4.A.rows.find(a=>a.url===r.url)?.visitors||0) : '',
+    r.visitorsDeltaPct !== null ? r.visitorsDeltaPct.toFixed(1)+'%' : '',
+    r.views, GA4.A ? (GA4.A.rows.find(a=>a.url===r.url)?.views||0) : '',
+    r.viewsDeltaPct !== null ? r.viewsDeltaPct.toFixed(1)+'%' : '',
+    (r.bounceRate*100).toFixed(1)+'%', GA4.A ? ((GA4.A.rows.find(a=>a.url===r.url)?.bounceRate||0)*100).toFixed(1)+'%' : '',
+    Math.round(r.timeOnPage), GA4.A ? Math.round(GA4.A.rows.find(a=>a.url===r.url)?.timeOnPage||0) : '',
+    r.kwCount, r.topKw ? '"'+r.topKw.query.replace(/"/g,'""')+'"' : '',
+    r.topKw?.posB?.toFixed(1)||'', r.topKw?.posA?.toFixed(1)||''
+  ].join(','))].join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download = 'page-performance-'+A.site+'-'+new Date().toISOString().split('T')[0]+'.csv';
+  a.click();
+  toast('Performance data exported');
+}
 </script>
-</body>
 </body>
 </html>
