@@ -1769,6 +1769,9 @@ function switchSite(s,el){
   ['ca','nz','uk'].forEach((k,i)=>{const c=document.getElementById('chk-'+k);if(c)c.style.display=k===s?'':'none';const sc=document.getElementById('sck-'+k);if(sc)sc.style.display=k===s?'':'none';document.querySelectorAll('.site-opt')[i]?.classList.toggle('on',k===s);});
   document.getElementById('tb-flag').textContent=A.sites[s].flag;document.getElementById('tb-site').textContent=A.sites[s].name;
   autoPickPeriods();renderAll();renderSnapList();
+  // Reset GA4 data for new site and pull from Supabase
+  GA4.A=null;GA4.B=null;GA4.PS=null;GA4.PSA=null;
+  loadGa4FromStorage();
 }
 function goView(v,el){
   document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));
@@ -2314,51 +2317,91 @@ function doGa4Drop(e, period){ e.preventDefault(); const zid='ga4'+(period==='PS
 // ── GA4 Supabase sync ──
 const GA4_TABLE = 'insiderank_ga4';
 
+// Slim payload — strip colInfo/debug, keep only what rendering needs
+function ga4Payload(period, parsed){
+  return {
+    id: A.site + '_' + period,
+    site: A.site,
+    period,
+    label: parsed.dateRange || period,
+    rows_json: {
+      rows: parsed.rows,
+      dateRange: parsed.dateRange || '',
+      filename: parsed.filename || '',
+      hasViews: !!parsed.hasViews,
+      hasBounce: !!parsed.hasBounce
+    },
+    synced_by: document.getElementById('sidebar-email')?.textContent || '',
+    synced_at: new Date().toISOString()
+  };
+}
+
 async function pushGa4ToSupabase(period, parsed){
   if(!A.sbConnected || !A.sbUrl || !A.sbKey) return;
   try {
-    const payload = {
-      id: A.site + '_' + period,
-      site: A.site,
-      period,
-      label: parsed.dateRange || period,
-      rows_json: parsed,
-      synced_by: document.getElementById('sidebar-email')?.textContent || '',
-      synced_at: new Date().toISOString()
-    };
-    const r = await fetch(`${A.sbUrl}/rest/v1/${GA4_TABLE}`, {
-      method: 'POST',
-      headers: {...sbH(), Prefer: 'resolution=merge-duplicates'},
-      body: JSON.stringify(payload)
+    const r = await fetch(`${A.sbUrl}/rest/v1/${GA4_TABLE}`,{
+      method:'POST',
+      headers:{...sbH(),Prefer:'resolution=merge-duplicates'},
+      body:JSON.stringify(ga4Payload(period,parsed))
     });
-    if(r.ok) toast('✓ GA4 Period ' + period + ' synced to team', 'ok');
-    else { const t = await r.text(); console.warn('GA4 sync failed:', t); }
-  } catch(e){ console.warn('GA4 Supabase push failed:', e.message); }
+    if(r.ok){
+      toast('✓ GA4 Period '+period+' synced to team','ok');
+    } else {
+      const t = await r.text();
+      if(r.status===404||t.includes('relation')||t.includes('does not exist')){
+        toast('⚠ GA4 table missing — run updated SQL in Settings → Team sync → Copy SQL','err');
+      } else {
+        toast('GA4 sync failed ('+r.status+'): '+t.slice(0,80),'err');
+      }
+    }
+  } catch(e){ toast('GA4 sync error: '+e.message,'err'); }
 }
 
 async function pullGa4FromSupabase(silent=false){
-  if(!A.sbConnected || !A.sbUrl || !A.sbKey) return;
+  if(!A.sbConnected||!A.sbUrl||!A.sbKey) return;
   try {
-    const r = await fetch(`${A.sbUrl}/rest/v1/${GA4_TABLE}?site=eq.${A.site}&select=*`, {headers: sbH()});
-    if(!r.ok){ if(!silent) toast('GA4 pull failed: HTTP '+r.status, 'err'); return; }
-    const rows = await r.json();
-    let loaded = 0;
-    for(const row of rows){
-      const p = row.period;
-      if(!GA4[p] || !GA4[p].rows?.length){
-        GA4[p] = row.rows_json;
-        try { await sv(GA4_SK+p, JSON.stringify(GA4[p])); } catch(e){}
-        const elId = 'ga4'+(p==='PS'?'ps':p==='PSA'?'psa':p.toLowerCase())+'-status';
-        const el = document.getElementById(elId);
-        if(el && GA4[p]){
-          el.innerHTML = '✓ <strong>'+GA4[p].rows.length.toLocaleString()+' pages</strong>'+(GA4[p].dateRange?' · '+GA4[p].dateRange:'')+'<span style="margin-left:8px;background:rgba(46,232,180,.14);color:var(--green);border:1px solid rgba(46,232,180,.28);padding:1px 7px;border-radius:4px;font-size:10px;font-weight:600">🌐 Team</span>';
-          el.className = 'pp-status loaded';
-        }
-        loaded++;
+    const r = await fetch(
+      `${A.sbUrl}/rest/v1/${GA4_TABLE}?site=eq.${encodeURIComponent(A.site)}&select=*&order=synced_at.desc`,
+      {headers:sbH()}
+    );
+    if(!r.ok){
+      const t = await r.text();
+      if(r.status===404||t.includes('relation')||t.includes('does not exist')){
+        if(!silent) toast('GA4 table not found — run updated SQL in Settings → Team sync → Copy SQL','err');
+      } else {
+        if(!silent) toast('GA4 pull failed: HTTP '+r.status,'err');
       }
+      return;
     }
-    if(loaded > 0){ renderPerfView(); if(!silent) toast('✓ Pulled GA4 data for '+loaded+' period'+(loaded>1?'s':''), 'ok'); }
-  } catch(e){ if(!silent) toast('GA4 pull failed: '+e.message, 'err'); }
+    const dbRows = await r.json();
+    if(!dbRows.length){ if(!silent) toast('No GA4 data in Supabase yet'); return; }
+    let loaded = 0;
+    for(const row of dbRows){
+      const p = row.period;
+      if(!p || !GA4.hasOwnProperty(p)) continue;
+      const data = row.rows_json;
+      if(!data||!data.rows||!data.rows.length) continue;
+      // Always overwrite — Supabase is source of truth for shared data
+      GA4[p] = data;
+      try { await sv(GA4_SK+p, JSON.stringify(data)); } catch(e){}
+      const elId='ga4'+(p==='PS'?'ps':p==='PSA'?'psa':p.toLowerCase())+'-status';
+      const el=document.getElementById(elId);
+      if(el){
+        el.innerHTML='✓ <strong>'+data.rows.length.toLocaleString()+' pages</strong>'
+          +(data.dateRange?' · '+data.dateRange:'')
+          +' <span style="background:rgba(46,232,180,.14);color:var(--green);border:1px solid rgba(46,232,180,.28);padding:1px 7px;border-radius:4px;font-size:10px;font-weight:600;margin-left:6px">&#127381; Team</span>';
+        el.className='pp-status loaded';
+      }
+      loaded++;
+    }
+    if(loaded>0){
+      if(GA4.A||GA4.B||GA4.PS||GA4.PSA){const h=document.getElementById('ga4-howto');if(h)h.style.display='none';}
+      renderPerfView();
+      if(!silent) toast('✓ GA4 data pulled — '+loaded+' period'+(loaded>1?'s':''),'ok');
+    } else {
+      if(!silent) toast('No new GA4 data from Supabase');
+    }
+  } catch(e){ if(!silent) toast('GA4 pull error: '+e.message,'err'); }
 }
 
 async function handleGa4(period, file){
@@ -2393,22 +2436,22 @@ async function handleGa4(period, file){
 }
 
 async function loadGa4FromStorage(){
-  // First load from localStorage
+  // Load local cache first (instant display)
   for(const p of ['A','B','PS','PSA']){
     try {
       const raw = await gv(GA4_SK+p);
       if(raw){
         GA4[p] = JSON.parse(raw);
-        const elId = 'ga4'+(p==='PS'?'ps':p==='PSA'?'psa':p.toLowerCase())+'-status';
-        const el = document.getElementById(elId);
-        if(el && GA4[p]){
-          el.innerHTML = '✓ <strong>'+GA4[p].rows.length.toLocaleString()+' pages</strong>'+(GA4[p].dateRange?' · '+GA4[p].dateRange:'');
-          el.className = 'pp-status loaded';
+        const elId='ga4'+(p==='PS'?'ps':p==='PSA'?'psa':p.toLowerCase())+'-status';
+        const el=document.getElementById(elId);
+        if(el&&GA4[p]){
+          el.innerHTML='✓ <strong>'+GA4[p].rows.length.toLocaleString()+' pages</strong>'+(GA4[p].dateRange?' · '+GA4[p].dateRange:'');
+          el.className='pp-status loaded';
         }
       }
     } catch(e){}
   }
-  // Then pull from Supabase (fills any periods not in local storage)
+  // Always pull from Supabase — overwrites local with latest team data
   await pullGa4FromSupabase(true);
 }
 
