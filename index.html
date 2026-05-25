@@ -412,6 +412,29 @@ input[type=file]{display:none}
 .ga4-steps strong{color:var(--text)}
 .ga4-steps code{font-family:var(--mono);font-size:10px;color:var(--teal);background:var(--bg4);padding:1px 5px;border-radius:3px}
 @media(max-width:1080px){.pp-period-grid{grid-template-columns:1fr}.pp-kpi{grid-template-columns:repeat(2,1fr)}.pp-how-to-mini{display:none}}
+/* ═══ URL TRACKER ═══ */
+.url-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px 5px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:20px;font-size:12px;font-family:var(--mono);color:var(--teal);transition:border-color .15s;max-width:320px}
+.url-chip:hover{border-color:var(--border3)}
+.url-chip-note{font-size:10px;color:var(--text3);font-family:var(--font);margin-left:3px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.url-chip-del{background:none;border:none;color:var(--text3);cursor:pointer;display:flex;padding:2px;border-radius:3px;transition:color .15s;flex-shrink:0}
+.url-chip-del:hover{color:var(--red)}
+.tr-delta-up{color:var(--green);font-family:var(--mono);font-size:12px;font-weight:700}
+.tr-delta-dn{color:var(--red);font-family:var(--mono);font-size:12px;font-weight:700}
+.tr-delta-na{color:var(--text3);font-family:var(--mono);font-size:12px}
+.tr-val{font-family:var(--mono);font-size:13px;text-align:right}
+.tr-val-b{font-family:var(--mono);font-size:13px;font-weight:700;text-align:right}
+.tr-note-cell{font-size:11px;color:var(--text3);font-style:italic;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tr-no-data{color:var(--text3);font-size:11px;font-family:var(--mono)}
+.tr-kw-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:12px;overflow:hidden}
+.tr-kw-card-hdr{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--bg3);cursor:pointer;transition:background .15s}
+.tr-kw-card-hdr:hover{background:var(--bg4)}
+.tr-kw-url{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--teal)}
+.tr-kw-table{width:100%;border-collapse:collapse;font-size:12px}
+.tr-kw-table thead th{padding:8px 14px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.4px;font-weight:600;border-bottom:1px solid var(--border);background:var(--bg2)}
+.tr-kw-table tbody td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+.tr-kw-table tbody tr:last-child td{border-bottom:none}
+.tr-kw-table tbody tr:hover td{background:rgba(255,255,255,.02)}
+/* ═══ LOGIN SCREEN ═══ */
 .login-screen{position:fixed;inset:0;background:var(--bg0);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
 .login-card{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:40px 40px 36px;width:100%;max-width:420px;box-shadow:0 24px 64px rgba(0,0,0,.6)}
 .login-logo{display:flex;align-items:center;gap:12px;margin-bottom:32px}
@@ -491,6 +514,7 @@ input[type=file]{display:none}
     <button class="nav-btn" onclick="goView('pages',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Pages</button>
     <button class="nav-btn" onclick="goView('competitors',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>SERP Tracker</button>
     <button class="nav-btn" onclick="goView('performance',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Page Performance</button>
+    <button class="nav-btn" onclick="goView('urltracker',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>URL Tracker</button>
     <button class="nav-btn" onclick="goView('imports',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Imports</button>
     <button class="nav-btn" onclick="goView('help',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Help</button>
     <button class="nav-btn" onclick="goView('settings',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</button>
@@ -913,6 +937,103 @@ input[type=file]{display:none}
   </div>
 </div>
 
+<!-- URL TRACKER -->
+<div class="view" id="v-urltracker">
+  <div class="page-hdr">
+    <div>
+      <div class="page-title">URL Tracker</div>
+      <div class="page-sub">Track specific pages you've worked on. Add URLs below and see a before/after comparison of clicks, impressions, and average position pulled from your GSC snapshots.</div>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="exportTrackerCSV()" id="tracker-export-btn" style="display:none">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV
+    </button>
+  </div>
+
+  <!-- Add URL input -->
+  <div class="card" style="margin-bottom:18px">
+    <div class="card-hdr">
+      <div>
+        <div class="card-title">&#127919; Tracked pages</div>
+        <div class="card-sub">Add the URL paths of pages you've made changes to. Use the path only — e.g. <code style="font-size:11px;color:var(--teal);background:var(--bg3);padding:1px 6px;border-radius:4px">/casinos/reviews/winspirit/</code></div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-ghost btn-sm" onclick="clearAllTracked()" id="tracker-clear-btn" style="display:none;color:var(--red)">Clear all</button>
+        <button class="btn btn-primary btn-sm" onclick="showAddUrlModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="width:13px;height:13px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add URL
+        </button>
+      </div>
+    </div>
+
+    <!-- URL chips -->
+    <div id="tracker-url-chips" style="padding:14px 18px;display:flex;flex-wrap:wrap;gap:8px;min-height:54px;align-items:center">
+      <span style="color:var(--text3);font-size:13px" id="tracker-chips-empty">No URLs added yet — click Add URL to get started</span>
+    </div>
+  </div>
+
+  <!-- No snapshot warning -->
+  <div id="tracker-no-snap" style="display:none;background:var(--amber-d);border:1px solid rgba(255,184,63,.3);border-radius:var(--rl);padding:14px 18px;margin-bottom:18px;font-size:13px">
+    &#9888; Set Period A and Period B snapshots in the top bar to see comparison data.
+  </div>
+
+  <!-- Results table -->
+  <div id="tracker-results" style="display:none">
+    <!-- Period labels -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:13px;color:var(--text2)">
+      <span>Comparing:</span>
+      <span style="background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:4px 12px;font-family:var(--mono);font-size:12px" id="tr-period-a">Period A</span>
+      <span style="color:var(--text3)">→</span>
+      <span style="background:var(--blue-d);border:1px solid rgba(91,159,255,.3);border-radius:6px;padding:4px 12px;font-family:var(--mono);font-size:12px;color:var(--blue)" id="tr-period-b">Period B</span>
+    </div>
+
+    <div class="card">
+      <div id="tr-top-scroll" style="overflow-x:auto;overflow-y:hidden;height:14px;border-bottom:1px solid var(--border)"><div id="tr-top-inner" style="height:1px"></div></div>
+      <div class="tbl-wrap" id="tr-tbl-wrap">
+        <table id="tr-table" style="min-width:860px">
+          <thead>
+            <tr>
+              <th style="min-width:260px">Page</th>
+              <th style="min-width:90px;text-align:right">Clicks A</th>
+              <th style="min-width:90px;text-align:right">Clicks B</th>
+              <th style="min-width:90px;text-align:right">Clicks &#916;</th>
+              <th style="min-width:100px;text-align:right">Impr. A</th>
+              <th style="min-width:100px;text-align:right">Impr. B</th>
+              <th style="min-width:100px;text-align:right">Impr. &#916;</th>
+              <th style="min-width:90px;text-align:right">Avg Pos A</th>
+              <th style="min-width:90px;text-align:right">Avg Pos B</th>
+              <th style="min-width:90px;text-align:right">Pos &#916;</th>
+              <th style="min-width:80px">Note</th>
+            </tr>
+          </thead>
+          <tbody id="tr-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Keyword drilldown per URL -->
+    <div id="tracker-kw-section" style="margin-top:22px"></div>
+  </div>
+</div>
+
+<!-- Add URL Modal -->
+<div id="tracker-modal" style="display:none" class="modal-bg" onclick="if(event.target===this)closeTrackerModal()">
+  <div class="modal" style="width:520px">
+    <div class="modal-title">Add pages to track</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.7">
+      Enter one URL path per line. Use the path only — no domain.<br>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--teal)">Example: /casinos/reviews/winspirit/</span>
+    </div>
+    <textarea id="tracker-url-input" style="width:100%;height:160px;background:var(--bg3);border:1.5px solid var(--border2);border-radius:var(--r);padding:12px 14px;color:var(--text);font-size:13px;font-family:var(--mono);outline:none;resize:vertical;line-height:1.8;transition:border .15s" placeholder="/casinos/reviews/winspirit/&#10;/payment-methods/interac/&#10;/slots/microgaming-slots/" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border2)'"></textarea>
+    <div style="margin-top:10px;font-size:12px;color:var(--text3)">
+      &#9432; You can also add a note for each URL. Format: <code style="font-size:11px;color:var(--teal);background:var(--bg4);padding:1px 5px;border-radius:3px">/path/ | your note here</code>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" onclick="closeTrackerModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="addTrackedUrls()">Add pages</button>
+    </div>
+  </div>
+</div>
+
 <!-- IMPORTS -->
 <div class="view" id="v-imports">
   <div class="page-hdr"><div><div class="page-title">Imports &amp; snapshots</div><div class="page-sub" id="imp-sub">Each GSC export becomes a snapshot. Pick any two to compare.</div></div></div>
@@ -1031,6 +1152,7 @@ input[type=file]{display:none}
           &nbsp;&nbsp;— <strong>Ahrefs-style table:</strong> Flat table showing URL, Page type, Status, Traffic, Change %, Keywords, KW change, Top keywords (primary + 2 secondary inline, with a "+N more" dropdown), and estimated volume.</li>
         <li><strong>SERP Tracker</strong> — Pulls live Google rankings for <em>every</em> keyword in Period B (not just top 30). Shows your real position right now, Drift (how much your live position differs from the GSC average), GSC Δ (movement A→B), SERP features (Snippet, PAA, Local, Video), and bojoko.ca / bonus.ca positions side by side. Rows where a competitor is beating you are highlighted red. Filterable by position range, SERP feature, competitor presence, GSC movement, and position mismatch. Exportable to CSV.</li>
         <li><strong>Page Performance</strong> — Combines GA4 engagement data with GSC ranking data into one page-level table. Shows Visitors, Views, Time on page (all with period-over-period change columns), and the ranking keywords for each page pulled from your GSC snapshot. Requires uploading GA4 CSV exports separately — see the full guide further down this Help page.</li>
+        <li><strong>URL Tracker</strong> — A focused before/after comparison tool for pages you've actively worked on. Add specific URL paths you've made changes to (content rewrites, new FAQ sections, internal linking updates, etc.) and instantly see how Clicks, Impressions, and Average Position changed between Period A and Period B. Also shows a full keyword-level breakdown per page. See the complete guide further down this Help page.</li>
         <li><strong>Imports</strong> — Upload GSC exports and manage snapshots. Set which snapshot is Period A and which is Period B.</li>
         <li><strong>Settings</strong> — Configure team sync (Supabase), Serper.dev API key, and active site.</li>
       </ul>
@@ -1248,6 +1370,154 @@ input[type=file]{display:none}
         <li><strong>Some pages in GA4 don't appear in the table.</strong> The table is built from the Period B Landing pages file — pages that appear in your GA4 Pages and screens report but not in Landing pages won't show up. Use the Landing pages report (not Pages and screens) as your primary upload for Period B.</li>
         <li><strong>Time on page shows 0s for some pages.</strong> This is normal for pages where GA4 couldn't measure engagement time — usually pages where the visitor left without any interaction, or single-page sessions where GA4 couldn't calculate duration. It doesn't necessarily mean the page performed poorly.</li>
         <li><strong>Can I export this data?</strong> Yes — click the <strong>Export CSV</strong> button in the top right of the Page Performance tab. The export includes all columns: URL, category, visitors (current and prev), views (current and prev), time on page (current and prev), ranking keyword count, top keyword, and its position.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══ URL TRACKER ═══ -->
+  <div class="help-sec" style="border-color:rgba(46,232,180,.25);background:linear-gradient(135deg,var(--bg2),rgba(46,232,180,.03))">
+    <div class="help-sec-title" style="font-size:18px;letter-spacing:-.3px">&#127919; URL Tracker — complete guide</div>
+    <div class="help-body">
+      The URL Tracker is a focused before/after tool built specifically for tracking the impact of changes you've made to individual pages. Instead of looking at hundreds of pages at once, you add only the pages you've worked on and get a clean side-by-side comparison showing exactly what moved — and by how much — between your two GSC periods.
+      <br><br>
+      <strong>When to use it:</strong> Any time you've made a deliberate change to a page and want to know if it worked. Examples:
+      <ul>
+        <li>Rewrote the intro or meta title of a casino review</li>
+        <li>Added an FAQ section to a payment methods page</li>
+        <li>Updated internal linking to a key landing page</li>
+        <li>Published a new slot review and want to track early ranking movement</li>
+        <li>Made technical changes (schema markup, page speed, canonical) and want to see impact</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="help-sec">
+    <div class="help-sec-title">&#128203; Before you start — set your periods</div>
+    <div class="help-body">
+      The URL Tracker pulls all its data from the GSC snapshots you've already imported. It doesn't need any new files — just make sure you have the right periods set.
+      <br><br>
+      <strong>What Period A and Period B mean for tracking changes:</strong>
+      <ul>
+        <li><strong>Period A</strong> = the period <em>before</em> you made your changes. This is your baseline.</li>
+        <li><strong>Period B</strong> = the period <em>after</em> your changes. This is your "current" state.</li>
+      </ul>
+      The comparison always runs A → B, so green deltas mean things improved in Period B compared to Period A.
+      <br><br>
+      <strong>How to check which periods are set:</strong> Look at the top bar in Inside Rank. The two date pickers show which snapshots are Period A and Period B. If they're not what you want, click either picker and select a different snapshot.
+      <div class="help-tip">&#128161; <strong>Tip:</strong> For the most meaningful comparison, choose periods of equal length — e.g. both 3 months. A 3-month vs 1-week comparison will almost always show lower numbers in the shorter period, not because rankings declined but because there were fewer days of data.</div>
+    </div>
+  </div>
+
+  <div class="help-sec">
+    <div class="help-sec-title">&#9312; Adding pages to track</div>
+    <div class="help-body">
+      <strong>Step 1:</strong> Click <strong>URL Tracker</strong> in the left sidebar.
+      <br><br>
+      <strong>Step 2:</strong> Click the <strong>Add URL</strong> button in the top right of the tracked pages card.
+      <br><br>
+      <strong>Step 3:</strong> A modal window will appear with a text box. Enter one URL path per line. Use the <em>path only</em> — no domain name, no https.
+      <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:12px 16px;margin:12px 0;font-family:var(--mono);font-size:12px;color:var(--teal);line-height:2">
+        /casinos/reviews/winspirit/<br>
+        /payment-methods/interac/<br>
+        /slots/microgaming-slots/<br>
+        /casinos/bonuses/no-deposit-bonus/
+      </div>
+      <strong>Step 4:</strong> Optionally add a note to any URL by adding a pipe <code style="color:var(--teal);font-size:11px">|</code> character followed by your note. This is useful for recording <em>what</em> change you made so you remember later:
+      <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:12px 16px;margin:12px 0;font-family:var(--mono);font-size:12px;color:var(--teal);line-height:2">
+        /casinos/reviews/winspirit/ | rewrote intro + added FAQ<br>
+        /payment-methods/interac/ | added comparison table<br>
+        /slots/microgaming-slots/ | updated internal links
+      </div>
+      <strong>Step 5:</strong> Click <strong>Add pages</strong>. The comparison table appears immediately.
+      <div class="help-tip">&#9432; URLs are saved permanently per site and persist when you close and reopen the tool. You don't need to re-add them each session. To remove a URL, click the × on its chip. To remove all, use the red <strong>Clear all</strong> button.</div>
+    </div>
+  </div>
+
+  <div class="help-sec">
+    <div class="help-sec-title">&#128200; Understanding the comparison table</div>
+    <div class="help-body">
+      The summary table shows one row per tracked URL with the following columns:
+      <ul>
+        <li><strong>Page</strong> — the URL path and your note (if you added one).</li>
+        <li><strong>Clicks A</strong> — total organic clicks in Period A (your baseline). Sourced from your GSC snapshot.</li>
+        <li><strong>Clicks B</strong> — total organic clicks in Period B (after your changes). Shown in bold.</li>
+        <li><strong>Clicks Δ</strong> — the absolute change. <span style="color:var(--green);font-weight:600">+12</span> means 12 more clicks in Period B. <span style="color:var(--red);font-weight:600">-5</span> means 5 fewer.</li>
+        <li><strong>Impressions A / B / Δ</strong> — same as clicks but for impressions (how many times your page appeared in search results). A rising impression count with flat clicks often means you're appearing for more queries but not yet converting them — watch position alongside this.</li>
+        <li><strong>Avg Pos A</strong> — your average GSC position across all keywords for that page in Period A.</li>
+        <li><strong>Avg Pos B</strong> — average position in Period B, shown as a colour-coded badge (green = top 3, amber = top 10, blue = 11–30, grey = 31+).</li>
+        <li><strong>Pos Δ</strong> — the change in average position. <span style="color:var(--green);font-weight:600">↓ 3.2</span> means the position number dropped by 3.2 — which is <em>good</em> (closer to position 1). <span style="color:var(--red);font-weight:600">↑ 1.8</span> means position increased (moved further from position 1 — worse).</li>
+        <li><strong>Note</strong> — the note you entered when adding the URL, if any.</li>
+      </ul>
+      <div class="help-tip">&#9432; <strong>No data showing?</strong> If Clicks A, Impressions A, and Avg Pos A all show "—" it means that page had no ranking keywords in your Period A snapshot. This could mean the page was brand new, didn't rank for any tracked queries in that period, or the URL in the tracker doesn't exactly match the URL in your GSC data. See the troubleshooting section below.</div>
+    </div>
+  </div>
+
+  <div class="help-sec">
+    <div class="help-sec-title">&#128269; Keyword breakdown cards</div>
+    <div class="help-body">
+      Below the summary table, each tracked page gets its own keyword breakdown card. This shows <em>every individual keyword</em> that page ranked for in either Period A or Period B, giving you a granular view of exactly which queries moved.
+      <br><br>
+      <strong>Columns in the keyword breakdown:</strong>
+      <ul>
+        <li><strong>Keyword</strong> — the search query.</li>
+        <li><strong>Pos A</strong> — average position in Period A (shown in grey — your baseline).</li>
+        <li><strong>Pos B</strong> — average position in Period B (colour-coded badge — your current state).</li>
+        <li><strong>Pos Δ</strong> — <span style="color:var(--green);font-weight:600">↓ 4.1</span> = improved by 4.1 positions. <span style="color:var(--red);font-weight:600">↑ 2.3</span> = declined by 2.3 positions. ≈ = essentially flat.</li>
+        <li><strong>Impr. A / Impr. B</strong> — impressions for that specific keyword in each period. Rising impressions on a keyword usually means it's moving up and appearing for more search variations.</li>
+      </ul>
+      <strong>Summary badges on each card:</strong>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">
+        <span class="tag tg-green">&#8593; 5 improved</span><span style="font-size:12px;color:var(--text3)">5 keywords moved to a better position</span>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0">
+        <span class="tag tg-red">&#8595; 2 declined</span><span style="font-size:12px;color:var(--text3)">2 keywords moved to a worse position</span>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0">
+        <span class="tag tg-blue">+3 new</span><span style="font-size:12px;color:var(--text3)">3 keywords appeared in Period B that weren't in Period A</span>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px">
+        <span class="tag tg-gray">1 lost</span><span style="font-size:12px;color:var(--text3)">1 keyword ranked in Period A but not in Period B</span>
+      </div>
+      Keywords are sorted by impressions (highest first) so the most impactful ones appear at the top.
+    </div>
+  </div>
+
+  <div class="help-sec">
+    <div class="help-sec-title">&#128161; How to interpret results — practical examples</div>
+    <div class="help-body">
+      <strong>Scenario 1 — Clear improvement:</strong>
+      <div style="background:var(--bg3);border:1px solid rgba(46,232,180,.2);border-radius:var(--r);padding:12px 16px;margin:10px 0;font-size:12px;line-height:1.9">
+        Clicks A: 12 → Clicks B: 31 <span style="color:var(--green);font-weight:600">+19</span> &nbsp;·&nbsp; Avg Pos A: 14.2 → Pos B: <span style="background:rgba(91,159,255,.15);color:var(--blue);padding:2px 7px;border-radius:4px;font-family:var(--mono)">8.9</span> <span style="color:var(--green);font-weight:600">↓ 5.3</span>
+      </div>
+      Your changes worked. Position improved by 5.3 places and clicks nearly tripled. Look at the keyword breakdown to see which specific queries drove the improvement — those are the ones your changes resonated with.
+      <br><br>
+      <strong>Scenario 2 — Impressions up, clicks flat:</strong>
+      <div style="background:var(--bg3);border:1px solid rgba(255,184,63,.2);border-radius:var(--r);padding:12px 16px;margin:10px 0;font-size:12px;line-height:1.9">
+        Clicks A: 8 → Clicks B: 9 <span style="color:var(--green);font-weight:600">+1</span> &nbsp;·&nbsp; Impr A: 420 → Impr B: 890 <span style="color:var(--green);font-weight:600">+470</span> &nbsp;·&nbsp; Avg Pos A: 22.1 → Pos B: <span style="background:rgba(91,159,255,.15);color:var(--blue);padding:2px 7px;border-radius:4px;font-family:var(--mono)">18.4</span> <span style="color:var(--green);font-weight:600">↓ 3.7</span>
+      </div>
+      You're moving up and appearing for more queries, but CTR is low because you're still in positions 11–30. This is a promising sign — keep optimising. Focus on meta title and description to improve click-through rate.
+      <br><br>
+      <strong>Scenario 3 — Position improved but clicks dropped:</strong>
+      <div style="background:var(--bg3);border:1px solid rgba(255,107,107,.2);border-radius:var(--r);padding:12px 16px;margin:10px 0;font-size:12px;line-height:1.9">
+        Clicks A: 45 → Clicks B: 28 <span style="color:var(--red);font-weight:600">-17</span> &nbsp;·&nbsp; Avg Pos A: 8.4 → Pos B: <span style="background:rgba(46,232,180,.16);color:var(--green);padding:2px 7px;border-radius:4px;font-family:var(--mono)">6.1</span> <span style="color:var(--green);font-weight:600">↓ 2.3</span>
+      </div>
+      Position improved but clicks fell. Check if Period B had fewer days or if it covered a seasonal low. Also look at the keyword breakdown — you may have improved for low-volume queries while losing ground on the high-volume ones.
+    </div>
+  </div>
+
+  <div class="help-sec">
+    <div class="help-sec-title">&#10067; URL Tracker — common questions</div>
+    <div class="help-body">
+      <ul>
+        <li><strong>The table shows "—" for all Period A columns.</strong> This means the page had no GSC keyword data in Period A. Most likely causes: the page was created after Period A ended, it didn't rank for any queries in that period (new or thin content), or the URL in the tracker doesn't match the URL format in your GSC snapshot. Try checking the Keywords tab and filtering by that URL to confirm how it appears in your GSC data.</li>
+        <li><strong>All columns show "No data" in Period B.</strong> The page has no ranking keywords in Period B either. Check that the URL path is correct (exact match including trailing slash). Also confirm your Period B snapshot is set — look at the comparison label above the table which shows which snapshots are being used.</li>
+        <li><strong>The URL I added doesn't match.</strong> GSC sometimes stores URLs with trailing slashes (<code style="color:var(--teal);font-size:11px">/casinos/reviews/winspirit/</code>) and sometimes without. The tracker tries both variants automatically. If still no match, go to the Keywords tab, search for a keyword you know ranks for that page, and check exactly how the URL appears in the URL column — then add that exact format to the tracker.</li>
+        <li><strong>Position improved but I want to see it at the keyword level.</strong> The "Avg Pos" column in the summary table averages across all keywords for that page. A page ranking for 50 keywords will show an average that may mask big moves on individual terms. Scroll down to the keyword breakdown card for that page — sort mentally by Impr. B to focus on the high-traffic keywords first.</li>
+        <li><strong>The comparison period labels say "No Period A".</strong> You only have one snapshot imported. Import a second GSC ZIP or CSV for the previous period, then set it as Period A using the top bar picker. You need two snapshots for the comparison to work.</li>
+        <li><strong>Can I track the same URLs across multiple sites?</strong> Yes — URLs are stored per site. Switch to .co.nz or .com in the sidebar and add URLs there independently. Each site has its own separate tracker list.</li>
+        <li><strong>I made changes mid-period — will that affect the data?</strong> Yes, and it's worth being aware of. GSC reports average position over the entire period. If you made changes on day 15 of a 30-day period, Period B only captures 15 days of post-change data averaged in with 15 days of pre-change data. For cleanest results, export a new GSC snapshot that starts <em>after</em> your change date and use that as Period B.</li>
+        <li><strong>Can I share my tracked URL list with the team?</strong> Currently tracked URLs are stored in your own browser. They don't sync via Supabase. Each team member manages their own list. If you want others to track the same pages, share the URL list with them and they can add them manually.</li>
+        <li><strong>Can I export the data?</strong> Yes — click <strong>Export CSV</strong> in the top right. The export includes one row per URL with all A/B values and deltas for clicks, impressions, and position, plus your notes.</li>
       </ul>
     </div>
   </div>
@@ -1781,6 +2051,7 @@ function goView(v,el){
   if(v==='imports')renderSnapList();
   if(v==='competitors')loadSerpForView();
   if(v==='performance')renderPerfView();
+  if(v==='urltracker')renderUrlTracker();
   if(v==='settings'){loadApiKeyToInput();renderSettingsSyncPanel();}
 }
 function renderAll(){updateTopbar();renderOverview();}
@@ -2750,6 +3021,286 @@ function exportPerfCSV(){
   a.click();
   toast('Performance data exported');
 }
+// ═══ URL TRACKER ═══
+const UT_SK = 'ir_ut_'; // storage key prefix
+
+// State: list of {url, note} objects per site
+function getTrackedUrls(){ try{ const r=localStorage.getItem(UT_SK+A.site); return r?JSON.parse(r):[]; }catch(e){ return []; } }
+function saveTrackedUrls(arr){ try{ localStorage.setItem(UT_SK+A.site,JSON.stringify(arr)); }catch(e){} }
+
+// ── Modal ──
+function showAddUrlModal(){
+  document.getElementById('tracker-url-input').value='';
+  document.getElementById('tracker-modal').style.display='flex';
+  setTimeout(()=>document.getElementById('tracker-url-input').focus(),80);
+}
+function closeTrackerModal(){ document.getElementById('tracker-modal').style.display='none'; }
+
+function addTrackedUrls(){
+  const raw = document.getElementById('tracker-url-input').value;
+  const lines = raw.split('\n').map(l=>l.trim()).filter(Boolean);
+  if(!lines.length){ closeTrackerModal(); return; }
+  const existing = getTrackedUrls();
+  const existingUrls = new Set(existing.map(e=>normTrackerUrl(e.url)));
+  let added = 0;
+  lines.forEach(line => {
+    const parts = line.split('|');
+    let url = (parts[0]||'').trim();
+    const note = (parts[1]||'').trim();
+    url = normTrackerUrl(url);
+    if(!url || existingUrls.has(url)) return;
+    existing.push({url, note});
+    existingUrls.add(url);
+    added++;
+  });
+  saveTrackedUrls(existing);
+  closeTrackerModal();
+  renderUrlTracker();
+  if(added > 0) toast('✓ '+added+' page'+(added>1?'s':'')+' added to tracker','ok');
+  else toast('No new pages added — already tracking all those URLs');
+}
+
+function normTrackerUrl(u){
+  u = (u||'').trim().toLowerCase();
+  if(u.startsWith('http')){ try{ u=new URL(u).pathname; }catch(e){} }
+  if(!u.startsWith('/')) u='/'+u;
+  return u;
+}
+
+function removeTrackedUrl(url){
+  const arr = getTrackedUrls().filter(e => e.url !== url);
+  saveTrackedUrls(arr);
+  renderUrlTracker();
+}
+
+function updateTrackedNote(url, note){
+  const arr = getTrackedUrls();
+  const item = arr.find(e=>e.url===url);
+  if(item){ item.note=note; saveTrackedUrls(arr); }
+}
+
+function clearAllTracked(){
+  if(!confirm('Remove all tracked URLs for this site?')) return;
+  saveTrackedUrls([]);
+  renderUrlTracker();
+}
+
+// ── Main render ──
+function renderUrlTracker(){
+  const tracked = getTrackedUrls();
+  const chipsEl = document.getElementById('tracker-url-chips');
+  const emptyEl = document.getElementById('tracker-chips-empty');
+  const clearBtn = document.getElementById('tracker-clear-btn');
+  const exportBtn = document.getElementById('tracker-export-btn');
+  const resultsEl = document.getElementById('tracker-results');
+  const noSnapEl = document.getElementById('tracker-no-snap');
+
+  // Render chips
+  if(tracked.length === 0){
+    if(emptyEl) emptyEl.style.display='';
+    chipsEl.querySelectorAll('.url-chip').forEach(c=>c.remove());
+    if(clearBtn) clearBtn.style.display='none';
+    if(exportBtn) exportBtn.style.display='none';
+    if(resultsEl) resultsEl.style.display='none';
+    return;
+  }
+  if(emptyEl) emptyEl.style.display='none';
+  if(clearBtn) clearBtn.style.display='';
+  // Rebuild chips
+  chipsEl.querySelectorAll('.url-chip').forEach(c=>c.remove());
+  tracked.forEach(({url, note}) => {
+    const chip = document.createElement('div');
+    chip.className = 'url-chip';
+    chip.innerHTML =
+      '<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px" title="'+esc(url)+'">'+esc(url)+'</span>'
+      +(note?'<span class="url-chip-note">'+esc(note)+'</span>':'')
+      +'<button class="url-chip-del" title="Remove" onclick="removeTrackedUrl(\''+esc(url).replace(/'/g,"\\'")+'\')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>';
+    chipsEl.appendChild(chip);
+  });
+
+  // Check snapshots
+  const sa = snapA(), sb = snapB();
+  if(!sb){
+    if(noSnapEl) noSnapEl.style.display='block';
+    if(resultsEl) resultsEl.style.display='none';
+    return;
+  }
+  if(noSnapEl) noSnapEl.style.display='none';
+  if(resultsEl) resultsEl.style.display='block';
+  if(exportBtn) exportBtn.style.display='';
+
+  // Period labels
+  const paEl=document.getElementById('tr-period-a'),pbEl=document.getElementById('tr-period-b');
+  if(paEl) paEl.textContent=sa?(sa.label||sa.start+' → '+sa.end):'No Period A';
+  if(pbEl) pbEl.textContent=sb.label||sb.start+' → '+sb.end;
+
+  // Build data
+  const mA = buildKwMap(sa), mB = buildKwMap(sb);
+
+  // Aggregate per page from GSC data
+  function pageStats(map, url){
+    const norm = u => u.replace(/\/+$/,'').toLowerCase();
+    const target = norm(url);
+    let clicks=0, impr=0, posSum=0, posCnt=0, kws=[];
+    Object.values(map).forEach(k => {
+      if(!k.page) return;
+      const kp = norm(k.page);
+      if(kp !== target && kp+'/' !== target && kp !== target+'/') return;
+      clicks += k.clicks; impr += k.impressions;
+      if(k.position>0){ posSum+=k.position*k.impressions; posCnt+=k.impressions; }
+      kws.push(k);
+    });
+    const avgPos = posCnt>0 ? posSum/posCnt : null;
+    kws.sort((a,b)=>b.impressions-a.impressions);
+    return {clicks, impr, avgPos, kws, hasData: clicks>0||impr>0};
+  }
+
+  const rows = tracked.map(({url,note}) => {
+    const a = pageStats(mA, url);
+    const b = pageStats(mB, url);
+    return {url, note, a, b};
+  });
+
+  // Render summary table
+  const tbody = document.getElementById('tr-tbody');
+  tbody.innerHTML = rows.map(({url,note,a,b}) => {
+    const clDelta = a.hasData ? b.clicks - a.clicks : null;
+    const imDelta = a.hasData ? b.impr - a.impr : null;
+    const posDelta = (a.avgPos && b.avgPos) ? a.avgPos - b.avgPos : null; // positive = improved
+
+    const deltaCell = (val, goodUp) => {
+      if(val===null) return '<span class="tr-delta-na">—</span>';
+      const good = goodUp ? val>0 : val<0;
+      const cls = good?'tr-delta-up':'tr-delta-dn';
+      const sign = val>0?'+':'';
+      return '<span class="'+cls+'">'+sign+Math.round(val)+'</span>';
+    };
+    const posDeltaCell = v => {
+      if(v===null) return '<span class="tr-delta-na">—</span>';
+      // positive delta = position improved (number went down)
+      const cls = v>0.1?'tr-delta-up':v<-0.1?'tr-delta-dn':'tr-delta-na';
+      const sign = v>0?'↓ ':'↑ ';
+      if(Math.abs(v)<0.1) return '<span class="tr-delta-na">≈</span>';
+      return '<span class="'+cls+'">'+sign+Math.abs(v).toFixed(1)+'</span>';
+    };
+
+    const noData = !b.hasData;
+
+    return '<tr>'
+      + '<td><span style="font-family:var(--mono);font-size:12px;color:var(--teal)">'+esc(url)+'</span>'
+        + (note?'<div class="tr-note-cell" title="'+esc(note)+'">'+esc(note)+'</div>':'')+'</td>'
+      + '<td class="tr-val">'+(a.hasData?a.clicks:'<span class="tr-no-data">—</span>')+'</td>'
+      + '<td class="tr-val-b" style="'+(noData?'color:var(--text3)':'color:var(--text)')+'">'+(b.hasData?b.clicks:'<span class="tr-no-data">No data</span>')+'</td>'
+      + '<td style="text-align:right">'+deltaCell(clDelta,true)+'</td>'
+      + '<td class="tr-val">'+(a.hasData?fmtN(a.impr):'<span class="tr-no-data">—</span>')+'</td>'
+      + '<td class="tr-val-b" style="'+(noData?'color:var(--text3)':'color:var(--text)')+'">'+(b.hasData?fmtN(b.impr):'<span class="tr-no-data">No data</span>')+'</td>'
+      + '<td style="text-align:right">'+deltaCell(imDelta,true)+'</td>'
+      + '<td class="tr-val">'+(a.avgPos?'<span>'+a.avgPos.toFixed(1)+'</span>':'<span class="tr-no-data">—</span>')+'</td>'
+      + '<td class="tr-val-b">'+(b.avgPos?posBadge(b.avgPos):'<span class="tr-no-data">No data</span>')+'</td>'
+      + '<td style="text-align:right">'+posDeltaCell(posDelta)+'</td>'
+      + '<td class="tr-note-cell">'+(note?esc(note):'')+'</td>'
+      + '</tr>';
+  }).join('');
+
+  // Keyword drilldown cards — one per tracked URL
+  const kwSection = document.getElementById('tracker-kw-section');
+  kwSection.innerHTML = '<div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:14px">Keyword breakdown per page</div>'
+    + rows.map(({url, note, a, b}) => {
+      if(!b.kws.length && !a.kws.length) return '';
+
+      // Merge keywords from A and B
+      const allKwKeys = new Set([...b.kws.map(k=>k.query), ...a.kws.map(k=>k.query)]);
+      const kwAMap = {}; a.kws.forEach(k=>{ kwAMap[k.query]=k; });
+      const kwBMap = {}; b.kws.forEach(k=>{ kwBMap[k.query]=k; });
+      const kwRows = [...allKwKeys].map(q => {
+        const ka=kwAMap[q], kb=kwBMap[q];
+        return {
+          query:q,
+          posA:ka?.position||null, posB:kb?.position||null,
+          clA:ka?.clicks||0, clB:kb?.clicks||0,
+          imA:ka?.impressions||0, imB:kb?.impressions||0,
+          dpos:(ka?.position&&kb?.position)?ka.position-kb.position:null
+        };
+      }).sort((a,b)=>(b.imB||b.imA)-(a.imB||a.imA));
+
+      const kwTableRows = kwRows.map(k => {
+        const dpHtml = k.dpos===null?'<span style="color:var(--text3)">—</span>':
+          k.dpos>0.1?'<span class="tr-delta-up">↓ '+k.dpos.toFixed(1)+'</span>':
+          k.dpos<-0.1?'<span class="tr-delta-dn">↑ '+Math.abs(k.dpos).toFixed(1)+'</span>':
+          '<span style="color:var(--text3)">≈</span>';
+        return '<tr>'
+          +'<td style="font-weight:500;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(k.query)+'</td>'
+          +'<td style="text-align:right">'+(k.posA?'<span style="font-family:var(--mono);font-size:11px;color:var(--text3)">'+k.posA.toFixed(1)+'</span>':'<span style="color:var(--text3)">—</span>')+'</td>'
+          +'<td style="text-align:right">'+(k.posB?posBadge(k.posB):'<span style="color:var(--text3)">—</span>')+'</td>'
+          +'<td style="text-align:right">'+dpHtml+'</td>'
+          +'<td style="text-align:right;font-family:var(--mono);font-size:11px;color:var(--text3)">'+fmtN(k.imA)+'</td>'
+          +'<td style="text-align:right;font-family:var(--mono);font-size:12px;font-weight:600">'+fmtN(k.imB)+'</td>'
+          +'</tr>';
+      }).join('');
+
+      const improved = kwRows.filter(k=>k.dpos!==null&&k.dpos>0.1).length;
+      const declined = kwRows.filter(k=>k.dpos!==null&&k.dpos<-0.1).length;
+      const newKw    = kwRows.filter(k=>!k.posA&&k.posB).length;
+      const lostKw   = kwRows.filter(k=>k.posA&&!k.posB).length;
+
+      return '<div class="tr-kw-card">'
+        +'<div class="tr-kw-card-hdr">'
+          +'<span class="tr-kw-url">'+esc(url)+'</span>'
+          +(note?'<span style="font-size:11px;color:var(--text3)">'+esc(note)+'</span>':'')
+          +'<span style="margin-left:auto;display:flex;gap:8px;flex-shrink:0">'
+            +(improved?'<span class="tag tg-green">&#8593; '+improved+' improved</span>':'')
+            +(declined?'<span class="tag tg-red">&#8595; '+declined+' declined</span>':'')
+            +(newKw?'<span class="tag tg-blue">+'+newKw+' new</span>':'')
+            +(lostKw?'<span class="tag tg-gray">'+lostKw+' lost</span>':'')
+          +'</span>'
+        +'</div>'
+        +'<table class="tr-kw-table"><thead><tr>'
+          +'<th>Keyword</th>'
+          +'<th style="text-align:right">Pos A</th>'
+          +'<th style="text-align:right">Pos B</th>'
+          +'<th style="text-align:right">Pos &#916;</th>'
+          +'<th style="text-align:right">Impr. A</th>'
+          +'<th style="text-align:right">Impr. B</th>'
+        +'</tr></thead><tbody>'+kwTableRows+'</tbody></table>'
+      +'</div>';
+    }).join('');
+
+  // Scroll sync
+  requestAnimationFrame(()=>{
+    const ts=document.getElementById('tr-top-scroll'),ti=document.getElementById('tr-top-inner'),tw=document.getElementById('tr-tbl-wrap'),tbl=document.getElementById('tr-table');
+    if(!ts||!tw||!tbl)return;
+    const sw=()=>{ti.style.width=tbl.scrollWidth+'px';};sw();new ResizeObserver(sw).observe(tbl);
+    let syn=false;ts.addEventListener('scroll',()=>{if(syn)return;syn=true;tw.scrollLeft=ts.scrollLeft;syn=false;});tw.addEventListener('scroll',()=>{if(syn)return;syn=true;ts.scrollLeft=tw.scrollLeft;syn=false;});
+  });
+}
+
+// ── Export ──
+function exportTrackerCSV(){
+  const tracked = getTrackedUrls();
+  const sa=snapA(),sb=snapB();
+  if(!tracked.length||!sb){toast('No data to export','err');return;}
+  const mA=buildKwMap(sa),mB=buildKwMap(sb);
+  function pageStats(map,url){
+    const norm=u=>u.replace(/\/+$/,'').toLowerCase();
+    const target=norm(url);
+    let clicks=0,impr=0,posSum=0,posCnt=0;
+    Object.values(map).forEach(k=>{
+      if(!k.page)return;
+      const kp=norm(k.page);
+      if(kp!==target&&kp+'/'!==target&&kp!==target+'/')return;
+      clicks+=k.clicks;impr+=k.impressions;
+      if(k.position>0){posSum+=k.position*k.impressions;posCnt+=k.impressions;}
+    });
+    return{clicks,impr,avgPos:posCnt>0?posSum/posCnt:null};
+  }
+  const hdrs=['url','note','clicks_a','clicks_b','clicks_delta','impressions_a','impressions_b','impressions_delta','avg_pos_a','avg_pos_b','pos_delta'];
+  const rows=tracked.map(({url,note})=>{
+    const a=pageStats(mA,url),b=pageStats(mB,url);
+    const pd=(a.avgPos&&b.avgPos)?(a.avgPos-b.avgPos).toFixed(2):'';
+    return['"'+url+'"','"'+(note||'')+'"',a.clicks,b.clicks,b.clicks-a.clicks,a.impr,b.impr,b.impr-a.impr,a.avgPos?a.avgPos.toFixed(2):'',b.avgPos?b.avgPos.toFixed(2):'',pd].join(',');
+  });
+  const csv=[hdrs.join(','),...rows].join('\n');
+  const a2=document.createElement('a');a2.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a2.download='url-tracker-'+A.site+'-'+new Date().toISOString().split('T')[0]+'.csv';a2.click();toast('Tracker data exported');
+}
 </script>
-</body>
 </html>
