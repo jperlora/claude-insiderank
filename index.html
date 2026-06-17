@@ -1107,28 +1107,54 @@ input[type=file]{display:none}
       Connected as <span id="gsc-user-email" style="font-weight:700;margin:0 4px"></span>
       <button onclick="revokeGsc()" style="margin-left:auto;background:none;border:none;color:var(--green);cursor:pointer;font-size:11px;font-weight:600;opacity:.75;font-family:var(--font)">Disconnect</button>
     </div>
+    <!-- comparison strip -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);flex-wrap:wrap">
+      <span style="font-size:11px;color:var(--text3);font-weight:500;text-transform:uppercase;letter-spacing:.5px">Comparing</span>
+      <span id="gsc-comp-a" style="font-size:12px;color:var(--text2);font-weight:500">No Period A</span>
+      <span style="color:var(--text3);font-size:13px">→</span>
+      <span id="gsc-comp-b" style="font-size:12px;color:var(--blue);font-weight:600">No Period B</span>
+      <a onclick="goView('imports',null)" style="margin-left:auto;font-size:11px;color:var(--text3);cursor:pointer;text-decoration:none">Manage in Imports →</a>
+    </div>
     <!-- tab bar -->
     <div class="gsc-tab-bar">
       <button class="gsc-tab active" id="gtab-pull" onclick="setGscTab('pull')">Pull Data</button>
+      <button class="gsc-tab" id="gtab-queries" onclick="setGscTab('queries')">All Queries</button>
+      <button class="gsc-tab" id="gtab-bypage" onclick="setGscTab('bypage')">By Page</button>
       <button class="gsc-tab" id="gtab-gap" onclick="setGscTab('gap')">Content Gap</button>
     </div>
     <!-- Pull Data tab -->
     <div id="gsc-tab-pull">
       <div class="gsc-pull-panel">
-        <div class="gsc-pull-row">
+        <div class="gsc-pull-row" style="flex-wrap:wrap;gap:10px">
           <div class="gsc-field">
             <label>GSC Property</label>
-            <select class="fi" id="gsc-property" style="min-width:260px;height:38px"></select>
+            <select class="fi" id="gsc-property" style="min-width:240px;height:38px"></select>
           </div>
           <div class="gsc-field">
             <label>Date range</label>
-            <select class="fi" id="gsc-range" style="height:38px">
-              <option value="28">Last 28 days</option>
+            <select class="fi" id="gsc-range" style="height:38px" onchange="gscRangeChanged()">
               <option value="90" selected>Last 3 months</option>
               <option value="180">Last 6 months</option>
+              <option value="custom">Custom dates…</option>
             </select>
           </div>
-          <button class="btn btn-primary" onclick="pullGscLive()" id="gsc-pull-btn" style="height:38px;align-self:flex-end">
+          <div class="gsc-field" id="gsc-custom-wrap" style="display:none;flex-direction:row;gap:6px;align-items:flex-end">
+            <div class="gsc-field">
+              <label>Start</label>
+              <input type="date" class="fi" id="gsc-custom-start" style="height:38px" onchange="gscRangeChanged()">
+            </div>
+            <div class="gsc-field">
+              <label>End</label>
+              <input type="date" class="fi" id="gsc-custom-end" style="height:38px" onchange="gscRangeChanged()">
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:10px;display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap">
+          <div class="gsc-field" style="flex:1;min-width:200px">
+            <label>Snapshot label</label>
+            <input type="text" class="fi" id="gsc-snap-label" placeholder="e.g. Last 3 months — Jun 2026" style="width:100%;height:38px">
+          </div>
+          <button class="btn btn-primary" onclick="pullGscLive()" id="gsc-pull-btn" style="height:38px;align-self:flex-end;flex-shrink:0">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.27"/></svg>
             Pull data
           </button>
@@ -1138,19 +1164,89 @@ input[type=file]{display:none}
           <div class="progress-bar-bg"><div class="progress-bar-fill" id="gsc-pull-bar" style="width:0%"></div></div>
         </div>
       </div>
-      <div id="gsc-pull-hist-wrap" style="display:none">
-        <div class="gsc-pull-hist">
-          <div class="gsc-pull-hist-hdr">Previously pulled snapshots</div>
-          <div id="gsc-pull-hist-list"></div>
+      <div id="gsc-snap-list-wrap" style="display:none">
+        <div class="snap-list">
+          <div class="snap-list-hdr" style="padding:13px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+            <span class="snap-list-title" id="gsc-snap-list-title">Pulled snapshots</span>
+            <span style="font-size:11px;color:var(--text3)">Set as Period A or B to compare in all views</span>
+          </div>
+          <div id="gsc-snap-list-items"></div>
         </div>
+      </div>
+    </div>
+    <!-- All Queries tab -->
+    <div id="gsc-tab-queries" style="display:none">
+      <div id="gsc-queries-nosnap" style="padding:48px 0;text-align:center;color:var(--text3)">
+        <div style="font-size:32px;margin-bottom:12px;opacity:.25">&#128270;</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px">No snapshot selected</div>
+        <div style="font-size:13px;max-width:360px;margin:0 auto">Pull data first, then set a snapshot as <strong style="color:var(--text)">Period B</strong> using the Pull Data tab — all queries from that period will appear here.</div>
+      </div>
+      <div id="gsc-queries-content" style="display:none">
+        <div style="margin-bottom:10px;font-size:12px;color:var(--text3)" id="gsc-queries-lbl"></div>
+        <div class="filters" style="margin-bottom:16px">
+          <div class="fi-wrap"><span class="fi-icon">&#128269;</span><input class="fi" type="text" id="gq-search" placeholder="Search queries or URLs…" style="width:240px;padding-left:26px" oninput="renderGscQueries()"></div>
+          <select class="fi" id="gq-pos" onchange="renderGscQueries()">
+            <option value="">All positions</option>
+            <option value="1-10">Top 10</option>
+            <option value="11-20">Pos 11–20</option>
+            <option value="21-50">Pos 21–50</option>
+            <option value="51-100">Pos 51–100</option>
+          </select>
+          <div style="display:flex;align-items:center;gap:6px">
+            <label style="font-size:12px;color:var(--text3);white-space:nowrap">Min impr.</label>
+            <input class="fi" type="number" id="gq-min-impr" value="0" min="0" style="width:65px;height:38px" oninput="renderGscQueries()">
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="exportGscQueriesCSV()">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
+          <span style="margin-left:auto;font-size:11px;color:var(--text3)" id="gq-count-lbl"></span>
+        </div>
+        <div class="card">
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr>
+                <th onclick="srtGscQ('query')" style="min-width:260px">Query<span class="si" id="si-gqq">&#8597;</span></th>
+                <th onclick="srtGscQ('page')" style="min-width:220px">Page URL<span class="si" id="si-gqp">&#8597;</span></th>
+                <th onclick="srtGscQ('impressions')" style="min-width:110px">Impressions<span class="si" id="si-gqi">&#8597;</span></th>
+                <th onclick="srtGscQ('position')" style="min-width:100px">Avg Pos<span class="si" id="si-gqpos">&#8597;</span></th>
+                <th onclick="srtGscQ('clicks')" style="min-width:80px">Clicks<span class="si" id="si-gqc">&#8597;</span></th>
+                <th onclick="srtGscQ('ctr')" style="min-width:80px">CTR<span class="si" id="si-gqctr">&#8597;</span></th>
+              </tr></thead>
+              <tbody id="gq-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pager"><span class="pager-info" id="gq-pinfo"></span><button class="pager-btn" id="gq-prev" onclick="pgGscQ(-1)">&#8592; Prev</button><button class="pager-btn" id="gq-next" onclick="pgGscQ(1)">Next &#8594;</button></div>
+        </div>
+      </div>
+    </div>
+    <!-- By Page tab -->
+    <div id="gsc-tab-bypage" style="display:none">
+      <div id="gsc-bypage-nosnap" style="padding:48px 0;text-align:center;color:var(--text3)">
+        <div style="font-size:32px;margin-bottom:12px;opacity:.25">&#128196;</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px">No snapshot selected</div>
+        <div style="font-size:13px;max-width:360px;margin:0 auto">Pull data and set a snapshot as <strong style="color:var(--text)">Period B</strong> — then see all queries grouped by their landing page.</div>
+      </div>
+      <div id="gsc-bypage-content" style="display:none">
+        <div class="filters" style="margin-bottom:16px">
+          <div class="fi-wrap"><span class="fi-icon">&#128269;</span><input class="fi" type="text" id="gbp-search" placeholder="Search pages…" style="width:240px;padding-left:26px" oninput="renderGscByPage()"></div>
+          <select class="fi" id="gbp-sort" onchange="renderGscByPage()">
+            <option value="impressions">Sort: Impressions</option>
+            <option value="clicks">Sort: Clicks</option>
+            <option value="kwCount">Sort: Keyword count</option>
+            <option value="position">Sort: Avg position</option>
+          </select>
+          <span style="margin-left:auto;font-size:11px;color:var(--text3)" id="gbp-count-lbl"></span>
+        </div>
+        <div id="gsc-bypage-list"></div>
       </div>
     </div>
     <!-- Content Gap tab -->
     <div id="gsc-tab-gap" style="display:none">
       <div id="gsc-gap-nosnap" style="padding:36px 0;text-align:center;color:var(--text3)">
         <div style="font-size:32px;margin-bottom:12px;opacity:.25">&#128203;</div>
-        <div style="font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px">No live data yet</div>
-        <div style="font-size:13px;max-width:340px;margin:0 auto">Pull data from the <strong style="color:var(--text)">Pull Data</strong> tab first — content gap analysis runs automatically on the pulled data.</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px">No data yet</div>
+        <div style="font-size:13px;max-width:340px;margin:0 auto">Pull data and set it as <strong style="color:var(--text)">Period B</strong> — content gaps are detected automatically.</div>
       </div>
       <div id="gsc-gap-content" style="display:none">
         <div class="filters" style="margin-bottom:16px">
@@ -1860,6 +1956,9 @@ let gscLiveRows=[];
 let gscQueryOnlyRows=[];
 let gscGapSort={col:'impressions',dir:-1};
 let gscGapPage=1;
+let gscQSort={col:'impressions',dir:-1};
+let gscQPage=1;
+let gscBpExpanded=new Set();
 const GSC_PAGE_SIZE=50;
 
 // ═══ BOOT ═══
@@ -2034,26 +2133,57 @@ function refreshGscState(){
   if(!cid){nokey.style.display='';conn.style.display='none';ready.style.display='none';return;}
   if(!gscAccessToken||Date.now()>=gscTokenExpiry){nokey.style.display='none';conn.style.display='';ready.style.display='none';return;}
   nokey.style.display='none';conn.style.display='none';ready.style.display='';
-  renderGscPullHist();
+  // update comparison strip
+  const sa=snapA(),sb=snapB();
+  const ca=document.getElementById('gsc-comp-a'),cb=document.getElementById('gsc-comp-b');
+  if(ca)ca.textContent=sa?sa.label+' ('+sa.start+' → '+sa.end+')':'No Period A';
+  if(cb)cb.textContent=sb?sb.label+' ('+sb.start+' → '+sb.end+')':'No Period B';
+  renderGscSnapList();
 }
 function setGscTab(tab){
-  document.getElementById('gsc-tab-pull').style.display=tab==='pull'?'':'none';
-  document.getElementById('gsc-tab-gap').style.display=tab==='gap'?'':'none';
-  document.getElementById('gtab-pull').classList.toggle('active',tab==='pull');
-  document.getElementById('gtab-gap').classList.toggle('active',tab==='gap');
-  if(tab==='gap')renderGapTable();
+  ['pull','queries','bypage','gap'].forEach(t=>{
+    const el=document.getElementById('gsc-tab-'+t);
+    const btn=document.getElementById('gtab-'+t);
+    if(el)el.style.display=t===tab?'':'none';
+    if(btn)btn.classList.toggle('active',t===tab);
+  });
+  if(tab==='queries')renderGscQueries();
+  else if(tab==='bypage')renderGscByPage();
+  else if(tab==='gap')renderGapTable();
 }
 
 // ── GSC Live Pull ──
+function gscRangeChanged(){
+  const range=document.getElementById('gsc-range')?.value;
+  const wrap=document.getElementById('gsc-custom-wrap');
+  if(wrap)wrap.style.display=range==='custom'?'flex':'none';
+  // auto-fill label
+  const lbl=document.getElementById('gsc-snap-label');
+  if(!lbl)return;
+  const now=new Date();
+  const mo=now.toLocaleString('default',{month:'short'});
+  const yr=now.getFullYear();
+  if(range==='90')lbl.value='Last 3 months — '+mo+' '+yr;
+  else if(range==='180')lbl.value='Last 6 months — '+mo+' '+yr;
+  else lbl.value='';
+}
 async function pullGscLive(){
   if(!gscAccessToken||Date.now()>=gscTokenExpiry){connectGsc();return;}
   const siteUrl=document.getElementById('gsc-property').value;
   if(!siteUrl){toast('Select a GSC property first','err');return;}
-  const days=parseInt(document.getElementById('gsc-range').value)||90;
-  const endDate=new Date();
-  const startDate=new Date();startDate.setDate(endDate.getDate()-days);
   const fmt=d=>d.toISOString().split('T')[0];
-  const sd=fmt(startDate),ed=fmt(endDate);
+  const range=document.getElementById('gsc-range').value;
+  let sd,ed;
+  if(range==='custom'){
+    sd=document.getElementById('gsc-custom-start').value;
+    ed=document.getElementById('gsc-custom-end').value;
+    if(!sd||!ed){toast('Set a start and end date first','err');return;}
+  }else{
+    const days=parseInt(range)||90;
+    const endDate=new Date();const startDate=new Date();startDate.setDate(endDate.getDate()-days);
+    sd=fmt(startDate);ed=fmt(endDate);
+  }
+  const userLabel=(document.getElementById('gsc-snap-label')?.value||'').trim()||('GSC Live — '+sd+' → '+ed);
   const btn=document.getElementById('gsc-pull-btn');
   const prog=document.getElementById('gsc-pull-progress');
   const bar=document.getElementById('gsc-pull-bar');
@@ -2091,7 +2221,7 @@ async function pullGscLive(){
       .map(r=>({...r,src:'gsc-live',urlSource:r.page?'exact':'none'}));
     const snap={
       id:'sn_gsc_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
-      label:'GSC Live — '+sd+' → '+ed,
+      label:userLabel,
       start:sd,end:ed,
       rows:snapRows,
       count:qpRows.length,
@@ -2110,7 +2240,7 @@ async function pullGscLive(){
     bar.style.width='100%';
     status.textContent=`Done — ${qpRows.length.toLocaleString()} queries pulled`;
     setTimeout(()=>{prog.style.display='none';bar.style.width='0%';},2000);
-    renderGscPullHist();
+    refreshGscState();
     toast(`GSC Live snapshot saved — ${qpRows.length.toLocaleString()} rows`,'ok');
   }catch(e){
     toast('Pull failed: '+e.message,'err');
@@ -2118,38 +2248,49 @@ async function pullGscLive(){
   }
   btn.disabled=false;
 }
-function renderGscPullHist(){
-  const wrap=document.getElementById('gsc-pull-hist-wrap');
-  const list=document.getElementById('gsc-pull-hist-list');
-  if(!wrap||!list)return;
+function renderGscSnapList(){
+  const wrap=document.getElementById('gsc-snap-list-wrap');
+  const items=document.getElementById('gsc-snap-list-items');
+  const title=document.getElementById('gsc-snap-list-title');
+  if(!wrap||!items)return;
   const snaps=(A.snaps[A.site]||[]).filter(s=>s.sources&&s.sources.includes('gsc-live'));
   if(!snaps.length){wrap.style.display='none';return;}
   wrap.style.display='';
-  list.innerHTML=snaps.map(s=>`
-    <div class="gsc-hist-item">
-      <div class="gsc-hist-label">${s.label}</div>
-      <div class="gsc-hist-meta">${(s.count||0).toLocaleString()} rows</div>
-      <div class="gsc-hist-meta" style="margin-left:8px">${s.start} → ${s.end}</div>
+  if(title)title.textContent='Pulled snapshots ('+snaps.length+')';
+  const curA=A.pA[A.site],curB=A.pB[A.site];
+  items.innerHTML=snaps.slice().reverse().map(s=>`
+    <div class="snap-item">
+      <div class="snap-info">
+        <div class="snap-lbl">${esc(s.label)}</div>
+        <div class="snap-meta">${(s.count||0).toLocaleString()} queries · ${s.start} → ${s.end}</div>
+      </div>
+      <div class="snap-actions">
+        <button class="snap-btn snap-a ${curA===s.id?'':'dim'}" onclick="setSnap('A','${s.id}');refreshGscState();">Set A</button>
+        <button class="snap-btn snap-b ${curB===s.id?'on':''}" onclick="setSnap('B','${s.id}');refreshGscState();">Set B</button>
+        <button class="snap-del" onclick="deleteSnap('${s.id}')" title="Delete"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
+      </div>
     </div>`).join('');
 }
 
 // ── Content Gap ──
 function computeContentGaps(){
-  if(!gscQueryOnlyRows.length)return[];
+  const srcRows=gscLiveRows.length?gscLiveRows:(snapB()?.rows||[]);
+  const srcQOnly=gscQueryOnlyRows.length?gscQueryOnlyRows:(snapB()?.rows||[]);
+  if(!srcQOnly.length)return[];
   const withPage=new Set();
-  gscLiveRows.forEach(r=>{
+  srcRows.forEach(r=>{
     if(r.page){
       const p=r.page.replace(/https?:\/\/[^/]+/,'').replace(/\/+$/,'');
       if(p&&p!=='')withPage.add(r.query);
     }
   });
   const homepageQueries=new Set();
-  gscLiveRows.forEach(r=>{
+  srcRows.forEach(r=>{
     if(!r.page)return;
     const p=r.page.replace(/https?:\/\/[^/]+/,'').replace(/\/+$/,'');
     if(p===''||p==='/')homepageQueries.add(r.query);
   });
-  return gscQueryOnlyRows
+  return srcQOnly
     .filter(r=>!withPage.has(r.query)||homepageQueries.has(r.query))
     .map(r=>({...r,opportunity:gapOpp(r)}));
 }
@@ -2236,6 +2377,117 @@ function exportGapCSV(){
   a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
   a.download='content-gaps-'+A.site+'-'+new Date().toISOString().split('T')[0]+'.csv';
   a.click();toast('Content gaps exported');
+}
+
+// ── All Queries ──
+function getFilteredGscQ(){
+  const rows=(snapB()?.rows||[]);
+  const search=(document.getElementById('gq-search')?.value||'').toLowerCase();
+  const pos=document.getElementById('gq-pos')?.value||'';
+  const minImpr=parseInt(document.getElementById('gq-min-impr')?.value)||0;
+  let filtered=rows.filter(r=>{
+    if(search&&!(r.query||'').toLowerCase().includes(search)&&!(r.page||'').toLowerCase().includes(search))return false;
+    if(r.impressions<minImpr)return false;
+    if(pos){const[lo,hi]=pos.split('-').map(Number);if(!r.position||r.position<lo||r.position>hi)return false;}
+    return true;
+  });
+  const{col,dir}=gscQSort;
+  filtered.sort((a,b)=>{
+    if(col==='query')return dir*(a.query||'').localeCompare(b.query||'');
+    if(col==='page')return dir*(a.page||'').localeCompare(b.page||'');
+    return dir*((b[col]||0)-(a[col]||0));
+  });
+  return filtered;
+}
+function renderGscQueries(){
+  const sb=snapB();
+  const nosnap=document.getElementById('gsc-queries-nosnap');
+  const content=document.getElementById('gsc-queries-content');
+  if(!sb){if(nosnap)nosnap.style.display='';if(content)content.style.display='none';return;}
+  if(nosnap)nosnap.style.display='none';if(content)content.style.display='';
+  const lbl=document.getElementById('gsc-queries-lbl');
+  if(lbl)lbl.textContent='Showing data from: '+sb.label+' ('+sb.start+' → '+sb.end+')';
+  const rows=getFilteredGscQ();
+  const total=rows.length;
+  const pages=Math.max(1,Math.ceil(total/GSC_PAGE_SIZE));
+  if(gscQPage>pages)gscQPage=1;
+  const slice=rows.slice((gscQPage-1)*GSC_PAGE_SIZE,gscQPage*GSC_PAGE_SIZE);
+  const tbody=document.getElementById('gq-tbody');
+  if(!tbody)return;
+  if(!slice.length){
+    tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:36px;color:var(--text3)">No queries match your filters.</td></tr>';
+  }else{
+    tbody.innerHTML=slice.map(r=>`<tr>
+      <td class="col-kw" title="${esc(r.query)}">${esc(r.query)}</td>
+      <td class="col-url">${r.page?'<span style="color:var(--teal);font-family:var(--mono);font-size:11px">'+esc(trimUrl(r.page))+'</span>':'<span style="color:var(--text3)">—</span>'}</td>
+      <td style="font-family:var(--mono);font-weight:600">${(r.impressions||0).toLocaleString()}</td>
+      <td>${posBadge(r.position)}</td>
+      <td style="font-family:var(--mono)">${(r.clicks||0).toLocaleString()}</td>
+      <td>${ctrCell(r.ctr||0)}</td>
+    </tr>`).join('');
+  }
+  const cnt=document.getElementById('gq-count-lbl');if(cnt)cnt.textContent=total.toLocaleString()+' queries';
+  const pi=document.getElementById('gq-pinfo');if(pi)pi.textContent=(gscQPage-1)*GSC_PAGE_SIZE+1+'–'+Math.min(gscQPage*GSC_PAGE_SIZE,total)+' of '+total.toLocaleString();
+  const prev=document.getElementById('gq-prev');const next=document.getElementById('gq-next');
+  if(prev)prev.disabled=gscQPage<=1;if(next)next.disabled=gscQPage>=pages;
+}
+function srtGscQ(col){
+  if(gscQSort.col===col)gscQSort.dir*=-1;else{gscQSort.col=col;gscQSort.dir=col==='query'||col==='page'?1:-1;}
+  gscQPage=1;
+  ['gqq','gqp','gqi','gqpos','gqc','gqctr'].forEach(k=>{const el=document.getElementById('si-'+k);if(el){el.textContent='↕';el.classList.remove('on');}});
+  const map={query:'gqq',page:'gqp',impressions:'gqi',position:'gqpos',clicks:'gqc',ctr:'gqctr'};
+  const el=document.getElementById('si-'+(map[col]||col));if(el){el.textContent=gscQSort.dir===1?'↑':'↓';el.classList.add('on');}
+  renderGscQueries();
+}
+function pgGscQ(dir){
+  const total=Math.ceil(getFilteredGscQ().length/GSC_PAGE_SIZE);
+  gscQPage=Math.max(1,Math.min(total,gscQPage+dir));
+  renderGscQueries();
+}
+function exportGscQueriesCSV(){
+  const rows=getFilteredGscQ();
+  if(!rows.length){toast('No queries to export','err');return;}
+  const hdrs=['query','page','impressions','avg_position','clicks','ctr'];
+  const csv=[hdrs.join(','),...rows.map(r=>[`"${(r.query||'').replace(/"/g,'""')}"`,`"${(r.page||'').replace(/"/g,'""')}"`,r.impressions||0,(r.position||0).toFixed(2),r.clicks||0,((r.ctr||0)*100).toFixed(2)+'%'].join(','))].join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download='all-queries-'+A.site+'-'+new Date().toISOString().split('T')[0]+'.csv';a.click();toast('Queries exported');
+}
+
+// ── By Page ──
+function renderGscByPage(){
+  const sb=snapB();
+  const nosnap=document.getElementById('gsc-bypage-nosnap');
+  const content=document.getElementById('gsc-bypage-content');
+  if(!sb||!sb.rows?.length){if(nosnap)nosnap.style.display='';if(content)content.style.display='none';return;}
+  if(nosnap)nosnap.style.display='none';if(content)content.style.display='';
+  const search=(document.getElementById('gbp-search')?.value||'').toLowerCase();
+  const sortKey=document.getElementById('gbp-sort')?.value||'impressions';
+  // aggregate by page
+  const pageMap={};
+  sb.rows.forEach(r=>{
+    if(!r.page)return;
+    const p=r.page;
+    if(!pageMap[p])pageMap[p]={page:p,impressions:0,clicks:0,posSum:0,posCnt:0,kws:[]};
+    const pg=pageMap[p];
+    pg.impressions+=r.impressions||0;pg.clicks+=r.clicks||0;
+    if(r.position>0){pg.posSum+=r.position;pg.posCnt++;}
+    pg.kws.push(r);
+  });
+  Object.values(pageMap).forEach(p=>{p.position=p.posCnt?p.posSum/p.posCnt:0;p.kwCount=p.kws.length;p.kws.sort((a,b)=>(b.impressions||0)-(a.impressions||0));});
+  let pages=Object.values(pageMap);
+  if(search)pages=pages.filter(p=>p.page.toLowerCase().includes(search));
+  pages.sort((a,b)=>sortKey==='position'?(a.position||999)-(b.position||999):(b[sortKey]||0)-(a[sortKey]||0));
+  const cnt=document.getElementById('gbp-count-lbl');if(cnt)cnt.textContent=pages.length.toLocaleString()+' pages';
+  const list=document.getElementById('gsc-bypage-list');if(!list)return;
+  list.innerHTML=pages.map(p=>{
+    const isExp=gscBpExpanded.has(p.page);
+    const expRows=isExp?`<div class="pr-expanded"><div class="pr-exp-hdr"><span>Queries (${p.kwCount})</span></div><div class="tbl-wrap"><table><thead><tr><th style="min-width:240px">Query</th><th style="min-width:100px">Impressions</th><th style="min-width:90px">Avg Pos</th><th style="min-width:80px">Clicks</th><th style="min-width:80px">CTR</th></tr></thead><tbody>${p.kws.map(r=>`<tr><td class="col-kw">${esc(r.query)}</td><td style="font-family:var(--mono)">${(r.impressions||0).toLocaleString()}</td><td>${posBadge(r.position)}</td><td style="font-family:var(--mono)">${(r.clicks||0).toLocaleString()}</td><td>${ctrCell(r.ctr||0)}</td></tr>`).join('')}</tbody></table></div></div>`:'';
+    return`<div class="page-row"><div class="pr-hdr" onclick="toggleGscBp('${esc(p.page)}')"><span class="exp-icon ${isExp?'open':''}">&#9654;</span><div class="pr-left"><div class="pr-url-row"><span class="pr-url">${esc(trimUrl(p.page))}</span></div><div class="pr-kw-stats">${p.kwCount} keywords</div></div><div class="pr-metrics"><div class="pr-metric"><div class="pr-metric-lbl">Impressions</div><div class="pr-metric-val"><span class="cur">${p.impressions.toLocaleString()}</span></div></div><div class="pr-metric"><div class="pr-metric-lbl">Avg Pos</div><div class="pr-metric-val"><span class="cur">${p.position?p.position.toFixed(1):'—'}</span></div></div><div class="pr-metric"><div class="pr-metric-lbl">Clicks</div><div class="pr-metric-val"><span class="cur">${p.clicks.toLocaleString()}</span></div></div></div></div>${expRows}</div>`;
+  }).join('');
+}
+function toggleGscBp(page){
+  if(gscBpExpanded.has(page))gscBpExpanded.delete(page);else gscBpExpanded.add(page);
+  renderGscByPage();
 }
 
 // ═══ BOOT (called after successful auth) ═══
