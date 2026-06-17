@@ -1107,14 +1107,6 @@ input[type=file]{display:none}
       Connected as <span id="gsc-user-email" style="font-weight:700;margin:0 4px"></span>
       <button onclick="revokeGsc()" style="margin-left:auto;background:none;border:none;color:var(--green);cursor:pointer;font-size:11px;font-weight:600;opacity:.75;font-family:var(--font)">Disconnect</button>
     </div>
-    <!-- comparison strip -->
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);flex-wrap:wrap">
-      <span style="font-size:11px;color:var(--text3);font-weight:500;text-transform:uppercase;letter-spacing:.5px">Comparing</span>
-      <span id="gsc-comp-a" style="font-size:12px;color:var(--text2);font-weight:500">No Period A</span>
-      <span style="color:var(--text3);font-size:13px">→</span>
-      <span id="gsc-comp-b" style="font-size:12px;color:var(--blue);font-weight:600">No Period B</span>
-      <a onclick="goView('imports',null)" style="margin-left:auto;font-size:11px;color:var(--text3);cursor:pointer;text-decoration:none">Manage in Imports →</a>
-    </div>
     <!-- tab bar -->
     <div class="gsc-tab-bar">
       <button class="gsc-tab active" id="gtab-pull" onclick="setGscTab('pull')">Pull Data</button>
@@ -1168,7 +1160,7 @@ input[type=file]{display:none}
         <div class="snap-list">
           <div class="snap-list-hdr" style="padding:13px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
             <span class="snap-list-title" id="gsc-snap-list-title">Pulled snapshots</span>
-            <span style="font-size:11px;color:var(--text3)">Set as Period A or B to compare in all views</span>
+            <span style="font-size:11px;color:var(--text3)">Select a period in All Queries to view or compare</span>
           </div>
           <div id="gsc-snap-list-items"></div>
         </div>
@@ -1178,38 +1170,48 @@ input[type=file]{display:none}
     <div id="gsc-tab-queries" style="display:none">
       <div id="gsc-queries-nosnap" style="padding:48px 0;text-align:center;color:var(--text3)">
         <div style="font-size:32px;margin-bottom:12px;opacity:.25">&#128270;</div>
-        <div style="font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px">No snapshot selected</div>
-        <div style="font-size:13px;max-width:360px;margin:0 auto">Pull data first, then set a snapshot as <strong style="color:var(--text)">Period B</strong> using the Pull Data tab — all queries from that period will appear here.</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px">No data pulled yet</div>
+        <div style="font-size:13px;max-width:360px;margin:0 auto">Go to <strong style="color:var(--text)">Pull Data</strong>, choose a date range and click <strong style="color:var(--text)">Pull data</strong> — your queries will appear here.</div>
       </div>
       <div id="gsc-queries-content" style="display:none">
-        <div style="margin-bottom:10px;font-size:12px;color:var(--text3)" id="gsc-queries-lbl"></div>
-        <div class="filters" style="margin-bottom:16px">
-          <div class="fi-wrap"><span class="fi-icon">&#128269;</span><input class="fi" type="text" id="gq-search" placeholder="Search queries or URLs…" style="width:240px;padding-left:26px" oninput="renderGscQueries()"></div>
-          <select class="fi" id="gq-pos" onchange="renderGscQueries()">
-            <option value="">All positions</option>
-            <option value="1-10">Top 10</option>
-            <option value="11-20">Pos 11–20</option>
-            <option value="21-50">Pos 21–50</option>
-            <option value="51-100">Pos 51–100</option>
-          </select>
-          <div style="display:flex;align-items:center;gap:6px">
-            <label style="font-size:12px;color:var(--text3);white-space:nowrap">Min impr.</label>
-            <input class="fi" type="number" id="gq-min-impr" value="0" min="0" style="width:65px;height:38px" oninput="renderGscQueries()">
+        <!-- period pickers -->
+        <div style="display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:16px;padding:14px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r)">
+          <div class="gsc-field" style="min-width:220px">
+            <label style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Viewing period</label>
+            <select class="fi" id="gq-snap-sel" style="height:36px" onchange="gscQSnapChanged()"></select>
           </div>
-          <button class="btn btn-ghost btn-sm" onclick="exportGscQueriesCSV()">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Export CSV
-          </button>
+          <div class="gsc-field" style="min-width:220px">
+            <label style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Compare to (optional)</label>
+            <select class="fi" id="gq-comp-sel" style="height:36px" onchange="gscQSnapChanged()">
+              <option value="">— No comparison —</option>
+            </select>
+          </div>
+          <span id="gq-comp-badge" style="display:none;font-size:11px;padding:3px 8px;background:var(--blue);color:#fff;border-radius:20px;white-space:nowrap;align-self:center;margin-bottom:2px">Comparing 2 periods</span>
+        </div>
+        <!-- filters -->
+        <div class="filters" style="margin-bottom:16px">
+          <div class="fi-wrap"><span class="fi-icon">&#128269;</span><input class="fi" type="text" id="gq-search" placeholder="Search queries or page URLs…" style="width:240px;padding-left:26px" oninput="renderGscQueries()"></div>
+          <select class="fi" id="gq-pos" onchange="renderGscQueries()" title="Filter by average ranking position">
+            <option value="">All positions</option>
+            <option value="1-10">Top 10 (positions 1–10)</option>
+            <option value="11-20">Positions 11–20</option>
+            <option value="21-50">Positions 21–50</option>
+            <option value="51-100">Positions 51–100</option>
+          </select>
+          <div style="display:flex;align-items:center;gap:6px" title="Only show queries with at least this many impressions">
+            <label style="font-size:12px;color:var(--text3);white-space:nowrap">Min impressions</label>
+            <input class="fi" type="number" id="gq-min-impr" value="0" min="0" style="width:70px;height:38px" oninput="renderGscQueries()">
+          </div>
           <span style="margin-left:auto;font-size:11px;color:var(--text3)" id="gq-count-lbl"></span>
         </div>
         <div class="card">
           <div class="tbl-wrap">
             <table>
-              <thead><tr>
+              <thead id="gq-thead"><tr>
                 <th onclick="srtGscQ('query')" style="min-width:260px">Query<span class="si" id="si-gqq">&#8597;</span></th>
                 <th onclick="srtGscQ('page')" style="min-width:220px">Page URL<span class="si" id="si-gqp">&#8597;</span></th>
                 <th onclick="srtGscQ('impressions')" style="min-width:110px">Impressions<span class="si" id="si-gqi">&#8597;</span></th>
-                <th onclick="srtGscQ('position')" style="min-width:100px">Avg Pos<span class="si" id="si-gqpos">&#8597;</span></th>
+                <th onclick="srtGscQ('position')" style="min-width:100px">Avg Position<span class="si" id="si-gqpos">&#8597;</span></th>
                 <th onclick="srtGscQ('clicks')" style="min-width:80px">Clicks<span class="si" id="si-gqc">&#8597;</span></th>
                 <th onclick="srtGscQ('ctr')" style="min-width:80px">CTR<span class="si" id="si-gqctr">&#8597;</span></th>
               </tr></thead>
@@ -1958,6 +1960,8 @@ let gscGapSort={col:'impressions',dir:-1};
 let gscGapPage=1;
 let gscQSort={col:'impressions',dir:-1};
 let gscQPage=1;
+let gscQSnapId=null;
+let gscQCompId=null;
 let gscBpExpanded=new Set();
 const GSC_PAGE_SIZE=50;
 
@@ -2133,11 +2137,6 @@ function refreshGscState(){
   if(!cid){nokey.style.display='';conn.style.display='none';ready.style.display='none';return;}
   if(!gscAccessToken||Date.now()>=gscTokenExpiry){nokey.style.display='none';conn.style.display='';ready.style.display='none';return;}
   nokey.style.display='none';conn.style.display='none';ready.style.display='';
-  // update comparison strip
-  const sa=snapA(),sb=snapB();
-  const ca=document.getElementById('gsc-comp-a'),cb=document.getElementById('gsc-comp-b');
-  if(ca)ca.textContent=sa?sa.label+' · '+sa.start+' to '+sa.end:'No Period A set';
-  if(cb)cb.textContent=sb?sb.label+' · '+sb.start+' to '+sb.end:'No Period B set';
   renderGscSnapList();
 }
 function setGscTab(tab){
@@ -2257,7 +2256,6 @@ function renderGscSnapList(){
   if(!snaps.length){wrap.style.display='none';return;}
   wrap.style.display='';
   if(title)title.textContent='Pulled snapshots ('+snaps.length+')';
-  const curA=A.pA[A.site],curB=A.pB[A.site];
   items.innerHTML=snaps.slice().reverse().map(s=>`
     <div class="snap-item">
       <div class="snap-info">
@@ -2265,11 +2263,24 @@ function renderGscSnapList(){
         <div class="snap-meta">${(s.count||0).toLocaleString()} queries · ${s.start} → ${s.end}</div>
       </div>
       <div class="snap-actions">
-        <button class="snap-btn snap-a ${curA===s.id?'':'dim'}" onclick="setSnap('A','${s.id}');refreshGscState();">Set A</button>
-        <button class="snap-btn snap-b ${curB===s.id?'on':''}" onclick="setSnap('B','${s.id}');refreshGscState();">Set B</button>
-        <button class="snap-del" onclick="deleteSnap('${s.id}')" title="Delete"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
+        <button class="snap-del" onclick="deleteSnap('${s.id}');renderGscSnapList();renderGscQueries();" title="Delete"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
       </div>
     </div>`).join('');
+  // populate period pickers in All Queries tab
+  const sel=document.getElementById('gq-snap-sel');
+  const cmp=document.getElementById('gq-comp-sel');
+  if(sel){
+    const prev=gscQSnapId;
+    sel.innerHTML=snaps.slice().reverse().map(s=>`<option value="${s.id}">${esc(s.label)} (${s.start} → ${s.end})</option>`).join('');
+    if(prev&&snaps.find(s=>s.id===prev))sel.value=prev;
+    else{gscQSnapId=sel.value||null;}
+  }
+  if(cmp){
+    const prev=gscQCompId;
+    cmp.innerHTML='<option value="">— No comparison —</option>'+snaps.slice().reverse().map(s=>`<option value="${s.id}">${esc(s.label)} (${s.start} → ${s.end})</option>`).join('');
+    if(prev&&snaps.find(s=>s.id===prev))cmp.value=prev;
+    else{gscQCompId=null;}
+  }
 }
 
 // ── Content Gap ──
@@ -2380,12 +2391,18 @@ function exportGapCSV(){
 }
 
 // ── All Queries ──
-function getFilteredGscQ(){
-  const rows=(snapB()?.rows||[]);
-  // Deduplicate by query: sum impressions+clicks, weighted avg position, best-position page
+function gscQSnapChanged(){
+  gscQSnapId=document.getElementById('gq-snap-sel')?.value||null;
+  gscQCompId=document.getElementById('gq-comp-sel')?.value||null;
+  if(!gscQCompId)gscQCompId=null;
+  const badge=document.getElementById('gq-comp-badge');
+  if(badge)badge.style.display=gscQCompId?'':'none';
+  gscQPage=1;
+  renderGscQueries();
+}
+function dedupeRows(rows){
   const map=new Map();
   rows.forEach(r=>{
-    const q=(r.query||'').toLowerCase()||'(unknown)';
     const key=r.query||'(unknown)';
     if(!map.has(key)){
       map.set(key,{query:r.query||'',page:r.page||'',impressions:r.impressions||0,clicks:r.clicks||0,position:r.position||0,_posImpr:(r.position||0)*(r.impressions||0),_totalImpr:r.impressions||0});
@@ -2395,20 +2412,23 @@ function getFilteredGscQ(){
       e.clicks+=(r.clicks||0);
       e._posImpr+=(r.position||0)*(r.impressions||0);
       e._totalImpr+=(r.impressions||0);
-      // keep page with best (lowest) position
       if((r.position||999)<(e.position||999)&&r.page){e.page=r.page;e.position=r.position||0;}
     }
   });
-  // finalize weighted avg position, compute ctr
-  const deduped=Array.from(map.values()).map(e=>{
+  return Array.from(map.values()).map(e=>{
     e.position=e._totalImpr>0?e._posImpr/e._totalImpr:0;
     e.ctr=e.impressions>0?e.clicks/e.impressions:0;
     return e;
   });
+}
+function getFilteredGscQ(){
+  const snapId=gscQSnapId||document.getElementById('gq-snap-sel')?.value;
+  const snap=(A.snaps[A.site]||[]).find(s=>s.id===snapId);
+  const rows=dedupeRows(snap?.rows||[]);
   const search=(document.getElementById('gq-search')?.value||'').toLowerCase();
   const pos=document.getElementById('gq-pos')?.value||'';
   const minImpr=parseInt(document.getElementById('gq-min-impr')?.value)||0;
-  let filtered=deduped.filter(r=>{
+  let filtered=rows.filter(r=>{
     if(search&&!(r.query||'').toLowerCase().includes(search)&&!(r.page||'').toLowerCase().includes(search))return false;
     if(r.impressions<minImpr)return false;
     if(pos){const[lo,hi]=pos.split('-').map(Number);if(!r.position||r.position<lo||r.position>hi)return false;}
@@ -2423,22 +2443,90 @@ function getFilteredGscQ(){
   return filtered;
 }
 function renderGscQueries(){
-  const sb=snapB();
+  const snaps=(A.snaps[A.site]||[]).filter(s=>s.sources&&s.sources.includes('gsc-live'));
   const nosnap=document.getElementById('gsc-queries-nosnap');
   const content=document.getElementById('gsc-queries-content');
-  if(!sb){if(nosnap)nosnap.style.display='';if(content)content.style.display='none';return;}
+  if(!snaps.length){if(nosnap)nosnap.style.display='';if(content)content.style.display='none';return;}
   if(nosnap)nosnap.style.display='none';if(content)content.style.display='';
-  const lbl=document.getElementById('gsc-queries-lbl');
-  if(lbl)lbl.textContent='Showing data from: '+sb.label+' ('+sb.start+' → '+sb.end+')';
+  // sync snap selector value
+  if(!gscQSnapId){
+    const sel=document.getElementById('gq-snap-sel');
+    gscQSnapId=sel?.value||snaps[snaps.length-1]?.id||null;
+  }
+  const compId=gscQCompId;
+  const compSnap=compId?(A.snaps[A.site]||[]).find(s=>s.id===compId):null;
+  // update table headers
+  const thead=document.getElementById('gq-thead');
+  if(thead){
+    if(compSnap){
+      const mainSnap=(A.snaps[A.site]||[]).find(s=>s.id===gscQSnapId);
+      thead.innerHTML=`<tr>
+        <th onclick="srtGscQ('query')" style="min-width:220px">Query<span class="si" id="si-gqq">&#8597;</span></th>
+        <th onclick="srtGscQ('page')" style="min-width:180px">Page URL<span class="si" id="si-gqp">&#8597;</span></th>
+        <th colspan="2" style="text-align:center;background:var(--bg3);font-size:11px;color:var(--text3)">Impressions</th>
+        <th colspan="2" style="text-align:center;background:var(--bg3);font-size:11px;color:var(--text3)">Avg Position</th>
+        <th colspan="2" style="text-align:center;background:var(--bg3);font-size:11px;color:var(--text3)">Clicks</th>
+      </tr><tr>
+        <th></th><th></th>
+        <th onclick="srtGscQ('impressions')" style="min-width:90px;font-size:11px">${esc((mainSnap?.label||'Current').substring(0,20))}<span class="si" id="si-gqi">&#8597;</span></th>
+        <th style="min-width:70px;font-size:11px;color:var(--text3)">${esc((compSnap.label||'Previous').substring(0,20))}</th>
+        <th onclick="srtGscQ('position')" style="min-width:80px;font-size:11px">${esc((mainSnap?.label||'Current').substring(0,20))}<span class="si" id="si-gqpos">&#8597;</span></th>
+        <th style="min-width:70px;font-size:11px;color:var(--text3)">${esc((compSnap.label||'Previous').substring(0,20))}</th>
+        <th onclick="srtGscQ('clicks')" style="min-width:70px;font-size:11px">${esc((mainSnap?.label||'Current').substring(0,20))}<span class="si" id="si-gqc">&#8597;</span></th>
+        <th style="min-width:70px;font-size:11px;color:var(--text3)">${esc((compSnap.label||'Previous').substring(0,20))}</th>
+      </tr>`;
+    }else{
+      thead.innerHTML=`<tr>
+        <th onclick="srtGscQ('query')" style="min-width:260px">Query<span class="si" id="si-gqq">&#8597;</span></th>
+        <th onclick="srtGscQ('page')" style="min-width:220px">Page URL<span class="si" id="si-gqp">&#8597;</span></th>
+        <th onclick="srtGscQ('impressions')" style="min-width:110px">Impressions<span class="si" id="si-gqi">&#8597;</span></th>
+        <th onclick="srtGscQ('position')" style="min-width:100px">Avg Position<span class="si" id="si-gqpos">&#8597;</span></th>
+        <th onclick="srtGscQ('clicks')" style="min-width:80px">Clicks<span class="si" id="si-gqc">&#8597;</span></th>
+        <th onclick="srtGscQ('ctr')" style="min-width:80px">CTR<span class="si" id="si-gqctr">&#8597;</span></th>
+      </tr>`;
+    }
+  }
   const rows=getFilteredGscQ();
+  // build comparison map if needed
+  let compMap=null;
+  if(compSnap){
+    compMap=new Map();
+    dedupeRows(compSnap.rows||[]).forEach(r=>compMap.set(r.query,r));
+  }
   const total=rows.length;
   const pages=Math.max(1,Math.ceil(total/GSC_PAGE_SIZE));
   if(gscQPage>pages)gscQPage=1;
   const slice=rows.slice((gscQPage-1)*GSC_PAGE_SIZE,gscQPage*GSC_PAGE_SIZE);
   const tbody=document.getElementById('gq-tbody');
   if(!tbody)return;
+  const colCount=compMap?8:6;
   if(!slice.length){
-    tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:36px;color:var(--text3)">No queries match your filters.</td></tr>';
+    tbody.innerHTML=`<tr><td colspan="${colCount}" style="text-align:center;padding:36px;color:var(--text3)">No queries match your filters.</td></tr>`;
+  }else if(compMap){
+    tbody.innerHTML=slice.map(r=>{
+      const c=compMap.get(r.query);
+      const diDelta=(v,prev,lower)=>{
+        if(prev==null)return'<span style="color:var(--text3)">—</span>';
+        const d=v-prev;
+        if(Math.abs(d)<0.01)return'<span style="color:var(--text3)">±0</span>';
+        const good=lower?(d<0):(d>0);
+        const sign=d>0?'+':'';
+        return`<span style="color:${good?'var(--green)':'var(--red)'}">${sign}${typeof v==='number'&&v<10?d.toFixed(1):Math.round(d)}</span>`;
+      };
+      const imprDelta=c?`<td style="font-size:11px">${diDelta(r.impressions,c.impressions,false)}</td>`:'<td style="color:var(--text3);font-size:11px">new</td>';
+      const posDelta=c?`<td style="font-size:11px">${diDelta(r.position,c.position,true)}</td>`:'<td style="color:var(--text3);font-size:11px">new</td>';
+      const clkDelta=c?`<td style="font-size:11px">${diDelta(r.clicks,c.clicks,false)}</td>`:'<td style="color:var(--text3);font-size:11px">new</td>';
+      return`<tr>
+        <td class="col-kw" title="${esc(r.query)}">${esc(r.query)}</td>
+        <td class="col-url">${r.page?'<span style="color:var(--teal);font-family:var(--mono);font-size:11px">'+esc(trimUrl(r.page))+'</span>':'<span style="color:var(--text3)">—</span>'}</td>
+        <td style="font-family:var(--mono);font-weight:600">${(r.impressions||0).toLocaleString()}</td>
+        ${imprDelta}
+        <td>${posBadge(r.position)}</td>
+        ${posDelta}
+        <td style="font-family:var(--mono)">${(r.clicks||0).toLocaleString()}</td>
+        ${clkDelta}
+      </tr>`;
+    }).join('');
   }else{
     tbody.innerHTML=slice.map(r=>`<tr>
       <td class="col-kw" title="${esc(r.query)}">${esc(r.query)}</td>
