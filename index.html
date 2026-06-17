@@ -1077,27 +1077,78 @@ input[type=file]{display:none}
   <div id="gsc-state-nokey">
     <div class="gsc-onboard">
       <div class="gsc-onboard-title">Connect Google Search Console</div>
-      <div class="gsc-onboard-sub">To pull live data you need a Google OAuth Client ID. It takes about 10 minutes to set up — you only do this once.</div>
+      <div class="gsc-onboard-sub">This is a one-time setup that lets Inside Rank pull data directly from your Google Search Console. It takes about 10–15 minutes and you'll never need to do it again.</div>
+
+      <div style="margin:20px 0 8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text3)">Before you start</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:20px">Make sure you're signed into Google Chrome (or your browser) with the <strong style="color:var(--text)">same Google account that has access to Google Search Console</strong>. If you're not sure which account that is, go to <strong style="color:var(--text)">search.google.com/search-console</strong> and check which account you're logged in as.</div>
+
       <ol class="gsc-steps">
-        <li><span class="gsc-step-num">1</span><span>Go to <strong style="color:var(--text)">console.cloud.google.com</strong> and create a new project</span></li>
-        <li><span class="gsc-step-num">2</span><span>Enable the <strong style="color:var(--text)">Google Search Console API</strong> under APIs &amp; Services → Library</span></li>
-        <li><span class="gsc-step-num">3</span><span>Go to APIs &amp; Services → OAuth consent screen → External → add your email as a test user</span></li>
-        <li><span class="gsc-step-num">4</span><span>Go to APIs &amp; Services → Credentials → Create OAuth Client ID → Web application</span></li>
-        <li><span class="gsc-step-num">5</span><span>Add <code style="color:var(--teal);font-size:12px">https://insiderank.netlify.app</code> as an Authorized JavaScript origin</span></li>
-        <li><span class="gsc-step-num">6</span><span>Copy the Client ID and paste it in <a onclick="goView('settings',null);setTimeout(()=>document.getElementById('gsc-clientid-input').scrollIntoView({behavior:'smooth'}),300)" style="color:var(--blue);cursor:pointer;font-weight:500">Settings → GSC API</a></span></li>
+        <li>
+          <span class="gsc-step-num">1</span>
+          <span>
+            <strong style="color:var(--text)">Open Google Cloud Console</strong><br>
+            <span style="color:var(--text2);font-size:12px">Go to <strong>console.cloud.google.com</strong> — sign in with the same Google account that has Search Console access. If it's your first time, it'll ask you to agree to terms of service.</span>
+          </span>
+        </li>
+        <li>
+          <span class="gsc-step-num">2</span>
+          <span>
+            <strong style="color:var(--text)">Create a new project</strong><br>
+            <span style="color:var(--text2);font-size:12px">At the top of the page, click the project dropdown (it may say "Select a project"). Click <strong>New Project</strong>. Give it a name like <em>Inside Rank</em> and click <strong>Create</strong>. Wait a moment — it will redirect you to the new project dashboard.</span>
+          </span>
+        </li>
+        <li>
+          <span class="gsc-step-num">3</span>
+          <span>
+            <strong style="color:var(--text)">Enable the Search Console API</strong><br>
+            <span style="color:var(--text2);font-size:12px">In the left sidebar click <strong>APIs &amp; Services → Library</strong>. In the search box type <strong>Google Search Console API</strong>. Click the result, then click the blue <strong>Enable</strong> button. This gives your project permission to read Search Console data.</span>
+          </span>
+        </li>
+        <li>
+          <span class="gsc-step-num">4</span>
+          <span>
+            <strong style="color:var(--text)">Set up the OAuth consent screen</strong><br>
+            <span style="color:var(--text2);font-size:12px">Go to <strong>APIs &amp; Services → OAuth consent screen</strong>. Select <strong>External</strong> and click <strong>Create</strong>. Fill in the App name (e.g. <em>Inside Rank</em>) and your email address for both "User support email" and "Developer contact information". Click <strong>Save and Continue</strong> through the next two screens (Scopes and Test users) — you can leave them as-is for now. On the final Summary screen click <strong>Back to Dashboard</strong>.</span>
+          </span>
+        </li>
+        <li>
+          <span class="gsc-step-num">5</span>
+          <span>
+            <strong style="color:var(--text)">Add yourself as a test user</strong><br>
+            <span style="color:var(--text2);font-size:12px">On the OAuth consent screen page, scroll down to the <strong>Test users</strong> section and click <strong>+ Add Users</strong>. Enter the email address of everyone who will use this tool (including yourself). Click <strong>Save</strong>. Anyone not on this list won't be able to connect.</span>
+          </span>
+        </li>
+        <li>
+          <span class="gsc-step-num">6</span>
+          <span>
+            <strong style="color:var(--text)">Create your OAuth Client ID</strong><br>
+            <span style="color:var(--text2);font-size:12px">Go to <strong>APIs &amp; Services → Credentials</strong>. Click <strong>+ Create Credentials</strong> at the top → select <strong>OAuth client ID</strong>. Under "Application type" choose <strong>Web application</strong>. Give it a name (any name). Under <strong>Authorised JavaScript origins</strong> click <strong>+ Add URI</strong> and enter exactly:</span>
+            <br><code style="color:var(--teal);font-size:12px;display:inline-block;margin-top:4px;background:var(--bg3);padding:3px 8px;border-radius:4px">https://insiderank.netlify.app</code>
+            <br><span style="color:var(--text2);font-size:12px;display:block;margin-top:4px">Click <strong>Create</strong>. A popup will appear showing your Client ID — it looks like a long string ending in <em>.apps.googleusercontent.com</em>.</span>
+          </span>
+        </li>
+        <li>
+          <span class="gsc-step-num">7</span>
+          <span>
+            <strong style="color:var(--text)">Copy the Client ID and paste it here</strong><br>
+            <span style="color:var(--text2);font-size:12px">Copy the Client ID from the popup (or find it later under APIs &amp; Services → Credentials). Then go to <a onclick="goView('settings',null);setTimeout(()=>document.getElementById('gsc-clientid-input').scrollIntoView({behavior:'smooth'}),300)" style="color:var(--blue);cursor:pointer;font-weight:500">Settings → GSC API</a>, paste it in and click <strong>Save Client ID</strong>. Come back here — the Connect button will appear.</span>
+          </span>
+        </li>
       </ol>
-      <button class="btn btn-primary" onclick="goView('settings',null);setTimeout(()=>document.getElementById('gsc-clientid-input').focus(),300)">Go to Settings → paste Client ID</button>
+      <button class="btn btn-primary" style="margin-top:8px" onclick="goView('settings',null);setTimeout(()=>document.getElementById('gsc-clientid-input').focus(),300)">I have my Client ID → Go to Settings</button>
+      <div style="margin-top:12px;font-size:12px;color:var(--text3)">Need more help? See the <a onclick="goView('help',null)" style="color:var(--blue);cursor:pointer">Help section → GSC Live setup &amp; FAQ</a></div>
     </div>
   </div>
   <!-- state: has key, not yet authorized -->
   <div id="gsc-state-connect" style="display:none">
     <div class="gsc-connect-panel">
-      <div class="gsc-connect-title">Connect your Google account</div>
-      <div class="gsc-connect-sub">Click below to sign in with the Google account that has access to your Search Console properties. You'll be asked to grant read-only access.</div>
+      <div class="gsc-connect-title">Almost there — connect your Google account</div>
+      <div class="gsc-connect-sub" style="max-width:420px;margin:0 auto 20px">Click the button below. A Google sign-in popup will appear — choose the Google account that has access to your Search Console data and click <strong>Allow</strong>. Inside Rank only ever reads your data — it can never change anything.</div>
       <button class="btn btn-primary" onclick="connectGsc()">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         Connect Google Search Console
       </button>
+      <div style="margin-top:14px;font-size:12px;color:var(--text3)">If the popup is blocked, allow popups for this site in your browser and try again.<br>If you see "Access blocked: app not verified" — go back to Google Cloud → OAuth consent screen → Test users and make sure your email is added.</div>
     </div>
   </div>
   <!-- state: authorized + pull UI -->
@@ -1341,25 +1392,34 @@ input[type=file]{display:none}
 
   <!-- GSC LIVE SETUP -->
   <div class="help-sec">
-    <div class="help-sec-title">&#128279; GSC Live — setup &amp; FAQ</div>
+    <div class="help-sec-title">&#128279; GSC Live — setup guide &amp; FAQ</div>
     <div class="help-body">
-      <p style="margin-bottom:12px">GSC Live lets you pull data directly from Google Search Console without exporting CSV files. Here's how to set it up:</p>
-      <ol style="line-height:2.2;padding-left:18px;margin-bottom:16px">
-        <li>Go to <strong>console.cloud.google.com</strong> and sign in with the Google account that has Search Console access.</li>
-        <li>Click the project dropdown at the top → <strong>New Project</strong> → name it anything (e.g. Inside Rank) → Create.</li>
-        <li>Go to <strong>APIs &amp; Services → Library</strong> → search <em>Google Search Console API</em> → Enable.</li>
-        <li>Go to <strong>APIs &amp; Services → OAuth consent screen</strong> → External → fill in App name and your email → Save. On the Test users page, add every email that will use this tool.</li>
-        <li>Go to <strong>APIs &amp; Services → Credentials</strong> → Create Credentials → OAuth client ID → Web application.</li>
-        <li>Under Authorized JavaScript origins add <code style="color:var(--teal);font-size:12px">https://insiderank.netlify.app</code> → Create.</li>
-        <li>Copy the Client ID → go to <a onclick="goView('settings',null)" style="color:var(--blue);cursor:pointer;font-weight:500">Settings → GSC API</a> → paste and save.</li>
-        <li>Go to <a onclick="goView('gsclive',null)" style="color:var(--blue);cursor:pointer;font-weight:500">GSC Live</a> → Connect Google Search Console → authorize → Pull data.</li>
-      </ol>
-      <ul>
-        <li><strong>The token expires after 1 hour.</strong> Click "Connect" again — if you're still logged into Google in the same browser, it re-authorizes silently with no popup.</li>
-        <li><strong>25,000 row limit.</strong> GSC Live fetches up to 25,000 queries per pull. Most sites are well under this. If your site has more, the top 25,000 by impressions are returned.</li>
-        <li><strong>Adding team members.</strong> Each team member must be added as a Test User in your Google Cloud project's OAuth consent screen (Step 4) and must connect with their own Google account.</li>
-        <li><strong>What is Content Gap?</strong> The Content Gap tab shows queries where GSC has impression data but no landing page URL is associated — meaning Google is showing your site for these queries but you haven't created a dedicated page for them yet. Sort by Impressions to find the biggest opportunities.</li>
-        <li><strong>Pulled data works like a CSV import.</strong> Every pull creates a snapshot you can set as Period A or Period B in the top bar picker. All existing views (Keywords, Pages, SERP Tracker) work with it automatically.</li>
+      <p style="margin-bottom:16px"><strong>GSC Live</strong> connects Inside Rank directly to your Google Search Console so you can pull ranking data with one click — no CSV exports needed. The setup is a one-time process that takes about 10–15 minutes.</p>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">&#128204; Step-by-step setup</div>
+
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:20px">
+        <div style="font-size:12px;color:var(--text2);line-height:1.9">
+          <div style="margin-bottom:8px"><strong style="color:var(--text)">Step 1 — Go to Google Cloud Console</strong><br>Open <strong>console.cloud.google.com</strong> in a new tab. Sign in with the Google account that has access to Google Search Console. If you're not sure which account that is, check by going to <strong>search.google.com/search-console</strong> first.</div>
+          <div style="margin-bottom:8px"><strong style="color:var(--text)">Step 2 — Create a new project</strong><br>At the very top of the page, click the project name dropdown (it might say "Select a project" or show an existing project name). Click <strong>New Project</strong>, give it a name like <em>Inside Rank</em>, and click <strong>Create</strong>. Google will redirect you to the new project's dashboard.</div>
+          <div style="margin-bottom:8px"><strong style="color:var(--text)">Step 3 — Enable the Search Console API</strong><br>In the left sidebar click <strong>APIs &amp; Services</strong>, then <strong>Library</strong>. In the search bar type <em>Google Search Console API</em> and click the result. Click the blue <strong>Enable</strong> button. This tells Google your project is allowed to read Search Console data.</div>
+          <div style="margin-bottom:8px"><strong style="color:var(--text)">Step 4 — Set up the OAuth consent screen</strong><br>In the left sidebar click <strong>APIs &amp; Services → OAuth consent screen</strong>. Select <strong>External</strong> and click <strong>Create</strong>. You'll see a form — fill in an App name (anything, e.g. <em>Inside Rank</em>) and your email address for "User support email" and "Developer contact information". Click <strong>Save and Continue</strong> three times until you reach the Summary page, then click <strong>Back to Dashboard</strong>.</div>
+          <div style="margin-bottom:8px"><strong style="color:var(--text)">Step 5 — Add test users</strong><br>Still on the OAuth consent screen page, scroll down to the <strong>Test users</strong> section. Click <strong>+ Add Users</strong> and add the email address of everyone who will use Inside Rank (including yourself). Click <strong>Save</strong>. <em>Important: anyone not added here will get an "Access blocked" error when they try to connect.</em></div>
+          <div style="margin-bottom:8px"><strong style="color:var(--text)">Step 6 — Create a Client ID</strong><br>Go to <strong>APIs &amp; Services → Credentials</strong>. Click <strong>+ Create Credentials</strong> at the top of the page and select <strong>OAuth client ID</strong>. Under "Application type" choose <strong>Web application</strong>. Scroll down to <strong>Authorised JavaScript origins</strong>, click <strong>+ Add URI</strong> and enter exactly: <code style="color:var(--teal);background:var(--bg);padding:2px 6px;border-radius:4px">https://insiderank.netlify.app</code>. Click <strong>Create</strong>.</div>
+          <div style="margin-bottom:8px"><strong style="color:var(--text)">Step 7 — Copy and save the Client ID</strong><br>A popup appears showing your new Client ID — a long string ending in <em>.apps.googleusercontent.com</em>. Copy it. Then go to <a onclick="goView('settings',null)" style="color:var(--blue);cursor:pointer;font-weight:500">Settings → GSC API</a> in Inside Rank, paste it in the box and click <strong>Save Client ID</strong>.</div>
+          <div><strong style="color:var(--text)">Step 8 — Connect and pull data</strong><br>Go to <a onclick="goView('gsclive',null)" style="color:var(--blue);cursor:pointer;font-weight:500">GSC Live</a>. Click <strong>Connect Google Search Console</strong>. A Google sign-in popup appears — choose your account and click <strong>Allow</strong>. Once connected, choose your website from the property dropdown, pick a date range, and click <strong>Pull data</strong>.</div>
+        </div>
+      </div>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">&#10067; Common questions</div>
+      <ul style="line-height:1.9">
+        <li><strong>"Access blocked: app not verified"</strong> — This means your email wasn't added as a test user. Go back to Google Cloud → APIs &amp; Services → OAuth consent screen → Test users → add your email → Save. Then try connecting again.</li>
+        <li><strong>"The popup is blocked"</strong> — Your browser is blocking the Google sign-in popup. Look for a blocked popup icon in the address bar, click it, and choose "Always allow popups from this site".</li>
+        <li><strong>The connection expires after 1 hour.</strong> This is a Google security limit. Click <strong>Connect</strong> again — if you're still logged into Google in the same browser, it reconnects instantly with no popup.</li>
+        <li><strong>I don't see my GSC property in the dropdown.</strong> Make sure you're connecting with the same Google account that has access to that property in Search Console. You can check at <strong>search.google.com/search-console</strong>.</li>
+        <li><strong>What does "Content Gap" mean?</strong> It shows search queries where Google is showing your website in results and getting impressions — but you don't have a dedicated page built for that topic yet. These are content opportunities. Sort by Impressions to find the biggest ones.</li>
+        <li><strong>Adding a new team member.</strong> Go to Google Cloud → OAuth consent screen → Test users → add their email. They then go to GSC Live on their own device and click Connect with their own Google account.</li>
+        <li><strong>How much data does one pull get?</strong> Up to 25,000 queries per pull. For most websites this covers everything. If you have more, the top 25,000 by impressions are returned.</li>
       </ul>
     </div>
   </div>
