@@ -2938,7 +2938,7 @@ function updateTopbar(){const a=snapA(),b=snapB();document.getElementById('pa-va
 // ═══ OVERVIEW ═══
 function renderOverview(){
   const sa=snapA(),sb=snapB(),mA=buildKwMap(sa),mB=buildKwMap(sb),kwRows=compareKws(mA,mB);
-  const ovs=document.getElementById('ov-sub');if(!sb)ovs.textContent='No data — import snapshots to get started';else ovs.textContent=(sa?sa.label+' → ':'')+sb.label;
+  const ovs=document.getElementById('ov-sub');if(!sb)ovs.textContent='No data — pull from GSC Live to get started';else ovs.textContent=(sa?sa.label+' → ':'')+sb.label;
   const dropped10=kwRows.filter(r=>r.posA&&r.posA<=10&&(!r.posB||r.posB>10));
   const aw=document.getElementById('alert-wrap');if(dropped10.length&&sa&&sb){aw.style.display='flex';document.getElementById('alert-txt').innerHTML='<strong>'+dropped10.length+' keywords</strong> dropped out of the top 10.';}else aw.style.display='none';
   const rawB=sb?sb.rows:[],rawA=sa?sa.rows:[];const cB=sb?.chartTotals||null,cA=sa?.chartTotals||null;
@@ -3106,18 +3106,8 @@ function initAhScrollSync(){const ts=document.getElementById('ah-top-scroll'),ti
 
 // ═══ SNAPSHOTS ═══
 function renderSnapList(){
-  const snaps=getSnaps(),site=A.sites[A.site].name;
-  document.getElementById('snap-list-title').textContent='Snapshots for '+site+' ('+snaps.length+')';
-  document.getElementById('imp-sub').textContent='Each GSC export = a snapshot for '+site+'. Pick any two to compare.';
-  const el=document.getElementById('snap-items');
-  if(!snaps.length){el.innerHTML='<div style="padding:22px;text-align:center;color:var(--text3);font-size:12px">No snapshots yet</div>';return;}
-  const curA=A.pA[A.site],curB=A.pB[A.site];
-  el.innerHTML=snaps.map(s=>{
-    const srcTags=(s.sources||[]).map(t=>'<span class="snap-src-tag '+t+'">'+t+'</span>').join('');
-    const teamBadge=s.syncedFrom==='team'?'<span class="tag tg-green" style="font-size:9px">&#127381; Team</span>':'';
-    const syncBtn=A.sbConnected&&s.syncedFrom!=='team'?'<button class="snap-btn" style="background:var(--green-d);color:var(--green);border:1px solid rgba(46,232,180,.3)" onclick="pushSnapToTeam(\''+s.id+'\')">&#8593; Sync</button>':'';
-    return'<div class="snap-item"><div class="snap-info"><div class="snap-lbl" style="display:flex;align-items:center;gap:8px">'+esc(s.label)+' '+teamBadge+'</div><div class="snap-meta">'+(s.count?.toLocaleString()||0)+' keywords · '+(s.start||'?')+' → '+(s.end||'?')+(s.urlFilledCount?' · '+s.urlFilledCount+'/'+s.count+' URLs':'')+'</div>'+(s.chartTotals?'<div style="font-size:10px;color:var(--green);margin-top:3px">✓ Chart.csv — totals match GSC UI</div>':'<div style="font-size:10px;color:var(--amber);margin-top:3px">⚠ No Chart.csv — top-1,000 only</div>')+(srcTags?'<div class="snap-sources">'+srcTags+'</div>':'')+'</div><div class="snap-actions">'+syncBtn+'<button class="snap-btn snap-a '+(curA===s.id?'':'dim')+'" onclick="setSnap(\'A\',\''+s.id+'\')">Set A</button><button class="snap-btn snap-b '+(curB===s.id?'on':'')+'" onclick="setSnap(\'B\',\''+s.id+'\')">Set B</button><button class="snap-del" onclick="deleteSnap(\''+s.id+'\')" title="Delete"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button></div></div>';
-  }).join('');
+  // The old Imports page is gone — delegate to GSC Live snapshot list.
+  renderGscSnapList();
 }
 async function setSnap(which,id){if(which==='A')A.pA[A.site]=id;else A.pB[A.site]=id;await savePer();updateTopbar();renderSnapList();renderAll();toast('Snapshot set as Period '+which);}
 async function deleteSnap(id){if(!confirm('Delete this snapshot?'))return;A.snaps[A.site]=(A.snaps[A.site]||[]).filter(s=>s.id!==id);if(A.pA[A.site]===id)delete A.pA[A.site];if(A.pB[A.site]===id)delete A.pB[A.site];autoPickPeriods();await save();await savePer();renderSnapList();renderAll();toast('Deleted');}
