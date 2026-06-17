@@ -2085,11 +2085,15 @@ async function pullGscLive(){
     bar.style.width='90%';
     gscLiveRows=qpRows;
     gscQueryOnlyRows=qRows;
+    // Store only top 5k rows in localStorage to avoid the 5MB limit.
+    // Full data stays in memory (gscLiveRows / gscQueryOnlyRows) for Content Gap.
+    const snapRows=qpRows.slice().sort((a,b)=>b.impressions-a.impressions).slice(0,5000)
+      .map(r=>({...r,src:'gsc-live',urlSource:r.page?'exact':'none'}));
     const snap={
       id:'sn_gsc_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
       label:'GSC Live — '+sd+' → '+ed,
       start:sd,end:ed,
-      rows:qpRows.map(r=>({...r,src:'gsc-live',urlSource:r.page?'exact':'none'})),
+      rows:snapRows,
       count:qpRows.length,
       urlFilledCount:qpRows.filter(r=>r.page).length,
       exactCount:qpRows.filter(r=>r.page).length,
