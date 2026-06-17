@@ -546,7 +546,6 @@ input[type=file]{display:none}
     <button class="nav-btn" onclick="goView('performance',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Page Performance</button>
     <button class="nav-btn" onclick="goView('urltracker',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>URL Tracker</button>
     <button class="nav-btn" id="nav-gsclive" onclick="goView('gsclive',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>GSC Live</button>
-    <button class="nav-btn" onclick="goView('imports',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Imports</button>
     <button class="nav-btn" onclick="goView('help',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Help</button>
     <button class="nav-btn" onclick="goView('settings',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</button>
   </div>
@@ -573,7 +572,7 @@ input[type=file]{display:none}
 <div class="page-content">
 <!-- OVERVIEW -->
 <div class="view active" id="v-overview">
-  <div class="page-hdr"><div><div class="page-title">Overview</div><div class="page-sub" id="ov-sub">No data — import snapshots to get started</div></div><button class="btn btn-ghost btn-sm" onclick="goView('imports',null)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Manage data</button></div>
+  <div class="page-hdr"><div><div class="page-title">Overview</div><div class="page-sub" id="ov-sub">No data — pull from GSC Live to get started</div></div><button class="btn btn-ghost btn-sm" onclick="goView('gsclive',null)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Pull data</button></div>
   <div id="alert-wrap" style="display:none" class="alert-banner">&#9888;&#65039; <span id="alert-txt"></span><a class="alert-link" onclick="goView('keywords',null);setStatus('declined')">Review them &#8594;</a></div>
   <div class="kpi-row" id="kpi-row"></div>
   <div class="main-aside">
@@ -696,7 +695,7 @@ input[type=file]{display:none}
 
   <!-- no snapshot warning -->
   <div id="serp-no-snap" style="display:none;background:var(--amber-d);border:1px solid rgba(255,184,63,.3);border-radius:var(--rl);padding:14px 18px;margin-bottom:18px;font-size:13px">
-    &#9888; No Period B snapshot selected. Go to <a onclick="goView('imports',null)" style="color:var(--blue);cursor:pointer;font-weight:500">Imports</a> and set a snapshot as Period B first.
+    &#9888; No Period B snapshot selected. Go to <a onclick="goView('gsclive',null)" style="color:var(--blue);cursor:pointer;font-weight:500">GSC Live</a>, pull data, then set a snapshot as Period B.
   </div>
 
   <!-- progress -->
@@ -1348,31 +1347,6 @@ input[type=file]{display:none}
   </div>
 </div>
 
-<!-- IMPORTS -->
-<div class="view" id="v-imports">
-  <div class="page-hdr"><div><div class="page-title">Imports &amp; snapshots</div><div class="page-sub" id="imp-sub">Each GSC export becomes a snapshot. Pick any two to compare.</div></div></div>
-  <div style="background:var(--bg2);border:1px solid var(--blue);border-radius:var(--rl);padding:18px;margin-bottom:16px">
-    <div style="font-size:14px;font-weight:600;margin-bottom:5px">&#128640; Bulk import — ZIP or multiple CSVs</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.75;margin-bottom:14px">Drop a <strong style="color:var(--text)">GSC data export ZIP</strong> or CSV files. Date range is read automatically from file metadata.</div>
-    <div class="imp-zone" id="bulk-drop" onclick="document.getElementById('bulk-input').click()" ondragover="doDragOver(event,'bulk-drop')" ondragleave="doDragLeave('bulk-drop')" ondrop="doDrop(event,'bulk')">
-      <div class="imp-zone-icon">&#128230;</div>
-      <div class="imp-zone-title">Drop GSC ZIP or CSV files here</div>
-      <div class="imp-zone-sub">Supports: .zip (GSC full export) · .csv (Queries, Pages, or combined) · multiple files</div>
-    </div>
-    <input type="file" id="bulk-input" accept=".csv,.zip" multiple onchange="handleBulk(this.files);this.value=''">
-    <div id="zip-debug" style="display:none;margin-top:14px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:12px 16px"></div>
-  </div>
-  <div class="imp-cards">
-    <div class="imp-card"><div class="imp-card-title">&#128196; GSC — keyword positions</div><div class="imp-card-desc">Search Console → Performance → Export → CSV. Detects queries, position, clicks, impressions, CTR.</div><div class="imp-form-grid"><div><div class="imp-form-lbl">Label</div><input class="fi" type="text" id="gsc-label" placeholder="e.g. May 2026" style="width:100%;height:30px"></div><div><div class="imp-form-lbl">Start</div><input class="fi" type="date" id="gsc-start" style="width:100%;height:30px"></div><div><div class="imp-form-lbl">End</div><input class="fi" type="date" id="gsc-end" style="width:100%;height:30px"></div></div><div style="display:flex;gap:8px"><button class="btn btn-primary" onclick="document.getElementById('gsc-input').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Upload GSC CSV</button><button class="btn btn-ghost" onclick="loadSample()">Load sample</button></div><input type="file" id="gsc-input" accept=".csv" onchange="handleGSC(this.files[0]);this.value=''"></div>
-    <div class="imp-card"><div class="imp-card-title" style="color:var(--blue)">&#128202; GA4 — engagement (optional)</div><div class="imp-card-desc">GA4 → Reports → Engagement → Landing pages → Filter Organic → Download CSV.</div><button class="btn btn-ghost" onclick="document.getElementById('ga4-input').click()">Upload GA4 CSV</button><input type="file" id="ga4-input" accept=".csv" onchange="toast('GA4 data joined')"></div>
-    <div class="imp-card"><div class="imp-card-title" style="color:var(--amber)">&#128209; GSC — Pages (optional)</div><div class="imp-card-desc">Search Console → Performance → Pages tab → Export CSV. Joined to fill URL column.</div><button class="btn btn-ghost" onclick="document.getElementById('pages-input').click()">Upload Pages CSV</button><input type="file" id="pages-input" accept=".csv" onchange="toast('Pages CSV stored')"></div>
-  </div>
-  <div class="snap-list">
-    <div class="snap-list-hdr"><div class="snap-list-title" id="snap-list-title">Snapshots (0)</div><button class="btn btn-ghost btn-sm" onclick="clearSnaps()">Clear all</button></div>
-    <div id="snap-items"><div style="padding:22px;text-align:center;color:var(--text3);font-size:12px">No snapshots yet — upload a GSC CSV to get started</div></div>
-  </div>
-</div>
-
 <!-- HELP -->
 <div class="view" id="v-help">
   <div class="page-hdr">
@@ -1424,43 +1398,24 @@ input[type=file]{display:none}
     </div>
   </div>
 
-  <!-- STEP 1: EXPORT FROM GSC -->
+  <!-- STEP 1: GET STARTED WITH GSC LIVE -->
   <div class="help-sec">
-    <div class="help-sec-title">&#9312; Step 1 — Export your data from Google Search Console</div>
+    <div class="help-sec-title">&#9312; Step 1 — Pull your data from GSC Live</div>
     <div class="help-body">
-      You need at least one GSC export to get started. To compare two periods you need two exports.
+      Inside Rank pulls data directly from Google Search Console — no CSV exports or file uploads needed.
       <br><br>
-      <strong>How to export a ZIP (recommended — most complete):</strong>
+      <strong>How to pull data:</strong>
       <ul>
-        <li>Go to <a href="https://search.google.com/search-console" target="_blank" style="color:var(--blue)">search.google.com/search-console</a></li>
-        <li>Select the correct property (e.g. <code style="color:var(--teal)">https://www.insidecasino.ca/</code>)</li>
-        <li>Click <strong>Performance</strong> in the left menu</li>
-        <li>Set your date range (e.g. last 3 months)</li>
-        <li>Click <strong>Export</strong> (top right) → <strong>Download</strong> — this downloads a full ZIP with multiple CSVs inside</li>
+        <li>Go to <strong>GSC Live</strong> in the left sidebar</li>
+        <li>If it's your first time, follow the one-time setup instructions to connect your Google account (takes about 10–15 minutes)</li>
+        <li>Once connected, select your website from the <strong>GSC Property</strong> dropdown</li>
+        <li>Choose a <strong>date range</strong> — Last 3 months, Last 6 months, or a custom range</li>
+        <li>Click <strong>Pull data</strong> — Inside Rank fetches up to 25,000 queries directly from Google</li>
       </ul>
-      <strong>How to export a single CSV (also works):</strong>
-      <ul>
-        <li>Same steps as above but click <strong>Export → CSV</strong> instead of Download</li>
-        <li>This gives you just the Queries CSV (keywords + positions)</li>
-      </ul>
-      <div class="help-tip">&#128161; <strong>Tip:</strong> Export two date ranges — for example, the last 3 months vs the same 3 months from the previous period — so you have a "before" and "after" to compare. The ZIP export is preferred because it includes Chart.csv, which makes total click/impression counts match exactly what GSC shows in the UI.</div>
-    </div>
-  </div>
-
-  <!-- STEP 2: IMPORT -->
-  <div class="help-sec">
-    <div class="help-sec-title">&#9313; Step 2 — Import your exports into Inside Rank</div>
-    <div class="help-body">
-      Go to <strong>Imports</strong> in the left sidebar. You'll see a drag-and-drop zone at the top.
-      <ul>
-        <li><strong>Drop a ZIP file</strong> — the tool automatically reads all CSVs inside it (Queries, Pages, Chart) and creates a snapshot in one go</li>
-        <li><strong>Drop one or more CSV files</strong> — works for individual Queries or Pages CSVs; if you drop them together they're combined into one snapshot</li>
-        <li>The <strong>date range</strong> is read automatically from the file metadata — no need to fill it in manually unless it's missing</li>
-      </ul>
-      Once imported, each export becomes a <strong>snapshot</strong> — a saved point-in-time record of all your keyword positions and traffic for that site.
+      Each pull creates a <strong>snapshot</strong> — a saved record of all your keyword rankings for that date range. Pull different date ranges to build up a history you can compare.
       <br><br>
-      <strong>Setting Period A and Period B:</strong> Every snapshot has a <strong>Set A</strong> and <strong>Set B</strong> button. Period A = the older/baseline period. Period B = the current/newer period. The comparison always runs A → B. You can see and change them in the top bar at any time.
-      <div class="help-tip">&#9888; <strong>Each site is separate.</strong> If you import data while insidecasino.ca is selected, that snapshot only appears under .ca. Switch sites using the sidebar to manage .co.nz or .com separately.</div>
+      <strong>Setting Period A and Period B:</strong> In the <strong>Pull Data</strong> tab, every snapshot has a <strong>Set A</strong> and <strong>Set B</strong> button. Period A = the older/baseline period. Period B = the current/newer period. The comparison always runs A → B. You can see and change the active periods in the top bar at any time.
+      <div class="help-tip">&#9888; <strong>Each site is separate.</strong> Data pulled while insidecasino.ca is selected only appears under .ca. Switch sites using the sidebar to manage different properties separately.</div>
     </div>
   </div>
 
@@ -1474,7 +1429,7 @@ input[type=file]{display:none}
       <ul>
         <li>Go to <strong>Settings → Team sync</strong> — you'll see the full admin panel</li>
         <li>Run the SQL shown there in your Supabase SQL editor to create the required tables (there are now two: one for GSC snapshots, one for GA4 data)</li>
-        <li>After importing a GSC ZIP, click <strong>↑ Sync</strong> next to each snapshot to push it to the team</li>
+        <li>After pulling GSC data, click <strong>↑ Sync</strong> next to each snapshot in the GSC Live → Pull Data tab to push it to the team</li>
         <li>After uploading GA4 CSVs in Page Performance, they are pushed to the team <strong>automatically</strong> — no extra step needed</li>
       </ul>
       <strong>For all other team members — nothing to set up:</strong>
@@ -1501,7 +1456,7 @@ input[type=file]{display:none}
         <li><strong>SERP Tracker</strong> — Pulls live Google rankings for <em>every</em> keyword in Period B (not just top 30). Shows your real position right now, Drift (how much your live position differs from the GSC average), GSC Δ (movement A→B), SERP features (Snippet, PAA, Local, Video), and bojoko.ca / bonus.ca positions side by side. Rows where a competitor is beating you are highlighted red. Filterable by position range, SERP feature, competitor presence, GSC movement, and position mismatch. Exportable to CSV.</li>
         <li><strong>Page Performance</strong> — Combines GA4 engagement data with GSC ranking data into one page-level table. Shows Visitors, Views, Time on page (all with period-over-period change columns), and the ranking keywords for each page pulled from your GSC snapshot. Requires uploading GA4 CSV exports separately — see the full guide further down this Help page.</li>
         <li><strong>URL Tracker</strong> — A focused before/after comparison tool for pages you've actively worked on. Add specific URL paths you've made changes to (content rewrites, new FAQ sections, internal linking updates, etc.) and instantly see how Clicks, Impressions, and Average Position changed between Period A and Period B. Also shows a full keyword-level breakdown per page. See the complete guide further down this Help page.</li>
-        <li><strong>Imports</strong> — Upload GSC exports and manage snapshots. Set which snapshot is Period A and which is Period B.</li>
+        <li><strong>GSC Live</strong> — Pull data directly from Google Search Console. Manage snapshots and set which is Period A and which is Period B.</li>
         <li><strong>Settings</strong> — Configure team sync (Supabase), Serper.dev API key, and active site.</li>
       </ul>
     </div>
@@ -1577,7 +1532,7 @@ input[type=file]{display:none}
         <li><strong>My keyword shows "Lost" but I know it's still ranking.</strong> This usually means it fell below position 30 in Period B but is still ranking at 31–100. Check the Pos 31–100 KPI card on the Overview. You can also filter the Keywords tab by "31–100 (Ahrefs blind)" to see them all.</li>
         <li><strong>The URL column is blank for some keywords.</strong> GSC Queries exports don't include URL data by default. Import a Pages CSV alongside your Queries CSV (or use the full ZIP export) — the tool will cross-reference and fill in URLs automatically.</li>
         <li><strong>Can I compare more than two periods?</strong> Yes — import as many snapshots as you want, then use the Period A and Period B pickers in the top bar to choose any two.</li>
-        <li><strong>Team members can't see my snapshots.</strong> Make sure you clicked <strong>↑ Sync</strong> next to the snapshot in the Imports tab. Team members connect automatically — they don't need to enter any credentials. If they still can't see it, ask them to click <strong>Refresh team snapshots</strong> in Settings.</li>
+        <li><strong>Team members can't see my snapshots.</strong> Make sure you clicked <strong>↑ Sync</strong> next to the snapshot in the GSC Live → Pull Data tab. Team members connect automatically — they don't need to enter any credentials. If they still can't see it, ask them to click <strong>Refresh team snapshots</strong> in Settings.</li>
         <li><strong>The Overview shows 0 clicks/impressions.</strong> This happens when you import a single Queries CSV without a Chart.csv. The tool totals from the top-1,000 rows — if your site has very low traffic it may still show correctly, but for large sites use the full ZIP export.</li>
         <li><strong>Position numbers look like averages, not exact ranks.</strong> That's correct — GSC reports the average position across all times a keyword appeared in results during the period. A keyword at "4.3" means it appeared sometimes at position 3, sometimes at position 5, averaging 4.3.</li>
       </ul>
@@ -1598,7 +1553,7 @@ input[type=file]{display:none}
       The tab joins two completely separate data sources on the page URL:
       <ul>
         <li><strong>Google Analytics 4 (GA4)</strong> — provides Visitors (sessions), Views (pageviews), and Time on page. You export this yourself as CSVs from the GA4 interface.</li>
-        <li><strong>GSC snapshots</strong> — provides Ranking keywords, average position, and position change. These are the same snapshots you import on the Imports tab — no extra work needed for this part.</li>
+        <li><strong>GSC snapshots</strong> — provides Ranking keywords, average position, and position change. These are the same snapshots pulled via GSC Live — no extra work needed for this part.</li>
       </ul>
       <div class="help-tip">&#9432; The tool matches pages between GA4 and GSC by their URL path (e.g. <code style="color:var(--teal);font-size:11px">/casinos/reviews/winspirit/</code>). If a page appears in GA4 but has no GSC keywords, the Ranking keywords column will be blank for that row — this is normal for pages that don't rank organically.</div>
     </div>
@@ -1934,7 +1889,7 @@ CREATE POLICY "allow_all_ga4" ON insiderank_ga4 FOR ALL USING (true) WITH CHECK 
         <span style="margin-left:auto;font-size:11px;color:var(--text3)" id="sync-last-pull-m"></span>
       </div>
       <div style="font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:14px">
-        Snapshots are shared by <strong style="color:var(--text)">teams@insidecasino.ca</strong> and pull automatically every time you open the tool. You'll see them in the <strong style="color:var(--text)">Imports</strong> tab with a <span style="background:rgba(46,232,180,.14);color:var(--green);border:1px solid rgba(46,232,180,.28);padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600">&#127381; Team</span> badge.
+        Snapshots are shared by <strong style="color:var(--text)">teams@insidecasino.ca</strong> and pull automatically every time you open the tool. You'll see them in the <strong style="color:var(--text)">GSC Live</strong> → Pull Data tab with a <span style="background:rgba(46,232,180,.14);color:var(--green);border:1px solid rgba(46,232,180,.28);padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600">&#127381; Team</span> badge.
       </div>
       <button class="btn btn-ghost" onclick="pullSharedSnaps()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.27"/></svg>
@@ -2316,6 +2271,7 @@ function renderGscSnapList(){
   if(!snaps.length){wrap.style.display='none';return;}
   wrap.style.display='';
   if(title)title.textContent='Pulled snapshots ('+snaps.length+')';
+  const curA=A.pA[A.site],curB=A.pB[A.site];
   items.innerHTML=snaps.slice().reverse().map(s=>`
     <div class="snap-item">
       <div class="snap-info">
@@ -2323,6 +2279,8 @@ function renderGscSnapList(){
         <div class="snap-meta">${(s.count||0).toLocaleString()} queries · ${s.start} → ${s.end}</div>
       </div>
       <div class="snap-actions">
+        <button class="snap-btn snap-a ${curA===s.id?'':'dim'}" onclick="setSnap('A','${s.id}');renderGscSnapList();" title="Use as baseline period for comparisons in all views">Set A</button>
+        <button class="snap-btn snap-b ${curB===s.id?'on':''}" onclick="setSnap('B','${s.id}');renderGscSnapList();" title="Use as current period for all views">Set B</button>
         <button class="snap-del" onclick="deleteSnap('${s.id}');renderGscSnapList();renderGscQueries();" title="Delete"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
       </div>
     </div>`).join('');
@@ -3174,7 +3132,7 @@ async function loadSample(){
 }
 
 // ═══ MODAL ═══
-function openModal(which){A.modalFor=which;document.getElementById('modal-title').textContent='Select Period '+which;const snaps=getSnaps(),ml=document.getElementById('modal-list');if(!snaps.length){ml.innerHTML='<div style="color:var(--text3);font-size:12px;padding:10px 0">No snapshots — go to Imports to upload CSVs</div>';}else{ml.innerHTML=snaps.map(s=>'<div class="modal-snap" onclick="pickSnap(\''+s.id+'\')"><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500">'+esc(s.label)+'</div><div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:2px">'+(s.count?.toLocaleString()||0)+' keywords · '+(s.start||'?')+' → '+(s.end||'?')+'</div></div><span style="color:var(--text3);font-size:11px">Select →</span></div>').join('');}document.getElementById('modal-bg').style.display='flex';}
+function openModal(which){A.modalFor=which;document.getElementById('modal-title').textContent='Select Period '+which;const snaps=getSnaps(),ml=document.getElementById('modal-list');if(!snaps.length){ml.innerHTML='<div style="color:var(--text3);font-size:12px;padding:10px 0">No snapshots yet — go to GSC Live to pull data</div>';}else{ml.innerHTML=snaps.map(s=>'<div class="modal-snap" onclick="pickSnap(\''+s.id+'\')"><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500">'+esc(s.label)+'</div><div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:2px">'+(s.count?.toLocaleString()||0)+' keywords · '+(s.start||'?')+' → '+(s.end||'?')+'</div></div><span style="color:var(--text3);font-size:11px">Select →</span></div>').join('');}document.getElementById('modal-bg').style.display='flex';}
 function pickSnap(id){setSnap(A.modalFor,id);closeModal();}
 function closeModal(){document.getElementById('modal-bg').style.display='none';}
 
