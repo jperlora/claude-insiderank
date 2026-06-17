@@ -8,6 +8,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <style>
 :root{
   --bg0:#0c0e11;--bg1:#13161b;--bg2:#1a1e25;--bg3:#222730;--bg4:#2b3040;--bg5:#343b4a;
@@ -482,6 +484,33 @@ input[type=file]{display:none}
 .gsc-tab{padding:7px 18px;border-radius:9px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .15s;border:none;background:none;font-family:var(--font)}
 .gsc-tab:hover{color:var(--text)}
 .gsc-tab.active{background:var(--bg4);color:var(--text);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+/* GSC preset chips */
+.gsc-presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.gsc-preset{padding:7px 14px;border-radius:20px;font-size:12px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .15s;border:1px solid var(--border2);background:var(--bg3);font-family:var(--font)}
+.gsc-preset:hover{border-color:var(--blue);color:var(--text)}
+.gsc-preset.active{background:rgba(59,158,255,.15);border-color:var(--blue);color:var(--blue);font-weight:600}
+.gsc-preset.compare{border-color:rgba(176,140,255,.35);color:var(--text2)}
+.gsc-preset.compare.active{background:rgba(176,140,255,.14);border-color:var(--purple);color:var(--purple);font-weight:600}
+.gsc-date-preview{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);font-size:12px;color:var(--text2);margin-bottom:14px;flex-wrap:wrap}
+.gsc-date-preview .period-pill{background:var(--bg4);border:1px solid var(--border2);padding:4px 10px;border-radius:6px;font-family:var(--mono);font-size:11px;color:var(--text)}
+.gsc-date-preview .vs-sep{color:var(--text3);font-size:11px;font-weight:600}
+.gsc-custom-row{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+/* Flatpickr dark theme overrides */
+.flatpickr-calendar{background:var(--bg3)!important;border:1px solid var(--border2)!important;border-radius:var(--r)!important;box-shadow:0 8px 32px rgba(0,0,0,.5)!important;font-family:var(--font)!important}
+.flatpickr-months,.flatpickr-month{background:var(--bg3)!important;color:var(--text)!important;fill:var(--text)!important}
+.flatpickr-current-month,.flatpickr-monthDropdown-months,.numInputWrapper{color:var(--text)!important}
+.flatpickr-day{color:var(--text2)!important;border-radius:6px!important}
+.flatpickr-day:hover{background:var(--bg4)!important;border-color:transparent!important}
+.flatpickr-day.selected,.flatpickr-day.startRange,.flatpickr-day.endRange{background:var(--blue)!important;border-color:var(--blue)!important;color:#fff!important}
+.flatpickr-day.inRange{background:rgba(59,158,255,.18)!important;border-color:transparent!important;color:var(--text)!important;box-shadow:none!important}
+.flatpickr-day.flatpickr-disabled,.flatpickr-day.prevMonthDay,.flatpickr-day.nextMonthDay{color:var(--text3)!important}
+.flatpickr-weekday{color:var(--text3)!important}
+.flatpickr-prev-month,.flatpickr-next-month{color:var(--text2)!important;fill:var(--text2)!important}
+.flatpickr-prev-month:hover svg,.flatpickr-next-month:hover svg{fill:var(--blue)!important}
+.numInputWrapper span{border-color:var(--border)!important}
+.numInputWrapper span svg{fill:var(--text3)!important}
+.flatpickr-time{background:var(--bg3)!important;border-top:1px solid var(--border)!important}
+.flatpickr-input{background:var(--bg2)!important;border:1px solid var(--border2)!important;color:var(--text)!important;border-radius:var(--r)!important;padding:0 12px!important;font-family:var(--font)!important;font-size:13px!important;cursor:pointer}
 .gap-opp-high{background:rgba(46,232,180,.14);color:var(--green);border:1px solid rgba(46,232,180,.28);padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600}
 .gap-opp-med{background:rgba(255,184,63,.13);color:var(--amber);border:1px solid rgba(255,184,63,.28);padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600}
 .gap-opp-low{background:rgba(255,255,255,.06);color:var(--text2);border:1px solid var(--border2);padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600}
@@ -1167,38 +1196,44 @@ input[type=file]{display:none}
     <!-- Pull Data tab -->
     <div id="gsc-tab-pull">
       <div class="gsc-pull-panel">
-        <div class="gsc-pull-row" style="flex-wrap:wrap;gap:10px">
-          <div class="gsc-field">
-            <label>GSC Property</label>
-            <select class="fi" id="gsc-property" style="min-width:240px;height:38px"></select>
-          </div>
-          <div class="gsc-field">
-            <label>Date range</label>
-            <select class="fi" id="gsc-range" style="height:38px" onchange="gscRangeChanged()">
-              <option value="90" selected>Last 3 months</option>
-              <option value="180">Last 6 months</option>
-              <option value="custom">Custom dates…</option>
-            </select>
-          </div>
-          <div class="gsc-field" id="gsc-custom-wrap" style="display:none;flex-direction:row;gap:6px;align-items:flex-end">
+        <!-- Property selector -->
+        <div class="gsc-field" style="margin-bottom:18px">
+          <label>GSC Property</label>
+          <select class="fi" id="gsc-property" style="min-width:280px;height:38px;max-width:420px"></select>
+        </div>
+        <!-- Preset chips -->
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);font-weight:500;margin-bottom:8px">Date range</div>
+        <div class="gsc-presets">
+          <button class="gsc-preset active" id="gpreset-3m" onclick="gscSetPreset('3m')">Last 3 months</button>
+          <button class="gsc-preset" id="gpreset-6m" onclick="gscSetPreset('6m')">Last 6 months</button>
+          <button class="gsc-preset compare" id="gpreset-3m-vs" onclick="gscSetPreset('3m-vs')">Last 3 months vs previous 3 months</button>
+          <button class="gsc-preset compare" id="gpreset-6m-vs" onclick="gscSetPreset('6m-vs')">Last 6 months vs previous 6 months</button>
+          <button class="gsc-preset" id="gpreset-custom" onclick="gscSetPreset('custom')">Custom range…</button>
+        </div>
+        <!-- Date preview -->
+        <div class="gsc-date-preview" id="gsc-date-preview"></div>
+        <!-- Custom date inputs (flatpickr) — shown only for 'custom' preset -->
+        <div id="gsc-custom-wrap" style="display:none">
+          <div class="gsc-custom-row">
             <div class="gsc-field">
-              <label>Start</label>
-              <input type="date" class="fi" id="gsc-custom-start" style="height:38px" onchange="gscRangeChanged()">
+              <label>Start date</label>
+              <input class="fi flatpickr-input" id="gsc-custom-start" placeholder="Select start date…" style="height:38px;width:180px;cursor:pointer" readonly>
             </div>
             <div class="gsc-field">
-              <label>End</label>
-              <input type="date" class="fi" id="gsc-custom-end" style="height:38px" onchange="gscRangeChanged()">
+              <label>End date</label>
+              <input class="fi flatpickr-input" id="gsc-custom-end" placeholder="Select end date…" style="height:38px;width:180px;cursor:pointer" readonly>
             </div>
           </div>
         </div>
-        <div style="margin-top:10px;display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap">
+        <!-- Pull button row -->
+        <div style="display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-top:4px">
           <div class="gsc-field" style="flex:1;min-width:200px">
-            <label>Snapshot label</label>
+            <label>Snapshot label <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3)">(optional — auto-filled)</span></label>
             <input type="text" class="fi" id="gsc-snap-label" placeholder="e.g. Last 3 months — Jun 2026" style="width:100%;height:38px">
           </div>
-          <button class="btn btn-primary" onclick="pullGscLive()" id="gsc-pull-btn" style="height:38px;align-self:flex-end;flex-shrink:0">
+          <button class="btn btn-primary" onclick="pullGscLive()" id="gsc-pull-btn" style="height:38px;align-self:flex-end;flex-shrink:0;min-width:120px">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.27"/></svg>
-            Pull data
+            <span id="gsc-pull-btn-lbl">Pull data</span>
           </button>
         </div>
         <div id="gsc-pull-progress" style="display:none;margin-top:14px">
@@ -2167,44 +2202,124 @@ function setGscTab(tab){
 }
 
 // ── GSC Live Pull ──
-function gscRangeChanged(){
-  const range=document.getElementById('gsc-range')?.value;
-  const wrap=document.getElementById('gsc-custom-wrap');
-  if(wrap)wrap.style.display=range==='custom'?'flex':'none';
-  // auto-fill label
-  const lbl=document.getElementById('gsc-snap-label');
-  if(!lbl)return;
-  const now=new Date();
-  const mo=now.toLocaleString('default',{month:'short'});
-  const yr=now.getFullYear();
-  if(range==='90')lbl.value='Last 3 months — '+mo+' '+yr;
-  else if(range==='180')lbl.value='Last 6 months — '+mo+' '+yr;
-  else lbl.value='';
+// ── GSC Preset / Date logic ──
+let gscPreset='3m';
+let gscFpStart=null,gscFpEnd=null; // flatpickr instances
+
+function gscFmtDate(d){return d.toISOString().split('T')[0];}
+function gscFmtLabel(d){return d.toLocaleString('default',{month:'short',year:'numeric'});}
+function gscShiftBack(sd,ed){
+  // shift a date range back by the same number of days
+  const days=Math.round((new Date(ed)-new Date(sd))/(86400000))+1;
+  const prevEnd=new Date(sd);prevEnd.setDate(prevEnd.getDate()-1);
+  const prevStart=new Date(prevEnd);prevStart.setDate(prevEnd.getDate()-(days-1));
+  return{sd:gscFmtDate(prevStart),ed:gscFmtDate(prevEnd)};
 }
-async function pullGscLive(){
-  if(!gscAccessToken||Date.now()>=gscTokenExpiry){connectGsc();return;}
-  const siteUrl=document.getElementById('gsc-property').value;
-  if(!siteUrl){toast('Select a GSC property first','err');return;}
-  const fmt=d=>d.toISOString().split('T')[0];
-  const range=document.getElementById('gsc-range').value;
-  let sd,ed;
-  if(range==='custom'){
-    sd=document.getElementById('gsc-custom-start').value;
-    ed=document.getElementById('gsc-custom-end').value;
-    if(!sd||!ed){toast('Set a start and end date first','err');return;}
-  }else{
-    const days=parseInt(range)||90;
-    const endDate=new Date();const startDate=new Date();startDate.setDate(endDate.getDate()-days);
-    sd=fmt(startDate);ed=fmt(endDate);
+function gscCalcDates(preset){
+  const now=new Date();
+  const fmt=gscFmtDate;
+  if(preset==='3m'){
+    const ed=new Date(now);const sd=new Date(now);sd.setDate(sd.getDate()-90);
+    return{periods:[{sd:fmt(sd),ed:fmt(ed),label:'Last 3 months — '+gscFmtLabel(now)}]};
   }
-  const userLabel=(document.getElementById('gsc-snap-label')?.value||'').trim()||('GSC Live — '+sd+' → '+ed);
-  const btn=document.getElementById('gsc-pull-btn');
-  const prog=document.getElementById('gsc-pull-progress');
-  const bar=document.getElementById('gsc-pull-bar');
+  if(preset==='6m'){
+    const ed=new Date(now);const sd=new Date(now);sd.setDate(sd.getDate()-180);
+    return{periods:[{sd:fmt(sd),ed:fmt(ed),label:'Last 6 months — '+gscFmtLabel(now)}]};
+  }
+  if(preset==='3m-vs'){
+    const ed=new Date(now);const sd=new Date(now);sd.setDate(sd.getDate()-90);
+    const cur={sd:fmt(sd),ed:fmt(ed),label:'Last 3 months — '+gscFmtLabel(now)};
+    const prev=gscShiftBack(cur.sd,cur.ed);
+    prev.label='Previous 3 months — '+gscFmtLabel(new Date(prev.ed));
+    return{periods:[prev,cur]};
+  }
+  if(preset==='6m-vs'){
+    const ed=new Date(now);const sd=new Date(now);sd.setDate(sd.getDate()-180);
+    const cur={sd:fmt(sd),ed:fmt(ed),label:'Last 6 months — '+gscFmtLabel(now)};
+    const prev=gscShiftBack(cur.sd,cur.ed);
+    prev.label='Previous 6 months — '+gscFmtLabel(new Date(prev.ed));
+    return{periods:[prev,cur]};
+  }
+  return null; // custom — handled separately
+}
+function gscSetPreset(preset){
+  gscPreset=preset;
+  // toggle active class on chips
+  ['3m','6m','3m-vs','6m-vs','custom'].forEach(p=>{
+    const el=document.getElementById('gpreset-'+p);
+    if(el)el.classList.toggle('active',p===preset);
+  });
+  // show/hide custom inputs
+  const customWrap=document.getElementById('gsc-custom-wrap');
+  if(customWrap)customWrap.style.display=preset==='custom'?'':'none';
+  // update button label
+  const btnLbl=document.getElementById('gsc-pull-btn-lbl');
+  if(btnLbl)btnLbl.textContent=(preset==='3m-vs'||preset==='6m-vs')?'Pull both periods':'Pull data';
+  // update date preview
+  gscUpdateDatePreview();
+  // auto-fill label
+  if(preset!=='custom'){
+    const calc=gscCalcDates(preset);
+    const lbl=document.getElementById('gsc-snap-label');
+    if(lbl&&calc){
+      if(calc.periods.length===1)lbl.value=calc.periods[0].label;
+      else lbl.value='';// comparison: each snapshot gets its own auto label
+    }
+  }
+}
+function gscUpdateDatePreview(){
+  const preview=document.getElementById('gsc-date-preview');
+  if(!preview)return;
+  if(gscPreset==='custom'){
+    const sd=document.getElementById('gsc-custom-start')?.value;
+    const ed=document.getElementById('gsc-custom-end')?.value;
+    if(sd&&ed){
+      preview.innerHTML=`<span style="font-size:11px;color:var(--text3);margin-right:2px">Range:</span><span class="period-pill">${sd} → ${ed}</span>`;
+    }else{
+      preview.innerHTML='<span style="font-size:12px;color:var(--text3)">Select a start and end date above</span>';
+    }
+    return;
+  }
+  const calc=gscCalcDates(gscPreset);
+  if(!calc)return;
+  if(calc.periods.length===1){
+    const p=calc.periods[0];
+    preview.innerHTML=`<span style="font-size:11px;color:var(--text3);margin-right:2px">Range:</span><span class="period-pill">${p.sd} → ${p.ed}</span>`;
+  }else{
+    const[prev,cur]=calc.periods;
+    preview.innerHTML=`
+      <span style="font-size:11px;color:var(--text3)">Period A (baseline):</span>
+      <span class="period-pill">${prev.sd} → ${prev.ed}</span>
+      <span class="vs-sep">vs</span>
+      <span style="font-size:11px;color:var(--text3)">Period B (current):</span>
+      <span class="period-pill" style="border-color:var(--blue);color:var(--blue)">${cur.sd} → ${cur.ed}</span>`;
+  }
+}
+function initGscFlatpickr(){
+  const startEl=document.getElementById('gsc-custom-start');
+  const endEl=document.getElementById('gsc-custom-end');
+  if(!startEl||!endEl||!window.flatpickr)return;
+  if(gscFpStart)gscFpStart.destroy();
+  if(gscFpEnd)gscFpEnd.destroy();
+  const maxDate=new Date();maxDate.setDate(maxDate.getDate()-3); // GSC has ~3 day delay
+  gscFpStart=flatpickr(startEl,{
+    dateFormat:'Y-m-d',maxDate,disableMobile:true,
+    onChange([d]){
+      if(gscFpEnd&&d)gscFpEnd.set('minDate',d);
+      gscUpdateDatePreview();
+    }
+  });
+  gscFpEnd=flatpickr(endEl,{
+    dateFormat:'Y-m-d',maxDate,disableMobile:true,
+    onChange(){gscUpdateDatePreview();}
+  });
+}
+async function gscSavePeriod(siteUrl,sd,ed,label,isA){
+  // Shared helper: fetch two API calls and save a snapshot. Returns the snap id.
   const status=document.getElementById('gsc-pull-status');
-  btn.disabled=true;prog.style.display='';
-  async function gscQuery(dimensions,label){
-    status.textContent=`Fetching ${label}…`;bar.style.width='20%';
+  const bar=document.getElementById('gsc-pull-bar');
+  async function gscQuery(dimensions,pct,msg){
+    status.textContent=msg;bar.style.width=pct+'%';
     const encoded=encodeURIComponent(siteUrl);
     const res=await fetch(`https://searchconsole.googleapis.com/webmasters/v3/sites/${encoded}/searchAnalytics/query`,{
       method:'POST',
@@ -2216,46 +2331,77 @@ async function pullGscLive(){
     return(data.rows||[]).map(r=>({
       query:r.keys[0]||'',
       page:dimensions.includes('page')?(r.keys[1]||''):null,
-      clicks:r.clicks||0,
-      impressions:r.impressions||0,
-      ctr:r.ctr||0,
-      position:r.position||0
+      clicks:r.clicks||0,impressions:r.impressions||0,ctr:r.ctr||0,position:r.position||0
     }));
   }
+  const qpRows=await gscQuery(['query','page'],20,`Fetching ${label} — queries + pages…`);
+  const qRows=await gscQuery(['query'],45,`Fetching ${label} — queries only…`);
+  if(!isA){gscLiveRows=qpRows;gscQueryOnlyRows=qRows;}
+  const snapRows=qpRows.slice().sort((a,b)=>b.impressions-a.impressions).slice(0,5000)
+    .map(r=>({...r,src:'gsc-live',urlSource:r.page?'exact':'none'}));
+  const snap={
+    id:'sn_gsc_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
+    label,start:sd,end:ed,
+    rows:snapRows,count:qpRows.length,
+    urlFilledCount:qpRows.filter(r=>r.page).length,
+    exactCount:qpRows.filter(r=>r.page).length,
+    inferredCount:0,sources:['gsc-live'],
+    files:['GSC Live API — '+siteUrl],zipName:null
+  };
+  if(!A.snaps[A.site])A.snaps[A.site]=[];
+  A.snaps[A.site]=A.snaps[A.site].filter(s=>s.label!==snap.label);
+  A.snaps[A.site].push(snap);
+  A.snaps[A.site].sort((a,b)=>(a.start||a.label).localeCompare(b.start||b.label));
+  return snap.id;
+}
+async function pullGscLive(){
+  if(!gscAccessToken||Date.now()>=gscTokenExpiry){connectGsc();return;}
+  const siteUrl=document.getElementById('gsc-property').value;
+  if(!siteUrl){toast('Select a GSC property first','err');return;}
+  const btn=document.getElementById('gsc-pull-btn');
+  const prog=document.getElementById('gsc-pull-progress');
+  const bar=document.getElementById('gsc-pull-bar');
+  const status=document.getElementById('gsc-pull-status');
+  btn.disabled=true;prog.style.display='';
   try{
-    const qpRows=await gscQuery(['query','page'],'queries + pages');
-    bar.style.width='60%';
-    const qRows=await gscQuery(['query'],'queries only');
-    bar.style.width='90%';
-    gscLiveRows=qpRows;
-    gscQueryOnlyRows=qRows;
-    // Store only top 5k rows in localStorage to avoid the 5MB limit.
-    // Full data stays in memory (gscLiveRows / gscQueryOnlyRows) for Content Gap.
-    const snapRows=qpRows.slice().sort((a,b)=>b.impressions-a.impressions).slice(0,5000)
-      .map(r=>({...r,src:'gsc-live',urlSource:r.page?'exact':'none'}));
-    const snap={
-      id:'sn_gsc_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
-      label:userLabel,
-      start:sd,end:ed,
-      rows:snapRows,
-      count:qpRows.length,
-      urlFilledCount:qpRows.filter(r=>r.page).length,
-      exactCount:qpRows.filter(r=>r.page).length,
-      inferredCount:0,
-      sources:['gsc-live'],
-      files:['GSC Live API — '+siteUrl],
-      zipName:null
-    };
-    if(!A.snaps[A.site])A.snaps[A.site]=[];
-    A.snaps[A.site]=A.snaps[A.site].filter(s=>s.label!==snap.label);
-    A.snaps[A.site].push(snap);
-    A.snaps[A.site].sort((a,b)=>(a.start||a.label).localeCompare(b.start||b.label));
-    await save();autoPickPeriods();renderAll();renderSnapList();
-    bar.style.width='100%';
-    status.textContent=`Done — ${qpRows.length.toLocaleString()} queries pulled`;
-    setTimeout(()=>{prog.style.display='none';bar.style.width='0%';},2000);
-    refreshGscState();
-    toast(`GSC Live snapshot saved — ${qpRows.length.toLocaleString()} rows`,'ok');
+    const userLabel=(document.getElementById('gsc-snap-label')?.value||'').trim();
+    if(gscPreset==='3m-vs'||gscPreset==='6m-vs'){
+      // Pull two periods sequentially → auto-set as Period A and B
+      const calc=gscCalcDates(gscPreset);
+      const[prev,cur]=calc.periods;
+      status.textContent='Pulling Period A (baseline)…';bar.style.width='5%';
+      const idA=await gscSavePeriod(siteUrl,prev.sd,prev.ed,prev.label,true);
+      status.textContent='Pulling Period B (current)…';bar.style.width='50%';
+      const idB=await gscSavePeriod(siteUrl,cur.sd,cur.ed,cur.label,false);
+      A.pA[A.site]=idA;A.pB[A.site]=idB;
+      await save();await savePer();renderAll();renderSnapList();
+      bar.style.width='100%';
+      status.textContent='Done — both periods saved and set for comparison';
+      setTimeout(()=>{prog.style.display='none';bar.style.width='0%';},2500);
+      refreshGscState();
+      toast('Both periods pulled and set for comparison','ok');
+    }else{
+      // Single period pull
+      let sd,ed,label;
+      if(gscPreset==='custom'){
+        sd=document.getElementById('gsc-custom-start').value;
+        ed=document.getElementById('gsc-custom-end').value;
+        if(!sd||!ed){toast('Select a start and end date first','err');btn.disabled=false;prog.style.display='none';return;}
+        label=userLabel||('GSC Live — '+sd+' → '+ed);
+      }else{
+        const calc=gscCalcDates(gscPreset);
+        const p=calc.periods[0];
+        sd=p.sd;ed=p.ed;label=userLabel||p.label;
+      }
+      const id=await gscSavePeriod(siteUrl,sd,ed,label,false);
+      autoPickPeriods();
+      await save();await savePer();renderAll();renderSnapList();
+      bar.style.width='100%';
+      status.textContent='Done — snapshot saved';
+      setTimeout(()=>{prog.style.display='none';bar.style.width='0%';},2000);
+      refreshGscState();
+      toast('GSC snapshot saved','ok');
+    }
   }catch(e){
     toast('Pull failed: '+e.message,'err');
     prog.style.display='none';bar.style.width='0%';
@@ -2625,7 +2771,7 @@ async function bootApp(){
   requestAnimationFrame(initKwScrollSync);
   document.addEventListener('click',e=>{if(!e.target.closest('.rel-cell')){document.querySelectorAll('.kw-dropdown').forEach(d=>d.remove());A.openKwDropdown=null;}});
   loadGscClientId();
-  setTimeout(()=>{initGscTokenClient();refreshGscState();},800);
+  setTimeout(()=>{initGscTokenClient();refreshGscState();initGscFlatpickr();gscSetPreset('3m');},900);
 }
 
 addEventListener('DOMContentLoaded',async()=>{
@@ -2930,7 +3076,7 @@ function goView(v,el){
   if(v==='performance')renderPerfView();
   if(v==='urltracker')renderUrlTracker();
   if(v==='settings'){loadApiKeyToInput();renderSettingsSyncPanel();}
-  if(v==='gsclive'){refreshGscState();}
+  if(v==='gsclive'){refreshGscState();setTimeout(()=>{initGscFlatpickr();gscSetPreset(gscPreset);},100);}
 }
 function renderAll(){updateTopbar();renderOverview();}
 function updateTopbar(){const a=snapA(),b=snapB();document.getElementById('pa-val').textContent=a?a.label:'No snapshot';document.getElementById('pa-sub').textContent=a?a.start+' → '+a.end:'—';document.getElementById('pb-val').textContent=b?b.label:'No snapshot';document.getElementById('pb-sub').textContent=b?b.start+' → '+b.end:'—';}
