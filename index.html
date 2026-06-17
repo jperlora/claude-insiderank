@@ -1899,6 +1899,24 @@ input[type=file]{display:none}
 ALTER TABLE insiderank_snapshots ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "allow_all" ON insiderank_snapshots FOR ALL USING (true) WITH CHECK (true);
 
+-- Full query rows (run this to enable unlimited GSC data storage)
+CREATE TABLE IF NOT EXISTS public.insiderank_rows (
+  id BIGSERIAL PRIMARY KEY,
+  snapshot_id TEXT NOT NULL REFERENCES insiderank_snapshots(id) ON DELETE CASCADE,
+  site TEXT NOT NULL,
+  query TEXT,
+  page TEXT,
+  impressions INTEGER DEFAULT 0,
+  clicks INTEGER DEFAULT 0,
+  ctr FLOAT DEFAULT 0,
+  position FLOAT DEFAULT 0,
+  src TEXT DEFAULT 'gsc-live',
+  url_source TEXT DEFAULT 'exact'
+);
+CREATE INDEX IF NOT EXISTS idx_ir_rows_snap ON insiderank_rows(snapshot_id);
+ALTER TABLE insiderank_rows ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "allow_all_rows" ON insiderank_rows FOR ALL USING (true) WITH CHECK (true);
+
 CREATE TABLE IF NOT EXISTS public.insiderank_ga4 (
   id TEXT PRIMARY KEY,
   site TEXT NOT NULL,
@@ -2314,31 +2332,81 @@ function initGscFlatpickr(){
     onChange(){gscUpdateDatePreview();}
   });
 }
-async function gscSavePeriod(siteUrl,sd,ed,label,isA){
-  // Shared helper: fetch two API calls and save a snapshot. Returns the snap id.
-  const status=document.getElementById('gsc-pull-status');
-  const bar=document.getElementById('gsc-pull-bar');
-  async function gscQuery(dimensions,pct,msg){
-    status.textContent=msg;bar.style.width=pct+'%';
-    const encoded=encodeURIComponent(siteUrl);
+// ── Supabase row storage helpers ──
+async function sbSaveRows(snapId,site,rows){
+  if(!A.sbConnected||!A.sbUrl||!A.sbKey)return;
+  await fetch(`${A.sbUrl}/rest/v1/insiderank_rows?snapshot_id=eq.${encodeURIComponent(snapId)}`,{method:'DELETE',headers:sbH()});
+  const BATCH=1000;
+  for(let i=0;i<rows.length;i+=BATCH){
+    const batch=rows.slice(i,i+BATCH).map(r=>({snapshot_id:snapId,site,query:r.query||'',page:r.page||null,impressions:r.impressions||0,clicks:r.clicks||0,ctr:r.ctr||0,position:r.position||0,src:r.src||'gsc-live',url_source:r.urlSource||(r.page?'exact':'none')}));
+    const res=await fetch(`${A.sbUrl}/rest/v1/insiderank_rows`,{method:'POST',headers:{...sbH(),Prefer:'return=minimal'},body:JSON.stringify(batch)});
+    if(!res.ok){const t=await res.text();throw new Error('Row save failed ('+res.status+'): '+t.slice(0,120));}
+  }
+}
+async function sbLoadRows(snapId){
+  if(!A.sbConnected||!A.sbUrl||!A.sbKey)return null;
+  const PAGE=10000;let allRows=[];let offset=0;
+  while(true){
+    const res=await fetch(`${A.sbUrl}/rest/v1/insiderank_rows?snapshot_id=eq.${encodeURIComponent(snapId)}&order=impressions.desc&limit=${PAGE}&offset=${offset}`,{headers:sbH()});
+    if(!res.ok)throw new Error('Row load failed: '+res.status);
+    const rows=await res.json();
+    allRows=allRows.concat(rows.map(r=>({query:r.query||'',page:r.page||null,impressions:r.impressions||0,clicks:r.clicks||0,ctr:r.ctr||0,position:r.position||0,src:r.src||'gsc-live',urlSource:r.url_source||'exact'})));
+    if(rows.length<PAGE)break;
+    offset+=PAGE;
+  }
+  return allRows;
+}
+async function loadSnapRows(snapId){
+  const snap=getSnap(snapId);if(!snap)return;
+  if(snap.rowsLoaded)return;
+  if(!A.sbConnected)return;
+  try{
+    const rows=await sbLoadRows(snapId);
+    if(rows&&rows.length>0){snap.rows=rows;snap.rowsLoaded=true;}
+  }catch(e){console.warn('Could not load rows from Supabase:',e.message);}
+}
+
+// ── GSC paginated fetch ──
+async function gscFetchAllRows(siteUrl,sd,ed,dimensions,onProgress){
+  const encoded=encodeURIComponent(siteUrl);
+  const PAGE=25000;let allRows=[];let startRow=0;
+  while(true){
+    if(onProgress)onProgress(startRow);
     const res=await fetch(`https://searchconsole.googleapis.com/webmasters/v3/sites/${encoded}/searchAnalytics/query`,{
       method:'POST',
       headers:{'Authorization':'Bearer '+gscAccessToken,'Content-Type':'application/json'},
-      body:JSON.stringify({startDate:sd,endDate:ed,dimensions,rowLimit:25000,startRow:0})
+      body:JSON.stringify({startDate:sd,endDate:ed,dimensions,rowLimit:PAGE,startRow})
     });
     if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'API error');}
     const data=await res.json();
-    return(data.rows||[]).map(r=>({
-      query:r.keys[0]||'',
-      page:dimensions.includes('page')?(r.keys[1]||''):null,
-      clicks:r.clicks||0,impressions:r.impressions||0,ctr:r.ctr||0,position:r.position||0
-    }));
+    const rows=(data.rows||[]).map(r=>({query:r.keys[0]||'',page:dimensions.includes('page')?(r.keys[1]||''):null,clicks:r.clicks||0,impressions:r.impressions||0,ctr:r.ctr||0,position:r.position||0}));
+    allRows=allRows.concat(rows);
+    if(rows.length<PAGE)break;
+    startRow+=PAGE;
   }
-  const qpRows=await gscQuery(['query','page'],20,`Fetching ${label} — queries + pages…`);
-  const qRows=await gscQuery(['query'],45,`Fetching ${label} — queries only…`);
+  return allRows;
+}
+
+async function gscSavePeriod(siteUrl,sd,ed,label,isA){
+  const status=document.getElementById('gsc-pull-status');
+  const bar=document.getElementById('gsc-pull-bar');
+  const basePct=isA?0:50;
+  const setBar=p=>bar.style.width=Math.min(99,(basePct+p))+'%';
+
+  status.textContent=`Fetching ${label} — queries + pages…`;setBar(5);
+  const qpRows=await gscFetchAllRows(siteUrl,sd,ed,['query','page'],n=>{
+    status.textContent=`Fetching ${label} — queries + pages (${n.toLocaleString()} fetched)…`;setBar(5+Math.min(15,Math.floor(n/2000)));
+  });
+  setBar(22);
+  status.textContent=`Fetching ${label} — queries only…`;
+  const qRows=await gscFetchAllRows(siteUrl,sd,ed,['query'],n=>{
+    status.textContent=`Fetching ${label} — queries only (${n.toLocaleString()} fetched)…`;setBar(22+Math.min(10,Math.floor(n/3000)));
+  });
+  setBar(34);
   if(!isA){gscLiveRows=qpRows;gscQueryOnlyRows=qRows;}
-  const snapRows=qpRows.slice().sort((a,b)=>b.impressions-a.impressions).slice(0,5000)
-    .map(r=>({...r,src:'gsc-live',urlSource:r.page?'exact':'none'}));
+
+  const allRowsMapped=qpRows.map(r=>({...r,src:'gsc-live',urlSource:r.page?'exact':'none'}));
+  const snapRows=allRowsMapped.slice().sort((a,b)=>b.impressions-a.impressions).slice(0,5000);
   const snap={
     id:'sn_gsc_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
     label,start:sd,end:ed,
@@ -2346,12 +2414,31 @@ async function gscSavePeriod(siteUrl,sd,ed,label,isA){
     urlFilledCount:qpRows.filter(r=>r.page).length,
     exactCount:qpRows.filter(r=>r.page).length,
     inferredCount:0,sources:['gsc-live'],
-    files:['GSC Live API — '+siteUrl],zipName:null
+    files:['GSC Live API — '+siteUrl],zipName:null,
+    rowsLoaded:false
   };
   if(!A.snaps[A.site])A.snaps[A.site]=[];
   A.snaps[A.site]=A.snaps[A.site].filter(s=>s.label!==snap.label);
   A.snaps[A.site].push(snap);
   A.snaps[A.site].sort((a,b)=>(a.start||a.label).localeCompare(b.start||b.label));
+
+  if(A.sbConnected){
+    const total=allRowsMapped.length;
+    const BATCH=1000;
+    status.textContent=`Saving ${total.toLocaleString()} rows to database…`;setBar(36);
+    await fetch(`${A.sbUrl}/rest/v1/insiderank_rows?snapshot_id=eq.${encodeURIComponent(snap.id)}`,{method:'DELETE',headers:sbH()});
+    for(let i=0;i<total;i+=BATCH){
+      const pct=36+Math.floor((i/Math.max(total,1))*12);setBar(pct);
+      status.textContent=`Saving to database — ${Math.min(i+BATCH,total).toLocaleString()} / ${total.toLocaleString()} rows…`;
+      const batch=allRowsMapped.slice(i,i+BATCH).map(r=>({snapshot_id:snap.id,site:A.site,query:r.query||'',page:r.page||null,impressions:r.impressions||0,clicks:r.clicks||0,ctr:r.ctr||0,position:r.position||0,src:r.src||'gsc-live',url_source:r.urlSource||(r.page?'exact':'none')}));
+      const res=await fetch(`${A.sbUrl}/rest/v1/insiderank_rows`,{method:'POST',headers:{...sbH(),Prefer:'return=minimal'},body:JSON.stringify(batch)});
+      if(!res.ok){const t=await res.text();throw new Error('Row save failed: '+t.slice(0,120));}
+    }
+    snap.rows=allRowsMapped;snap.rowsLoaded=true;
+    setBar(48);status.textContent=`Saved ${total.toLocaleString()} rows to database ✓`;
+  }else{
+    setBar(48);status.textContent=`${qpRows.length.toLocaleString()} queries fetched (top 5,000 saved locally — connect Supabase to store all)`;
+  }
   return snap.id;
 }
 async function pullGscLive(){
@@ -2371,12 +2458,10 @@ async function pullGscLive(){
       const[prev,cur]=calc.periods;
       status.textContent='Pulling Period A (baseline)…';bar.style.width='5%';
       const idA=await gscSavePeriod(siteUrl,prev.sd,prev.ed,prev.label,true);
-      status.textContent='Pulling Period B (current)…';bar.style.width='50%';
       const idB=await gscSavePeriod(siteUrl,cur.sd,cur.ed,cur.label,false);
       A.pA[A.site]=idA;A.pB[A.site]=idB;
+      bar.style.width='100%';status.textContent='Both periods saved ✓';
       await save();await savePer();renderAll();renderSnapList();
-      bar.style.width='100%';
-      status.textContent='Done — both periods saved and set for comparison';
       setTimeout(()=>{prog.style.display='none';bar.style.width='0%';},2500);
       refreshGscState();
       toast('Both periods pulled and set for comparison','ok');
@@ -2771,7 +2856,7 @@ async function bootApp(){
   requestAnimationFrame(initKwScrollSync);
   document.addEventListener('click',e=>{if(!e.target.closest('.rel-cell')){document.querySelectorAll('.kw-dropdown').forEach(d=>d.remove());A.openKwDropdown=null;}});
   loadGscClientId();
-  setTimeout(()=>{initGscTokenClient();refreshGscState();initGscFlatpickr();gscSetPreset('3m');},900);
+  setTimeout(async()=>{initGscTokenClient();refreshGscState();initGscFlatpickr();gscSetPreset('3m');const idA=A.pA[A.site],idB=A.pB[A.site];if(idA)await loadSnapRows(idA);if(idB&&idB!==idA)await loadSnapRows(idB);if(idA||idB)renderAll();},900);
 }
 
 addEventListener('DOMContentLoaded',async()=>{
@@ -2840,7 +2925,7 @@ async function pullSharedSnaps(silent=false){
     rows.forEach(row=>{
       if(!A.snaps[row.site])A.snaps[row.site]=[];
       if(!A.snaps[row.site].find(s=>s.id===row.id)){
-        A.snaps[row.site].push({...row.snapshot_json,id:row.id,label:row.label,start:row.start_date,end:row.end_date,syncedFrom:'team',syncedBy:row.synced_by});
+        A.snaps[row.site].push({...row.snapshot_json,id:row.id,label:row.label,start:row.start_date,end:row.end_date,syncedFrom:'team',syncedBy:row.synced_by,rowsLoaded:false});
         added++;
       }
     });
@@ -2857,7 +2942,8 @@ async function pushSnapToTeam(id){
   if(!A.sbConnected){toast('Connect Supabase first','err');return;}
   const snap=getSnap(id);if(!snap){toast('Snapshot not found','err');return;}
   try{
-    const payload={id:snap.id,site:A.site,label:snap.label,start_date:snap.start,end_date:snap.end,snapshot_json:snap,synced_by:document.getElementById('sidebar-email').textContent,synced_at:new Date().toISOString()};
+    const {rows:_r,rowsLoaded:_rl,...snapMeta}=snap;
+    const payload={id:snap.id,site:A.site,label:snap.label,start_date:snap.start,end_date:snap.end,snapshot_json:snapMeta,synced_by:document.getElementById('sidebar-email').textContent,synced_at:new Date().toISOString()};
     const r=await fetch(`${A.sbUrl}/rest/v1/insiderank_snapshots`,{method:'POST',headers:{...sbH(),Prefer:'resolution=merge-duplicates'},body:JSON.stringify(payload)});
     if(r.ok){toast('✓ Snapshot synced to team','ok');renderSnapList();}else{const t=await r.text();toast('Sync failed: '+t.slice(0,80),'err');}
   }catch(e){toast('Sync failed: '+e.message,'err');}
@@ -2919,7 +3005,7 @@ function renderSharedList(rows){
   if(wrap)wrap.style.display='block';
   list.innerHTML=rows.map(r=>'<div class="shared-item"><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500">'+esc(r.label||r.id)+'</div><div style="font-size:11px;color:var(--text3);font-family:var(--mono)">'+esc(r.site)+' · '+(r.start_date||'?')+' → '+(r.end_date||'?')+' · by '+esc(r.synced_by||'unknown')+'</div></div><button class="btn btn-ghost btn-sm" onclick="deleteTeamSnap(\''+r.id+'\')">Remove</button></div>').join('');
 }
-function copySQL(){const sql='CREATE TABLE IF NOT EXISTS public.insiderank_snapshots (\n  id TEXT PRIMARY KEY,\n  site TEXT NOT NULL,\n  label TEXT,\n  start_date TEXT,\n  end_date TEXT,\n  snapshot_json JSONB NOT NULL,\n  synced_by TEXT,\n  synced_at TIMESTAMPTZ DEFAULT NOW()\n);\nALTER TABLE insiderank_snapshots ENABLE ROW LEVEL SECURITY;\nCREATE POLICY "allow_all" ON insiderank_snapshots FOR ALL USING (true) WITH CHECK (true);\n\nCREATE TABLE IF NOT EXISTS public.insiderank_ga4 (\n  id TEXT PRIMARY KEY,\n  site TEXT NOT NULL,\n  period TEXT NOT NULL,\n  label TEXT,\n  rows_json JSONB NOT NULL,\n  synced_by TEXT,\n  synced_at TIMESTAMPTZ DEFAULT NOW()\n);\nALTER TABLE insiderank_ga4 ENABLE ROW LEVEL SECURITY;\nCREATE POLICY "allow_all_ga4" ON insiderank_ga4 FOR ALL USING (true) WITH CHECK (true);';navigator.clipboard.writeText(sql).then(()=>toast('SQL copied')).catch(()=>toast('Copy failed','err'));}
+function copySQL(){const sql='CREATE TABLE IF NOT EXISTS public.insiderank_snapshots (\n  id TEXT PRIMARY KEY,\n  site TEXT NOT NULL,\n  label TEXT,\n  start_date TEXT,\n  end_date TEXT,\n  snapshot_json JSONB NOT NULL,\n  synced_by TEXT,\n  synced_at TIMESTAMPTZ DEFAULT NOW()\n);\nALTER TABLE insiderank_snapshots ENABLE ROW LEVEL SECURITY;\nCREATE POLICY "allow_all" ON insiderank_snapshots FOR ALL USING (true) WITH CHECK (true);\n\n-- Full query rows (enables unlimited GSC data storage)\nCREATE TABLE IF NOT EXISTS public.insiderank_rows (\n  id BIGSERIAL PRIMARY KEY,\n  snapshot_id TEXT NOT NULL REFERENCES insiderank_snapshots(id) ON DELETE CASCADE,\n  site TEXT NOT NULL,\n  query TEXT,\n  page TEXT,\n  impressions INTEGER DEFAULT 0,\n  clicks INTEGER DEFAULT 0,\n  ctr FLOAT DEFAULT 0,\n  position FLOAT DEFAULT 0,\n  src TEXT DEFAULT \'gsc-live\',\n  url_source TEXT DEFAULT \'exact\'\n);\nCREATE INDEX IF NOT EXISTS idx_ir_rows_snap ON insiderank_rows(snapshot_id);\nALTER TABLE insiderank_rows ENABLE ROW LEVEL SECURITY;\nCREATE POLICY "allow_all_rows" ON insiderank_rows FOR ALL USING (true) WITH CHECK (true);\n\nCREATE TABLE IF NOT EXISTS public.insiderank_ga4 (\n  id TEXT PRIMARY KEY,\n  site TEXT NOT NULL,\n  period TEXT NOT NULL,\n  label TEXT,\n  rows_json JSONB NOT NULL,\n  synced_by TEXT,\n  synced_at TIMESTAMPTZ DEFAULT NOW()\n);\nALTER TABLE insiderank_ga4 ENABLE ROW LEVEL SECURITY;\nCREATE POLICY "allow_all_ga4" ON insiderank_ga4 FOR ALL USING (true) WITH CHECK (true);';navigator.clipboard.writeText(sql).then(()=>toast('SQL copied')).catch(()=>toast('Copy failed','err'));}
 
 // ═══ CSV PARSING ═══
 function pcr(line){const c=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){inQ=!inQ;}else if(ch===','&&!inQ){c.push(cur.trim().replace(/^"|"$/g,''));cur='';}else{cur+=ch;}}c.push(cur.trim().replace(/^"|"$/g,''));return c;}
@@ -3255,8 +3341,8 @@ function renderSnapList(){
   // The old Imports page is gone — delegate to GSC Live snapshot list.
   renderGscSnapList();
 }
-async function setSnap(which,id){if(which==='A')A.pA[A.site]=id;else A.pB[A.site]=id;await savePer();updateTopbar();renderSnapList();renderAll();toast('Snapshot set as Period '+which);}
-async function deleteSnap(id){if(!confirm('Delete this snapshot?'))return;A.snaps[A.site]=(A.snaps[A.site]||[]).filter(s=>s.id!==id);if(A.pA[A.site]===id)delete A.pA[A.site];if(A.pB[A.site]===id)delete A.pB[A.site];autoPickPeriods();await save();await savePer();renderSnapList();renderAll();toast('Deleted');}
+async function setSnap(which,id){if(which==='A')A.pA[A.site]=id;else A.pB[A.site]=id;await savePer();updateTopbar();renderSnapList();await loadSnapRows(id);renderAll();toast('Snapshot set as Period '+which);}
+async function deleteSnap(id){if(!confirm('Delete this snapshot?'))return;A.snaps[A.site]=(A.snaps[A.site]||[]).filter(s=>s.id!==id);if(A.pA[A.site]===id)delete A.pA[A.site];if(A.pB[A.site]===id)delete A.pB[A.site];autoPickPeriods();await save();await savePer();if(A.sbConnected){try{await fetch(`${A.sbUrl}/rest/v1/insiderank_rows?snapshot_id=eq.${encodeURIComponent(id)}`,{method:'DELETE',headers:sbH()});}catch(e){console.warn('Row delete failed:',e.message);}}renderSnapList();renderAll();toast('Deleted');}
 async function clearSnaps(){if(!confirm('Delete all snapshots for this site?'))return;delete A.snaps[A.site];delete A.pA[A.site];delete A.pB[A.site];await save();await savePer();renderSnapList();renderAll();toast('All cleared');}
 
 // ═══ SAMPLE ═══
