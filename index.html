@@ -2136,8 +2136,8 @@ function refreshGscState(){
   // update comparison strip
   const sa=snapA(),sb=snapB();
   const ca=document.getElementById('gsc-comp-a'),cb=document.getElementById('gsc-comp-b');
-  if(ca)ca.textContent=sa?sa.label+' ('+sa.start+' → '+sa.end+')':'No Period A';
-  if(cb)cb.textContent=sb?sb.label+' ('+sb.start+' → '+sb.end+')':'No Period B';
+  if(ca)ca.textContent=sa?sa.label+' · '+sa.start+' to '+sa.end:'No Period A set';
+  if(cb)cb.textContent=sb?sb.label+' · '+sb.start+' to '+sb.end:'No Period B set';
   renderGscSnapList();
 }
 function setGscTab(tab){
@@ -2382,10 +2382,33 @@ function exportGapCSV(){
 // ── All Queries ──
 function getFilteredGscQ(){
   const rows=(snapB()?.rows||[]);
+  // Deduplicate by query: sum impressions+clicks, weighted avg position, best-position page
+  const map=new Map();
+  rows.forEach(r=>{
+    const q=(r.query||'').toLowerCase()||'(unknown)';
+    const key=r.query||'(unknown)';
+    if(!map.has(key)){
+      map.set(key,{query:r.query||'',page:r.page||'',impressions:r.impressions||0,clicks:r.clicks||0,position:r.position||0,_posImpr:(r.position||0)*(r.impressions||0),_totalImpr:r.impressions||0});
+    }else{
+      const e=map.get(key);
+      e.impressions+=(r.impressions||0);
+      e.clicks+=(r.clicks||0);
+      e._posImpr+=(r.position||0)*(r.impressions||0);
+      e._totalImpr+=(r.impressions||0);
+      // keep page with best (lowest) position
+      if((r.position||999)<(e.position||999)&&r.page){e.page=r.page;e.position=r.position||0;}
+    }
+  });
+  // finalize weighted avg position, compute ctr
+  const deduped=Array.from(map.values()).map(e=>{
+    e.position=e._totalImpr>0?e._posImpr/e._totalImpr:0;
+    e.ctr=e.impressions>0?e.clicks/e.impressions:0;
+    return e;
+  });
   const search=(document.getElementById('gq-search')?.value||'').toLowerCase();
   const pos=document.getElementById('gq-pos')?.value||'';
   const minImpr=parseInt(document.getElementById('gq-min-impr')?.value)||0;
-  let filtered=rows.filter(r=>{
+  let filtered=deduped.filter(r=>{
     if(search&&!(r.query||'').toLowerCase().includes(search)&&!(r.page||'').toLowerCase().includes(search))return false;
     if(r.impressions<minImpr)return false;
     if(pos){const[lo,hi]=pos.split('-').map(Number);if(!r.position||r.position<lo||r.position>hi)return false;}
