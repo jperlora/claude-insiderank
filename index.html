@@ -2285,6 +2285,61 @@ function ga4MapRows(rawRows,sd,ed){
   }).filter(r=>r.url&&r.visitors>0);
   return{rows,dateRange:sd+' → '+ed,hasViews:true,hasBounce:true,filename:'GA4 Live API'};
 }
+async function pullGa4Live(){
+  if(!ga4AccessToken||Date.now()>=ga4TokenExpiry){connectGa4();return;}
+  const propId=localStorage.getItem(GA4_PROP_SK)||'';
+  if(!propId){toast('Save a GA4 Property ID in Settings first','err');return;}
+  const sb=snapB();
+  if(!sb){toast('Set a Current (Period B) GSC snapshot first','err');return;}
+  const sa=snapA();
+
+  const btn=document.getElementById('ga4-live-pull-btn');
+  const prog=document.getElementById('ga4-live-progress');
+  const bar=document.getElementById('ga4-live-bar');
+  const status=document.getElementById('ga4-live-status');
+  if(btn)btn.disabled=true;
+  if(prog)prog.style.display='';
+
+  try{
+    if(status)status.textContent=`Fetching GA4 data for Current period (${sb.start} → ${sb.end})…`;
+    if(bar)bar.style.width='20%';
+    const rawB=await ga4FetchReport(propId,sb.start,sb.end);
+    if(bar)bar.style.width='50%';
+    const parsedB=ga4MapRows(rawB,sb.start,sb.end);
+    GA4.B=parsedB;GA4.PS=null;
+    try{await sv(GA4_SK+'B',JSON.stringify(parsedB));}catch(e){}
+    await pushGa4ToSupabase('B',parsedB);
+
+    if(sa){
+      if(status)status.textContent=`Fetching GA4 data for Baseline period (${sa.start} → ${sa.end})…`;
+      if(bar)bar.style.width='60%';
+      const rawA=await ga4FetchReport(propId,sa.start,sa.end);
+      if(bar)bar.style.width='85%';
+      const parsedA=ga4MapRows(rawA,sa.start,sa.end);
+      GA4.A=parsedA;GA4.PSA=null;
+      try{await sv(GA4_SK+'A',JSON.stringify(parsedA));}catch(e){}
+      await pushGa4ToSupabase('A',parsedA);
+    }
+
+    if(bar)bar.style.width='100%';
+    if(status)status.textContent=`✓ Loaded ${parsedB.rows.length.toLocaleString()} pages`+(sa?` (both periods)`:'')+' — rendering…';
+
+    const bEl=document.getElementById('ga4b-status');
+    if(bEl){bEl.innerHTML='✓ <strong>'+parsedB.rows.length.toLocaleString()+' pages</strong> · '+parsedB.dateRange+' <span style="background:rgba(59,158,255,.15);color:var(--blue);border:1px solid rgba(91,159,255,.3);padding:1px 7px;border-radius:4px;font-size:10px;font-weight:600;margin-left:6px">Live API</span>';bEl.className='pp-status loaded';}
+    if(sa){const aEl=document.getElementById('ga4a-status');if(aEl){aEl.innerHTML='✓ <strong>'+(GA4.A.rows.length.toLocaleString())+' pages</strong> · '+GA4.A.dateRange+' <span style="background:rgba(59,158,255,.15);color:var(--blue);border:1px solid rgba(91,159,255,.3);padding:1px 7px;border-radius:4px;font-size:10px;font-weight:600;margin-left:6px">Live API</span>';aEl.className='pp-status loaded';}}
+
+    const csvWrap=document.getElementById('ga4-csv-wrap');if(csvWrap)csvWrap.classList.add('hidden');
+    renderPerfView();
+    refreshGa4State();
+    toast('✓ GA4 data loaded — '+parsedB.rows.length.toLocaleString()+' pages','ok');
+    setTimeout(()=>{if(prog)prog.style.display='none';if(bar)bar.style.width='0%';},2000);
+  }catch(e){
+    toast('GA4 pull failed: '+e.message,'err');
+    if(prog)prog.style.display='none';
+    if(bar)bar.style.width='0%';
+  }
+  if(btn)btn.disabled=false;
+}
 function refreshGa4State(){
   const propId=localStorage.getItem(GA4_PROP_SK)||'';
   const panel=document.getElementById('ga4-live-panel');
