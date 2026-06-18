@@ -1991,6 +1991,16 @@ CREATE POLICY "allow_all_ga4" ON insiderank_ga4 FOR ALL USING (true) WITH CHECK 
       <span id="gsc-clientid-status" style="font-size:12px;color:var(--text3)"></span>
     </div>
     <div style="margin-top:12px;font-size:11px;color:var(--text3);line-height:1.8">&#9432; Don't have a Client ID yet? <a onclick="goView('gsclive',null)" style="color:var(--blue);cursor:pointer;font-weight:500">Go to GSC Live</a> for step-by-step setup instructions.</div>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px">GA4 Property ID</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:10px;line-height:1.6">Your numeric GA4 Property ID — found in GA4 → Admin → Property Settings. Same Google Cloud project as GSC.</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input class="fi" type="text" id="ga4-prop-input" placeholder="e.g. 123456789" style="width:200px">
+          <button class="btn btn-primary btn-sm" onclick="saveGa4PropId()">Save</button>
+          <span id="ga4-prop-status" style="font-size:12px;color:var(--text3)"></span>
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:8px">Also enable the <strong style="color:var(--text2)">Google Analytics Data API</strong> in your Google Cloud project (APIs &amp; Services → Library → search "Google Analytics Data API" → Enable).</div>
+      </div>
   </div>
   <!-- SERPER -->
   <div class="set-card">
@@ -2166,6 +2176,22 @@ function saveGscClientId(){
 function loadGscClientId(){
   const v=localStorage.getItem(GSC_CID_SK)||'';
   const inp=document.getElementById('gsc-clientid-input');
+  if(inp)inp.value=v;
+  return v;
+}
+const GA4_PROP_SK='ir_ga4_prop';
+function saveGa4PropId(){
+  const val=(document.getElementById('ga4-prop-input').value||'').trim();
+  if(!val||!/^\d+$/.test(val)){toast('Enter a numeric GA4 Property ID','err');return;}
+  localStorage.setItem(GA4_PROP_SK,val);
+  document.getElementById('ga4-prop-status').textContent='Saved';
+  document.getElementById('ga4-prop-status').style.color='var(--green)';
+  toast('GA4 Property ID saved','ok');
+  refreshGa4State();
+}
+function loadGa4PropId(){
+  const v=localStorage.getItem(GA4_PROP_SK)||'';
+  const inp=document.getElementById('ga4-prop-input');
   if(inp)inp.value=v;
   return v;
 }
@@ -2899,6 +2925,7 @@ async function bootApp(){
   requestAnimationFrame(initKwScrollSync);
   document.addEventListener('click',e=>{if(!e.target.closest('.rel-cell')){document.querySelectorAll('.kw-dropdown').forEach(d=>d.remove());A.openKwDropdown=null;}});
   loadGscClientId();
+  loadGa4PropId();
   setTimeout(async()=>{initGscTokenClient();refreshGscState();initGscFlatpickr();gscSetPreset('3m');const idA=A.pA[A.site],idB=A.pB[A.site];if(idA)await loadSnapRows(idA);if(idB&&idB!==idA)await loadSnapRows(idB);if(idA||idB)renderAll();},900);
 }
 
