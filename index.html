@@ -2679,6 +2679,8 @@ async function gscSavePeriod(siteUrl,sd,ed,label,isA){
   A.snaps[A.site].sort((a,b)=>(a.start||a.label).localeCompare(b.start||b.label));
 
   if(A.sbConnected){
+    // Push snapshot metadata first (insiderank_rows has FK → insiderank_snapshots)
+    await pushSnapToTeam(snap.id,true);
     const total=allRowsMapped.length;
     const BATCH=1000;
     status.textContent=`Saving ${total.toLocaleString()} rows to database…`;setBar(36);
@@ -2688,11 +2690,10 @@ async function gscSavePeriod(siteUrl,sd,ed,label,isA){
       status.textContent=`Saving to database — ${Math.min(i+BATCH,total).toLocaleString()} / ${total.toLocaleString()} rows…`;
       const batch=allRowsMapped.slice(i,i+BATCH).map(r=>({snapshot_id:snap.id,site:A.site,query:r.query||'',page:r.page||null,impressions:r.impressions||0,clicks:r.clicks||0,ctr:r.ctr||0,position:r.position||0,src:r.src||'gsc-live',url_source:r.urlSource||(r.page?'exact':'none')}));
       const res=await fetch(`${A.sbUrl}/rest/v1/insiderank_rows`,{method:'POST',headers:{...sbH(),Prefer:'return=minimal'},body:JSON.stringify(batch)});
-      if(!res.ok){const t=await res.text();throw new Error('Row save failed: '+t.slice(0,120));}
+      if(!res.ok){const t=await res.text();throw new Error('DB row save failed ('+res.status+'): '+t.slice(0,200));}
     }
     snap.rows=allRowsMapped;snap.rowsLoaded=true;
     setBar(48);status.textContent=`Saved ${total.toLocaleString()} rows to database ✓`;
-    await pushSnapToTeam(snap.id,true);
   }else{
     setBar(48);status.textContent=`${qpRows.length.toLocaleString()} queries fetched (top 5,000 saved locally — connect Supabase to store all)`;
   }
