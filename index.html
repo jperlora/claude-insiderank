@@ -2187,7 +2187,7 @@ function saveGa4PropId(){
   document.getElementById('ga4-prop-status').textContent='Saved';
   document.getElementById('ga4-prop-status').style.color='var(--green)';
   toast('GA4 Property ID saved','ok');
-  refreshGa4State();
+  if(typeof refreshGa4State==='function')refreshGa4State();
 }
 function loadGa4PropId(){
   const v=localStorage.getItem(GA4_PROP_SK)||'';
