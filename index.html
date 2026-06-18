@@ -306,6 +306,7 @@ input[type=file]{display:none}
 .help-tip{background:var(--amber-d);border:1px solid rgba(255,184,63,.28);border-radius:var(--r);padding:11px 15px;font-size:13px;color:var(--text2);margin-top:12px}
 .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s;font-family:var(--font)}
 .btn-primary{background:var(--blue);color:#fff}.btn-primary:hover{background:#4a8ef0}
+.btn:disabled{opacity:.45;cursor:not-allowed}
 .btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border2)}.btn-ghost:hover{color:var(--text);background:var(--bg4);border-color:var(--border3)}
 .btn-green{background:var(--green);color:#0c0e11;font-weight:600}.btn-green:hover{background:#25d0a0}
 .btn-danger{background:var(--red-d);color:var(--red);border:1px solid rgba(255,107,107,.3)}.btn-danger:hover{background:rgba(255,107,107,.25)}
@@ -875,6 +876,7 @@ input[type=file]{display:none}
         </div>
         <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start">
           <button class="btn btn-primary" id="ga4-live-pull-btn" onclick="pullGa4Live()" style="min-width:140px">Pull GA4 data</button>
+          <div id="ga4-live-hint" style="display:none;font-size:11px;color:var(--amber);margin-top:2px"></div>
           <div id="ga4-live-loaded" style="display:none;font-size:12px;color:var(--green)"></div>
         </div>
       </div>
@@ -2345,9 +2347,14 @@ function refreshGa4State(){
     if(emailEl)emailEl.textContent=ga4UserEmail||'Connected';
     const pullBtn=document.getElementById('ga4-live-pull-btn');
     if(pullBtn){
-      pullBtn.disabled=!canPull;
       pullBtn.title=!hasProp?'Save a GA4 Property ID in Settings first'
         :!hasB?'Set a GSC snapshot as Current (Period B) first':'';
+    }
+    const hintEl=document.getElementById('ga4-live-hint');
+    if(hintEl){
+      if(!hasProp){hintEl.textContent='⚠ Save a GA4 Property ID in Settings first';hintEl.style.display='';}
+      else if(!hasB){hintEl.textContent='⚠ Set a GSC snapshot as Current (Period B) first';hintEl.style.display='';}
+      else{hintEl.textContent='';hintEl.style.display='none';}
     }
     const datesEl=document.getElementById('ga4-live-dates');
     if(datesEl){
