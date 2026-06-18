@@ -2666,6 +2666,7 @@ async function pullGscLive(){
   btn.disabled=false;
 }
 function renderGscSnapList(){
+  const curA=A.pA[A.site],curB=A.pB[A.site];
   const wrap=document.getElementById('gsc-snap-list-wrap');
   const items=document.getElementById('gsc-snap-list-items');
   const title=document.getElementById('gsc-snap-list-title');
@@ -2688,7 +2689,6 @@ function renderGscSnapList(){
       if(sbd)sbd.textContent=sB?sB.start+' → '+sB.end:'';
     }else{strip.style.display='none';}
   }
-  const curA=A.pA[A.site],curB=A.pB[A.site];
   items.innerHTML=snaps.slice().reverse().map(s=>{
     const isA=curA===s.id,isB=curB===s.id;
     const badge=isA&&isB?'<span style="font-size:10px;background:var(--amber-d,#2d2200);color:var(--amber);border:1px solid rgba(255,180,0,.3);padding:2px 7px;border-radius:4px;font-weight:600">Baseline + Current</span>'
@@ -3121,7 +3121,7 @@ async function pullSharedSnaps(silent=false){
         added++;
       }
     });
-    if(added>0){if(A.snaps[A.site])A.snaps[A.site].sort((a,b)=>(a.start||a.label).localeCompare(b.start||b.label));await save();autoPickPeriods();renderAll();renderSnapList();if(!silent)toast('✓ Pulled '+added+' team snapshot'+(added>1?'s':''),'ok');}
+    if(added>0){if(A.snaps[A.site])A.snaps[A.site].sort((a,b)=>(a.start||a.label).localeCompare(b.start||b.label));await save();autoPickPeriods();renderAll();renderSnapList();renderGscSnapList();if(!silent)toast('✓ Pulled '+added+' team snapshot'+(added>1?'s':''),'ok');}
     else if(!silent)toast('Team snapshots up to date');
     const el=document.getElementById('sync-last-pull');
     const ts=new Date().toLocaleString();
