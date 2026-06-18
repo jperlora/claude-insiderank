@@ -2692,6 +2692,7 @@ async function gscSavePeriod(siteUrl,sd,ed,label,isA){
     }
     snap.rows=allRowsMapped;snap.rowsLoaded=true;
     setBar(48);status.textContent=`Saved ${total.toLocaleString()} rows to database ✓`;
+    await pushSnapToTeam(snap.id,true);
   }else{
     setBar(48);status.textContent=`${qpRows.length.toLocaleString()} queries fetched (top 5,000 saved locally — connect Supabase to store all)`;
   }
@@ -3214,15 +3215,15 @@ async function pullSharedSnaps(silent=false){
     renderSharedList(rows);
   }catch(e){if(!silent)toast('Sync pull failed: '+e.message,'err');}
 }
-async function pushSnapToTeam(id){
-  if(!A.sbConnected){toast('Connect Supabase first','err');return;}
-  const snap=getSnap(id);if(!snap){toast('Snapshot not found','err');return;}
+async function pushSnapToTeam(id,silent=false){
+  if(!A.sbConnected){if(!silent)toast('Connect Supabase first','err');return;}
+  const snap=getSnap(id);if(!snap){if(!silent)toast('Snapshot not found','err');return;}
   try{
     const {rows:_r,rowsLoaded:_rl,...snapMeta}=snap;
     const payload={id:snap.id,site:A.site,label:snap.label,start_date:snap.start,end_date:snap.end,snapshot_json:snapMeta,synced_by:document.getElementById('sidebar-email').textContent,synced_at:new Date().toISOString()};
     const r=await fetch(`${A.sbUrl}/rest/v1/insiderank_snapshots`,{method:'POST',headers:{...sbH(),Prefer:'resolution=merge-duplicates'},body:JSON.stringify(payload)});
-    if(r.ok){toast('✓ Snapshot synced to team','ok');renderSnapList();}else{const t=await r.text();toast('Sync failed: '+t.slice(0,80),'err');}
-  }catch(e){toast('Sync failed: '+e.message,'err');}
+    if(r.ok){if(!silent)toast('✓ Snapshot synced to team','ok');renderSnapList();}else{const t=await r.text();if(!silent)toast('Sync failed: '+t.slice(0,80),'err');}
+  }catch(e){if(!silent)toast('Sync failed: '+e.message,'err');}
 }
 async function deleteTeamSnap(id){
   if(!A.sbConnected)return;if(!confirm('Remove from team database?'))return;
