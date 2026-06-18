@@ -1154,6 +1154,7 @@ input[type=file]{display:none}
       <button class="gsc-tab" id="gtab-queries" onclick="setGscTab('queries')">All Queries</button>
       <button class="gsc-tab" id="gtab-bypage" onclick="setGscTab('bypage')">By Page</button>
       <button class="gsc-tab" id="gtab-gap" onclick="setGscTab('gap')">Content Gap</button>
+      <button class="gsc-tab" id="gtab-opp" onclick="setGscTab('opp')">Opportunities</button>
     </div>
     <!-- Pull Data tab -->
     <div id="gsc-tab-pull">
@@ -1356,6 +1357,67 @@ input[type=file]{display:none}
             </table>
           </div>
           <div class="pager"><span class="pager-info" id="gap-pinfo"></span><button class="pager-btn" id="gap-prev" onclick="pgGap(-1)">&#8592; Prev</button><button class="pager-btn" id="gap-next" onclick="pgGap(1)">Next &#8594;</button></div>
+        </div>
+      </div>
+    </div>
+    <div id="gsc-tab-opp" style="display:none">
+      <div id="gsc-opp-nosnap" style="padding:36px 0;text-align:center;color:var(--text3)">
+        <div style="font-size:32px;margin-bottom:12px;opacity:.25">&#128161;</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px">No data yet</div>
+        <div style="font-size:13px;max-width:340px;margin:0 auto">Pull data and set it as <strong style="color:var(--text)">Period B</strong> to surface ranking opportunities.</div>
+      </div>
+      <div id="gsc-opp-content" style="display:none">
+        <div class="filters" style="margin-bottom:16px">
+          <button class="btn btn-ghost btn-sm" onclick="exportOppCSV()">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
+          <span style="margin-left:auto;font-size:11px;color:var(--text3)" id="opp-count-lbl"></span>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-hdr" style="cursor:pointer" onclick="toggleOppSection('boost')">
+            <div>
+              <div class="card-title">Boost to Page 1 <span class="tag tg-amber" id="opp-boost-badge" style="margin-left:8px"></span></div>
+              <div class="card-sub">Queries ranking pos 11–20 with ≥10 impressions — a content push could reach page 1</div>
+            </div>
+            <span id="opp-boost-icon" style="color:var(--text3);font-size:13px">&#9660;</span>
+          </div>
+          <div id="opp-boost-body">
+            <div class="tbl-wrap"><table>
+              <thead><tr><th style="min-width:280px">Query</th><th>Position</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>Action</th></tr></thead>
+              <tbody id="opp-boost-tbody"></tbody>
+            </table></div>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-hdr" style="cursor:pointer" onclick="toggleOppSection('ctr')">
+            <div>
+              <div class="card-title">Fix CTR <span class="tag tg-blue" id="opp-ctr-badge" style="margin-left:8px"></span></div>
+              <div class="card-sub">Ranking pos 1–10 with ≥20 impressions but CTR below the site average for that position band</div>
+            </div>
+            <span id="opp-ctr-icon" style="color:var(--text3);font-size:13px">&#9660;</span>
+          </div>
+          <div id="opp-ctr-body">
+            <div class="tbl-wrap"><table>
+              <thead><tr><th style="min-width:280px">Query</th><th>Position</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>Action</th></tr></thead>
+              <tbody id="opp-ctr-tbody"></tbody>
+            </table></div>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-hdr" style="cursor:pointer" onclick="toggleOppSection('create')">
+            <div>
+              <div class="card-title">Create Content <span class="tag tg-green" id="opp-create-badge" style="margin-left:8px"></span></div>
+              <div class="card-sub">Queries with ≥20 impressions and no dedicated landing page (high/med opportunity only)</div>
+            </div>
+            <span id="opp-create-icon" style="color:var(--text3);font-size:13px">&#9660;</span>
+          </div>
+          <div id="opp-create-body">
+            <div class="tbl-wrap"><table>
+              <thead><tr><th style="min-width:280px">Query</th><th>Position</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>Action</th></tr></thead>
+              <tbody id="opp-create-tbody"></tbody>
+            </table></div>
+          </div>
         </div>
       </div>
     </div>
@@ -2026,6 +2088,7 @@ let gscQSnapId=null;
 let gscQCompId=null;
 let gscBpExpanded=new Set();
 const GSC_PAGE_SIZE=50;
+let gscOppCollapsed={boost:false,ctr:false,create:false};
 
 // ═══ BOOT ═══
 // ═══ AUTH ═══
@@ -2424,7 +2487,7 @@ function refreshGscState(){
   renderGscSnapList();
 }
 function setGscTab(tab){
-  ['pull','queries','bypage','gap'].forEach(t=>{
+  ['pull','queries','bypage','gap','opp'].forEach(t=>{
     const el=document.getElementById('gsc-tab-'+t);
     const btn=document.getElementById('gtab-'+t);
     if(el)el.style.display=t===tab?'':'none';
@@ -2433,6 +2496,7 @@ function setGscTab(tab){
   if(tab==='queries')renderGscQueries();
   else if(tab==='bypage')renderGscByPage();
   else if(tab==='gap')renderGapTable();
+  else if(tab==='opp')renderOpportunities();
 }
 
 // ── GSC Live Pull ──
@@ -2791,6 +2855,77 @@ function computeContentGaps(){
     .filter(r=>!withPage.has(r.query)||homepageQueries.has(r.query))
     .map(r=>({...r,opportunity:gapOpp(r)}));
 }
+function computeOpportunities(){
+  const rows=gscLiveRows.length?gscLiveRows:(snapB()?.rows||[]);
+  if(!rows.length)return{boost:[],fixCtr:[],create:[]};
+  const boost=rows
+    .filter(r=>r.position>=11&&r.position<=20&&r.impressions>=10)
+    .sort((a,b)=>b.impressions-a.impressions);
+  const bandMap={};
+  rows.filter(r=>r.position>=1&&r.position<=10&&r.impressions>=20).forEach(r=>{
+    const b=Math.ceil(r.position);
+    if(!bandMap[b])bandMap[b]={sum:0,cnt:0};
+    bandMap[b].sum+=(r.ctr||0);bandMap[b].cnt++;
+  });
+  const bandAvg={};
+  Object.keys(bandMap).forEach(b=>{bandAvg[b]=bandMap[b].cnt?bandMap[b].sum/bandMap[b].cnt:0;});
+  const fixCtr=rows
+    .filter(r=>{
+      if(r.position<1||r.position>10||r.impressions<20)return false;
+      const avg=bandAvg[Math.ceil(r.position)]||0;
+      return avg>0&&(r.ctr||0)<avg;
+    })
+    .sort((a,b)=>b.impressions-a.impressions);
+  const create=computeContentGaps()
+    .filter(r=>r.impressions>=20&&(r.opportunity==='high'||r.opportunity==='med'))
+    .sort((a,b)=>b.impressions-a.impressions);
+  return{boost,fixCtr,create};
+}
+function renderOpportunities(){
+  const nosnap=document.getElementById('gsc-opp-nosnap');
+  const content=document.getElementById('gsc-opp-content');
+  const rows=gscLiveRows.length?gscLiveRows:(snapB()?.rows||[]);
+  if(!rows.length){
+    if(nosnap)nosnap.style.display='';
+    if(content)content.style.display='none';
+    return;
+  }
+  if(nosnap)nosnap.style.display='none';
+  if(content)content.style.display='';
+  const {boost,fixCtr,create}=computeOpportunities();
+  const el=id=>document.getElementById(id);
+  if(el('opp-boost-badge'))el('opp-boost-badge').textContent=boost.length;
+  if(el('opp-ctr-badge'))el('opp-ctr-badge').textContent=fixCtr.length;
+  if(el('opp-create-badge'))el('opp-create-badge').textContent=create.length;
+  const total=boost.length+fixCtr.length+create.length;
+  if(el('opp-count-lbl'))el('opp-count-lbl').textContent=total.toLocaleString()+' opportunit'+(total===1?'y':'ies');
+  function buildRows(arr,actionLabel,actionClass){
+    if(!arr.length)return`<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--text3)">No opportunities found.</td></tr>`;
+    return arr.map(r=>`<tr>
+      <td class="col-kw" title="${esc(r.query)}">${esc(r.query)}</td>
+      <td>${posBadge(r.position)}</td>
+      <td style="font-family:var(--mono);font-weight:600">${fmtN(r.impressions)}</td>
+      <td style="font-family:var(--mono)">${(r.clicks||0).toLocaleString()}</td>
+      <td>${ctrCell(r.ctr||0)}</td>
+      <td><span class="${actionClass}">${esc(actionLabel)}</span></td>
+    </tr>`).join('');
+  }
+  if(el('opp-boost-tbody'))el('opp-boost-tbody').innerHTML=buildRows(boost,'Improve content','gap-opp-high');
+  if(el('opp-ctr-tbody'))el('opp-ctr-tbody').innerHTML=buildRows(fixCtr,'Fix title/meta','gap-opp-med');
+  if(el('opp-create-tbody'))el('opp-create-tbody').innerHTML=buildRows(create,'Create page','gap-opp-low');
+  ['boost','ctr','create'].forEach(k=>{
+    const body=el('opp-'+k+'-body'),icon=el('opp-'+k+'-icon');
+    if(body)body.style.display=gscOppCollapsed[k]?'none':'';
+    if(icon)icon.innerHTML=gscOppCollapsed[k]?'&#9650;':'&#9660;';
+  });
+}
+function toggleOppSection(key){
+  gscOppCollapsed[key]=!gscOppCollapsed[key];
+  const body=document.getElementById('opp-'+key+'-body');
+  const icon=document.getElementById('opp-'+key+'-icon');
+  if(body)body.style.display=gscOppCollapsed[key]?'none':'';
+  if(icon)icon.innerHTML=gscOppCollapsed[key]?'&#9650;':'&#9660;';
+}
 function gapOpp(r){
   if(r.impressions>=100&&r.position<=20)return'high';
   if(r.impressions>=20&&r.position<=50)return'med';
@@ -2864,6 +2999,28 @@ function renderGapTable(){
   if(prev)prev.disabled=gscGapPage<=1;if(next)next.disabled=gscGapPage>=pages;
 }
 function escHtml(str){return(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function exportOppCSV(){
+  const {boost,fixCtr,create}=computeOpportunities();
+  const all=[
+    ...boost.map(r=>({...r,category:'boost_to_page1',action:'Improve content'})),
+    ...fixCtr.map(r=>({...r,category:'fix_ctr',action:'Fix title/meta'})),
+    ...create.map(r=>({...r,category:'create_content',action:'Create page'})),
+  ];
+  if(!all.length){toast('No opportunities to export','err');return;}
+  const hdrs=['query','category','action','position','impressions','clicks','ctr'];
+  const rows=all.map(r=>[
+    `"${(r.query||'').replace(/"/g,'""')}"`,
+    r.category,r.action,
+    r.position?.toFixed(2)||'',
+    r.impressions,r.clicks||0,
+    ((r.ctr||0)*100).toFixed(2)+'%'
+  ].join(','));
+  const csv=[hdrs.join(','),...rows].join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download='opportunities-'+A.site+'-'+new Date().toISOString().split('T')[0]+'.csv';
+  a.click();toast('Opportunities exported');
+}
 function exportGapCSV(){
   const gaps=getFilteredGaps();
   if(!gaps.length){toast('No gaps to export','err');return;}
