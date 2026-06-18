@@ -406,8 +406,6 @@ input[type=file]{display:none}
 .pp-how-to-mini em{color:var(--teal);font-style:normal;font-weight:500}
 .pp-more-btn{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:4px;background:var(--bg4);border:1px solid var(--border2);color:var(--text3);font-size:10px;cursor:pointer;font-family:var(--mono);font-weight:600;transition:all .15s;white-space:nowrap;margin-top:3px}
 .pp-more-btn:hover{border-color:var(--border3);color:var(--text);background:var(--bg5)}
-#ga4-csv-wrap{margin-bottom:0}
-#ga4-csv-wrap.hidden{display:none}
 .ga4-how-to{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rl);padding:18px 20px;margin-bottom:18px}
 .ga4-how-to-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:8px}
 .ga4-steps{counter-reset:ga4step;list-style:none;padding:0}
@@ -891,91 +889,12 @@ input[type=file]{display:none}
   </div>
 
   <!-- CSV fallback (collapsed when live data loaded) -->
-  <div id="ga4-csv-wrap">
-    <!-- How to export from GA4 -->
-    <div class="ga4-how-to" id="ga4-howto">
-      <div class="ga4-how-to-title">&#128202; Two GA4 reports — which gives you what</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
-        <div style="background:var(--bg4);border:1px solid rgba(91,159,255,.25);border-radius:var(--r);padding:14px">
-          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:8px">&#128196; Report 1 — Landing pages <span style="background:var(--green-d);color:var(--green);border:1px solid rgba(46,232,180,.3);padding:1px 7px;border-radius:4px;font-size:10px;font-weight:600;margin-left:4px">You already have this</span></div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.8">Reports → Engagement → <strong style="color:var(--text)">Landing pages</strong><br>Gives you: <span style="color:var(--green)">✓ Sessions &nbsp; ✓ Active users &nbsp; ✓ Time on page</span><br><span style="color:var(--red)">✗ Views (not in this report)</span></div>
-        </div>
-        <div style="background:var(--bg4);border:1px solid rgba(255,184,63,.25);border-radius:var(--r);padding:14px">
-          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:8px">&#128202; Report 2 — Pages and screens <span style="background:var(--amber-d);color:var(--amber);border:1px solid rgba(255,184,63,.3);padding:1px 7px;border-radius:4px;font-size:10px;font-weight:600;margin-left:4px">Upload for Views</span></div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.8">Reports → Engagement → <strong style="color:var(--text)">Pages and screens</strong><br>Gives you: <span style="color:var(--green)">✓ Views</span><br><span style="color:var(--text3)">Upload Period B below to fill the Views column</span></div>
-        </div>
-      </div>
-      <ol class="ga4-steps">
-        <li><strong>Sessions + Time on page:</strong> Reports → Engagement → <strong>Landing pages</strong> → set date range → download → <code>Download CSV</code>. Export two — Period A and Period B.</li>
-        <li><strong>Views:</strong> Reports → Engagement → <strong>Pages and screens</strong> → same date ranges → <code>Download CSV</code>. Upload Period B below as "Pages &amp; Screens".</li>
-      </ol>
-    </div>
-    <!-- Upload cards — 2x2 grid -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px">
-      <!-- A: Landing pages -->
-      <div class="pp-period-card">
-        <div class="pp-period-label a">&#128197; Period A — Landing pages <span style="font-size:9px;font-weight:500;opacity:.7">(previous period)</span></div>
-        <div class="pp-how-to-mini">
-          <strong>How to export:</strong> GA4 → Reports → Engagement → Landing pages → set your <em>previous</em> date range → download icon → Download CSV
-        </div>
-        <div class="pp-upload-zone" id="ga4a-drop" onclick="document.getElementById('ga4a-input').click()" ondragover="doDragOver(event,'ga4a-drop')" ondragleave="doDragLeave('ga4a-drop')" ondrop="doGa4Drop(event,'A')">
-          <div class="pp-upload-icon">&#128229;</div>
-          <div class="pp-upload-title">Drop GA4 CSV here</div>
-          <div class="pp-upload-sub">Fills: Visitors Δ · Time on page Δ</div>
-        </div>
-        <input type="file" id="ga4a-input" accept=".csv" onchange="handleGa4('A',this.files[0]);this.value=''">
-        <div class="pp-status" id="ga4a-status">No file uploaded — needed for comparison columns</div>
-      </div>
-      <!-- A: Pages & screens -->
-      <div class="pp-period-card" style="border-color:rgba(255,184,63,.2)">
-        <div class="pp-period-label" style="color:var(--amber)">&#128197; Period A — Pages &amp; screens <span style="font-size:9px;font-weight:500;opacity:.7">(previous period)</span></div>
-        <div class="pp-how-to-mini">
-          <strong>How to export:</strong> GA4 → Reports → Engagement → Pages and screens → set your <em>previous</em> date range → download icon → Download CSV
-        </div>
-        <div class="pp-upload-zone" id="ga4psa-drop" onclick="document.getElementById('ga4psa-input').click()" ondragover="doDragOver(event,'ga4psa-drop')" ondragleave="doDragLeave('ga4psa-drop')" ondrop="doGa4Drop(event,'PSA')">
-          <div class="pp-upload-icon">&#128202;</div>
-          <div class="pp-upload-title">Drop GA4 CSV here</div>
-          <div class="pp-upload-sub">Fills: Views Δ comparison column</div>
-        </div>
-        <input type="file" id="ga4psa-input" accept=".csv" onchange="handleGa4('PSA',this.files[0]);this.value=''">
-        <div class="pp-status" id="ga4psa-status">No file uploaded — needed for Views change %</div>
-      </div>
-      <!-- B: Landing pages -->
-      <div class="pp-period-card" style="border-color:rgba(91,159,255,.25)">
-        <div class="pp-period-label b">&#128198; Period B — Landing pages <span style="font-size:9px;font-weight:500;opacity:.7">(current period)</span></div>
-        <div class="pp-how-to-mini">
-          <strong>How to export:</strong> GA4 → Reports → Engagement → Landing pages → set your <em>current</em> date range → download icon → Download CSV
-        </div>
-        <div class="pp-upload-zone" id="ga4b-drop" onclick="document.getElementById('ga4b-input').click()" ondragover="doDragOver(event,'ga4b-drop')" ondragleave="doDragLeave('ga4b-drop')" ondrop="doGa4Drop(event,'B')">
-          <div class="pp-upload-icon">&#128229;</div>
-          <div class="pp-upload-title">Drop GA4 CSV here</div>
-          <div class="pp-upload-sub">Required · Visitors · Time on page</div>
-        </div>
-        <input type="file" id="ga4b-input" accept=".csv" onchange="handleGa4('B',this.files[0]);this.value=''">
-        <div class="pp-status" id="ga4b-status">No file uploaded</div>
-      </div>
-      <!-- B: Pages & screens -->
-      <div class="pp-period-card" style="border-color:rgba(91,159,255,.25)">
-        <div class="pp-period-label b">&#128198; Period B — Pages &amp; screens <span style="font-size:9px;font-weight:500;opacity:.7">(current period)</span></div>
-        <div class="pp-how-to-mini">
-          <strong>How to export:</strong> GA4 → Reports → Engagement → Pages and screens → set your <em>current</em> date range → download icon → Download CSV
-        </div>
-        <div class="pp-upload-zone" id="ga4ps-drop" onclick="document.getElementById('ga4ps-input').click()" ondragover="doDragOver(event,'ga4ps-drop')" ondragleave="doDragLeave('ga4ps-drop')" ondrop="doGa4Drop(event,'PS')">
-          <div class="pp-upload-icon">&#128202;</div>
-          <div class="pp-upload-title">Drop GA4 CSV here</div>
-          <div class="pp-upload-sub">Fills: Views column</div>
-        </div>
-        <input type="file" id="ga4ps-input" accept=".csv" onchange="handleGa4('PS',this.files[0]);this.value=''">
-        <div class="pp-status" id="ga4ps-status">No file uploaded — needed for Views column</div>
-      </div>
-    </div>
-  </div>
 
   <!-- empty state -->
   <div id="perf-empty" style="text-align:center;padding:50px 20px;color:var(--text3)">
     <div style="font-size:36px;margin-bottom:12px;opacity:.25">&#128202;</div>
-    <div style="font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px">Upload GA4 exports to get started</div>
-    <div style="font-size:13px;color:var(--text3);max-width:400px;margin:0 auto">Upload at least a Period B file above. GSC keyword data is joined automatically from whichever snapshot you've set as Period B.</div>
+    <div style="font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px">Connect Google Analytics to get started</div>
+    <div style="font-size:13px;color:var(--text3);max-width:400px;margin:0 auto">Click "Connect Google Analytics" above, then click "Pull GA4 data". GSC keyword data is joined automatically from your active Period B snapshot.</div>
   </div>
 
   <!-- results -->
@@ -2359,11 +2278,6 @@ async function pullGa4Live(){
     if(bar)bar.style.width='100%';
     if(status)status.textContent=`✓ Loaded ${parsedB.rows.length.toLocaleString()} pages`+(sa?` (both periods)`:'')+' — rendering…';
 
-    const bEl=document.getElementById('ga4b-status');
-    if(bEl){bEl.innerHTML='✓ <strong>'+parsedB.rows.length.toLocaleString()+' pages</strong> · '+parsedB.dateRange+' <span style="background:rgba(59,158,255,.15);color:var(--blue);border:1px solid rgba(91,159,255,.3);padding:1px 7px;border-radius:4px;font-size:10px;font-weight:600;margin-left:6px">Live API</span>';bEl.className='pp-status loaded';}
-    if(sa){const aEl=document.getElementById('ga4a-status');if(aEl){aEl.innerHTML='✓ <strong>'+(GA4.A.rows.length.toLocaleString())+' pages</strong> · '+GA4.A.dateRange+' <span style="background:rgba(59,158,255,.15);color:var(--blue);border:1px solid rgba(91,159,255,.3);padding:1px 7px;border-radius:4px;font-size:10px;font-weight:600;margin-left:6px">Live API</span>';aEl.className='pp-status loaded';}}
-
-    const csvWrap=document.getElementById('ga4-csv-wrap');if(csvWrap)csvWrap.classList.add('hidden');
     renderPerfView();
     refreshGa4State();
     toast('✓ GA4 data loaded — '+parsedB.rows.length.toLocaleString()+' pages','ok');
@@ -4045,7 +3959,6 @@ async function pullGa4FromSupabase(silent=false){
       loaded++;
     }
     if(loaded>0){
-      if(GA4.A||GA4.B||GA4.PS||GA4.PSA){const h=document.getElementById('ga4-howto');if(h)h.style.display='none';const cw=document.getElementById('ga4-csv-wrap');if(cw&&(GA4.B?.filename==='GA4 Live API'||GA4.A?.filename==='GA4 Live API'))cw.classList.add('hidden');}
       renderPerfView();
       if(!silent) toast('✓ GA4 data pulled — '+loaded+' period'+(loaded>1?'s':''),'ok');
     } else {
@@ -4078,7 +3991,6 @@ async function handleGa4(period, file){
     el.innerHTML = '✓ <strong>'+parsed.rows.length.toLocaleString()+' pages</strong>'+(parsed.dateRange?' · '+parsed.dateRange:'')+'<br><span style="font-size:10px;color:var(--text3)">Columns → '+colDebug+'</span>';
     el.className = 'pp-status loaded';
   }
-  if(GA4.A || GA4.B || GA4.PS || GA4.PSA){const h=document.getElementById('ga4-howto');if(h)h.style.display='none';const cw=document.getElementById('ga4-csv-wrap');if(cw&&(GA4.B?.filename==='GA4 Live API'||GA4.A?.filename==='GA4 Live API'))cw.classList.add('hidden');}
   // Push to Supabase so team sees it
   await pushGa4ToSupabase(period, parsed);
   renderPerfView();
@@ -4216,7 +4128,7 @@ function renderPerfView(){
   document.getElementById('perf-empty').style.display='none';
   document.getElementById('perf-content').style.display='block';
   document.getElementById('perf-export-btn').style.display='';
-  document.getElementById('ga4-howto').style.display='none';
+
 
   // Populate category filter
   const catSel = document.getElementById('perf-cat');
