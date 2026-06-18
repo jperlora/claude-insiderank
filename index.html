@@ -2248,6 +2248,43 @@ function revokeGa4(){
   refreshGa4State();
   toast('Disconnected from Google Analytics');
 }
+async function ga4FetchReport(propertyId,sd,ed){
+  const PAGE=10000;let allRows=[];let offset=0;
+  while(true){
+    const res=await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,{
+      method:'POST',
+      headers:{'Authorization':'Bearer '+ga4AccessToken,'Content-Type':'application/json'},
+      body:JSON.stringify({
+        dateRanges:[{startDate:sd,endDate:ed}],
+        dimensions:[{name:'pagePath'}],
+        metrics:[{name:'sessions'},{name:'screenPageViews'},{name:'averageSessionDuration'},{name:'bounceRate'}],
+        limit:PAGE,offset
+      })
+    });
+    if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'GA4 API error '+res.status);}
+    const data=await res.json();
+    const rows=data.rows||[];
+    allRows=allRows.concat(rows);
+    if(rows.length<PAGE)break;
+    offset+=PAGE;
+  }
+  return allRows;
+}
+function ga4MapRows(rawRows,sd,ed){
+  const rows=rawRows.map(r=>{
+    const dims=r.dimensionValues||[];
+    const mets=r.metricValues||[];
+    const path=dims[0]?.value||'';
+    const sessions=parseFloat(mets[0]?.value||0);
+    const views=parseFloat(mets[1]?.value||0);
+    const avgDuration=parseFloat(mets[2]?.value||0);
+    const bounceRate=parseFloat(mets[3]?.value||0);
+    const url=(A.site?('https://'+A.site.replace(/^sc-domain:/,'')):'')
+      +(path.startsWith('/')?path:'/'+path);
+    return{url,visitors:Math.round(sessions),views:Math.round(views),timeOnPage:avgDuration,bounceRate,active:0,newUsers:0,keyEvents:0};
+  }).filter(r=>r.url&&r.visitors>0);
+  return{rows,dateRange:sd+' → '+ed,hasViews:true,hasBounce:true,filename:'GA4 Live API'};
+}
 function refreshGa4State(){
   const propId=localStorage.getItem(GA4_PROP_SK)||'';
   const panel=document.getElementById('ga4-live-panel');
