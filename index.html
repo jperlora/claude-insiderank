@@ -2055,6 +2055,10 @@ const GSC_CID_SK='ir_gsc_cid';
 let gscTokenClient=null;
 let gscAccessToken=null;
 let gscTokenExpiry=0;
+let ga4TokenClient=null;
+let ga4AccessToken=null;
+let ga4TokenExpiry=0;
+let ga4UserEmail='';
 let gscProperties=[];
 let gscLiveRows=[];
 let gscQueryOnlyRows=[];
@@ -2210,6 +2214,81 @@ function initGscTokenClient(){
       fetchGscUserInfo().then(()=>{fetchGscProperties().then(()=>{refreshGscState();});});
     }
   });
+}
+function initGa4TokenClient(){
+  const cid=localStorage.getItem(GSC_CID_SK)||'';
+  if(!cid||!window.google?.accounts?.oauth2)return;
+  ga4TokenClient=google.accounts.oauth2.initTokenClient({
+    client_id:cid,
+    scope:'https://www.googleapis.com/auth/analytics.readonly',
+    callback:async(resp)=>{
+      if(resp.error){toast('GA4 auth failed: '+resp.error,'err');return;}
+      ga4AccessToken=resp.access_token;
+      ga4TokenExpiry=Date.now()+(resp.expires_in-60)*1000;
+      try{
+        const r=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+ga4AccessToken}});
+        const d=await r.json();ga4UserEmail=d.email||'';
+      }catch(e){}
+      refreshGa4State();
+      toast('✓ Connected to Google Analytics','ok');
+    }
+  });
+}
+function connectGa4(){
+  const cid=localStorage.getItem(GSC_CID_SK)||'';
+  if(!cid){toast('Paste your Client ID in Settings first','err');goView('settings',null);return;}
+  if(!ga4TokenClient)initGa4TokenClient();
+  if(!ga4TokenClient){toast('Google Identity Services not loaded yet','err');return;}
+  if(ga4AccessToken&&Date.now()<ga4TokenExpiry){refreshGa4State();return;}
+  ga4TokenClient.requestAccessToken({prompt:''});
+}
+function revokeGa4(){
+  if(ga4AccessToken)google.accounts.oauth2.revoke(ga4AccessToken,()=>{});
+  ga4AccessToken=null;ga4TokenExpiry=0;ga4UserEmail='';
+  refreshGa4State();
+  toast('Disconnected from Google Analytics');
+}
+function refreshGa4State(){
+  const propId=localStorage.getItem(GA4_PROP_SK)||'';
+  const panel=document.getElementById('ga4-live-panel');
+  if(!panel)return;
+  const connected=!!(ga4AccessToken&&Date.now()<ga4TokenExpiry);
+  const hasB=!!(snapB()?.start);
+  const hasProp=!!propId;
+  const canPull=connected&&hasB&&hasProp;
+
+  document.getElementById('ga4-live-connect-row').style.display=connected?'none':'';
+  document.getElementById('ga4-live-connected-row').style.display=connected?'':'none';
+
+  if(connected){
+    const emailEl=document.getElementById('ga4-live-email');
+    if(emailEl)emailEl.textContent=ga4UserEmail||'Connected';
+    const pullBtn=document.getElementById('ga4-live-pull-btn');
+    if(pullBtn){
+      pullBtn.disabled=!canPull;
+      pullBtn.title=!hasProp?'Save a GA4 Property ID in Settings first'
+        :!hasB?'Set a GSC snapshot as Current (Period B) first':'';
+    }
+    const datesEl=document.getElementById('ga4-live-dates');
+    if(datesEl){
+      const sa=snapA(),sb=snapB();
+      const parts=[];
+      if(sa)parts.push(`<span style="color:var(--text3)">Baseline:</span> ${esc(sa.label)} <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">${sa.start} → ${sa.end}</span>`);
+      if(sb)parts.push(`<span style="color:var(--blue)">Current:</span> ${esc(sb.label)} <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">${sb.start} → ${sb.end}</span>`);
+      datesEl.innerHTML=parts.length?parts.join('<br>'):'<span style="color:var(--text3)">Set GSC snapshots as Baseline / Current to enable pull</span>';
+    }
+  }
+
+  const loadedEl=document.getElementById('ga4-live-loaded');
+  if(loadedEl){
+    const bLoaded=GA4.B&&GA4.B.rows&&GA4.B.rows.length>0;
+    loadedEl.style.display=bLoaded?'':'none';
+    if(bLoaded){
+      loadedEl.innerHTML=`✓ GA4 data loaded &nbsp;·&nbsp; ${GA4.B.rows.length.toLocaleString()} pages`
+        +(GA4.A?` &nbsp;·&nbsp; both periods`:'')
+        +` &nbsp;<button class="btn btn-ghost btn-sm" onclick="revokeGa4()" style="margin-left:8px;padding:3px 10px">Disconnect</button>`;
+    }
+  }
 }
 function connectGsc(){
   const cid=localStorage.getItem(GSC_CID_SK)||'';
