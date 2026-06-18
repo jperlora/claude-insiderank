@@ -593,9 +593,15 @@ input[type=file]{display:none}
 <div class="topbar">
   <div class="topbar-site"><span id="tb-flag">&#127464;&#127462;</span><span id="tb-site">insidecasino.ca</span></div>
   <span class="compare-lbl">COMPARE</span>
-  <div class="period-picker" onclick="openModal('A')"><div class="period-slot"><div class="pslot-val" id="pa-val">No snapshot</div><div class="pslot-sub" id="pa-sub">&#8212;</div></div><div class="pchev">&#9662;</div></div>
+  <div class="period-picker" onclick="openModal('A')" title="Baseline — the older period you're comparing FROM">
+    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);margin-bottom:2px">Baseline (older)</div>
+    <div class="period-slot"><div class="pslot-val" id="pa-val">No snapshot</div><div class="pslot-sub" id="pa-sub">&#8212;</div></div><div class="pchev">&#9662;</div>
+  </div>
   <div class="vs-arr">&#8594;</div>
-  <div class="period-picker" onclick="openModal('B')"><div class="period-slot"><div class="pslot-val" id="pb-val">No snapshot</div><div class="pslot-sub" id="pb-sub">&#8212;</div></div><div class="pchev">&#9662;</div></div>
+  <div class="period-picker" onclick="openModal('B')" title="Current — the newer period you're comparing TO">
+    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--blue);margin-bottom:2px">Current (newer)</div>
+    <div class="period-slot"><div class="pslot-val" id="pb-val">No snapshot</div><div class="pslot-sub" id="pb-sub">&#8212;</div></div><div class="pchev">&#9662;</div>
+  </div>
   <button class="btn btn-ghost btn-sm" style="margin-left:8px" onclick="exportCSV()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
 </div>
 <div class="page-content">
@@ -1242,10 +1248,28 @@ input[type=file]{display:none}
         </div>
       </div>
       <div id="gsc-snap-list-wrap" style="display:none">
+        <!-- Comparison summary strip -->
+        <div id="gsc-compare-strip" style="display:none;margin-bottom:14px;padding:12px 16px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r)">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);margin-bottom:8px">Active comparison</div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin-bottom:3px">Baseline (older)</div>
+              <div id="gsc-strip-a" style="font-size:13px;font-weight:600;color:var(--text)">—</div>
+              <div id="gsc-strip-a-dates" style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:1px"></div>
+            </div>
+            <div style="color:var(--text3);font-size:18px;flex-shrink:0">→</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--blue);margin-bottom:3px">Current (newer)</div>
+              <div id="gsc-strip-b" style="font-size:13px;font-weight:600;color:var(--blue)">—</div>
+              <div id="gsc-strip-b-dates" style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:1px"></div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--text3);margin-top:10px;border-top:1px solid var(--border);padding-top:8px">All views compare Baseline → Current. Green deltas = improved in the newer period.</div>
+        </div>
         <div class="snap-list">
           <div class="snap-list-hdr" style="padding:13px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
             <span class="snap-list-title" id="gsc-snap-list-title">Pulled snapshots</span>
-            <span style="font-size:11px;color:var(--text3)">Select a period in All Queries to view or compare</span>
+            <span style="font-size:11px;color:var(--text3)">Set one as Baseline and one as Current to compare</span>
           </div>
           <div id="gsc-snap-list-items"></div>
         </div>
@@ -2502,19 +2526,38 @@ function renderGscSnapList(){
   if(!snaps.length){wrap.style.display='none';return;}
   wrap.style.display='';
   if(title)title.textContent='Pulled snapshots ('+snaps.length+')';
+  // update comparison strip
+  const strip=document.getElementById('gsc-compare-strip');
+  const sA=snaps.find(s=>s.id===curA),sB=snaps.find(s=>s.id===curB);
+  if(strip){
+    if(sA||sB){
+      strip.style.display='';
+      const sa=document.getElementById('gsc-strip-a'),sad=document.getElementById('gsc-strip-a-dates');
+      const sb=document.getElementById('gsc-strip-b'),sbd=document.getElementById('gsc-strip-b-dates');
+      if(sa)sa.textContent=sA?sA.label:'Not set';
+      if(sad)sad.textContent=sA?sA.start+' → '+sA.end:'';
+      if(sb)sb.textContent=sB?sB.label:'Not set';
+      if(sbd)sbd.textContent=sB?sB.start+' → '+sB.end:'';
+    }else{strip.style.display='none';}
+  }
   const curA=A.pA[A.site],curB=A.pB[A.site];
-  items.innerHTML=snaps.slice().reverse().map(s=>`
-    <div class="snap-item">
+  items.innerHTML=snaps.slice().reverse().map(s=>{
+    const isA=curA===s.id,isB=curB===s.id;
+    const badge=isA&&isB?'<span style="font-size:10px;background:var(--amber-d,#2d2200);color:var(--amber);border:1px solid rgba(255,180,0,.3);padding:2px 7px;border-radius:4px;font-weight:600">Baseline + Current</span>'
+      :isA?'<span style="font-size:10px;background:var(--bg4);color:var(--text2);border:1px solid var(--border2);padding:2px 7px;border-radius:4px;font-weight:600">✓ Baseline (A)</span>'
+      :isB?'<span style="font-size:10px;background:var(--blue-d);color:var(--blue);border:1px solid rgba(91,159,255,.3);padding:2px 7px;border-radius:4px;font-weight:600">✓ Current (B)</span>':'';
+    return`<div class="snap-item" style="${isA||isB?'border-color:var(--border2)':''}">
       <div class="snap-info">
-        <div class="snap-lbl">${esc(s.label)}</div>
+        <div style="display:flex;align-items:center;gap:8px"><div class="snap-lbl">${esc(s.label)}</div>${badge}</div>
         <div class="snap-meta">${(s.count||0).toLocaleString()} queries · ${s.start} → ${s.end}</div>
       </div>
       <div class="snap-actions">
-        <button class="snap-btn snap-a ${curA===s.id?'':'dim'}" onclick="setSnap('A','${s.id}');renderGscSnapList();" title="Use as baseline period for comparisons in all views">Set A</button>
-        <button class="snap-btn snap-b ${curB===s.id?'on':''}" onclick="setSnap('B','${s.id}');renderGscSnapList();" title="Use as current period for all views">Set B</button>
+        <button class="snap-btn snap-a ${isA?'':'dim'}" onclick="setSnap('A','${s.id}');renderGscSnapList();" title="Set as Baseline — the older period you're comparing FROM">Baseline</button>
+        <button class="snap-btn snap-b ${isB?'on':''}" onclick="setSnap('B','${s.id}');renderGscSnapList();" title="Set as Current — the newer period you're comparing TO">Current</button>
         <button class="snap-del" onclick="deleteSnap('${s.id}');renderGscSnapList();renderGscQueries();" title="Delete"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   // populate period pickers in All Queries tab
   const sel=document.getElementById('gq-snap-sel');
   const cmp=document.getElementById('gq-comp-sel');
@@ -3354,7 +3397,7 @@ async function loadSample(){
 }
 
 // ═══ MODAL ═══
-function openModal(which){A.modalFor=which;document.getElementById('modal-title').textContent='Select Period '+which;const snaps=getSnaps(),ml=document.getElementById('modal-list');if(!snaps.length){ml.innerHTML='<div style="color:var(--text3);font-size:12px;padding:10px 0">No snapshots yet — go to GSC Live to pull data</div>';}else{ml.innerHTML=snaps.map(s=>'<div class="modal-snap" onclick="pickSnap(\''+s.id+'\')"><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500">'+esc(s.label)+'</div><div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:2px">'+(s.count?.toLocaleString()||0)+' keywords · '+(s.start||'?')+' → '+(s.end||'?')+'</div></div><span style="color:var(--text3);font-size:11px">Select →</span></div>').join('');}document.getElementById('modal-bg').style.display='flex';}
+function openModal(which){A.modalFor=which;document.getElementById('modal-title').textContent=which==='A'?'Select Baseline period (older / previous)':'Select Current period (newer / recent)';const snaps=getSnaps(),ml=document.getElementById('modal-list');if(!snaps.length){ml.innerHTML='<div style="color:var(--text3);font-size:12px;padding:10px 0">No snapshots yet — go to GSC Live to pull data</div>';}else{ml.innerHTML=snaps.map(s=>'<div class="modal-snap" onclick="pickSnap(\''+s.id+'\')"><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500">'+esc(s.label)+'</div><div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:2px">'+(s.count?.toLocaleString()||0)+' keywords · '+(s.start||'?')+' → '+(s.end||'?')+'</div></div><span style="color:var(--text3);font-size:11px">Select →</span></div>').join('');}document.getElementById('modal-bg').style.display='flex';}
 function pickSnap(id){setSnap(A.modalFor,id);closeModal();}
 function closeModal(){document.getElementById('modal-bg').style.display='none';}
 
