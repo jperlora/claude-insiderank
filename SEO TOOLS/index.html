@@ -8,6 +8,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <style>
 :root{
   --bg0:#0c0e11;--bg1:#13161b;--bg2:#1a1e25;--bg3:#222730;--bg4:#2b3040;--bg5:#343b4a;
@@ -304,6 +306,7 @@ input[type=file]{display:none}
 .help-tip{background:var(--amber-d);border:1px solid rgba(255,184,63,.28);border-radius:var(--r);padding:11px 15px;font-size:13px;color:var(--text2);margin-top:12px}
 .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s;font-family:var(--font)}
 .btn-primary{background:var(--blue);color:#fff}.btn-primary:hover{background:#4a8ef0}
+.btn:disabled{opacity:.45;cursor:not-allowed}
 .btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border2)}.btn-ghost:hover{color:var(--text);background:var(--bg4);border-color:var(--border3)}
 .btn-green{background:var(--green);color:#0c0e11;font-weight:600}.btn-green:hover{background:#25d0a0}
 .btn-danger{background:var(--red-d);color:var(--red);border:1px solid rgba(255,107,107,.3)}.btn-danger:hover{background:rgba(255,107,107,.25)}
@@ -482,6 +485,33 @@ input[type=file]{display:none}
 .gsc-tab{padding:7px 18px;border-radius:9px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .15s;border:none;background:none;font-family:var(--font)}
 .gsc-tab:hover{color:var(--text)}
 .gsc-tab.active{background:var(--bg4);color:var(--text);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+/* GSC preset chips */
+.gsc-presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.gsc-preset{padding:7px 14px;border-radius:20px;font-size:12px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .15s;border:1px solid var(--border2);background:var(--bg3);font-family:var(--font)}
+.gsc-preset:hover{border-color:var(--blue);color:var(--text)}
+.gsc-preset.active{background:rgba(59,158,255,.15);border-color:var(--blue);color:var(--blue);font-weight:600}
+.gsc-preset.compare{border-color:rgba(176,140,255,.35);color:var(--text2)}
+.gsc-preset.compare.active{background:rgba(176,140,255,.14);border-color:var(--purple);color:var(--purple);font-weight:600}
+.gsc-date-preview{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);font-size:12px;color:var(--text2);margin-bottom:14px;flex-wrap:wrap}
+.gsc-date-preview .period-pill{background:var(--bg4);border:1px solid var(--border2);padding:4px 10px;border-radius:6px;font-family:var(--mono);font-size:11px;color:var(--text)}
+.gsc-date-preview .vs-sep{color:var(--text3);font-size:11px;font-weight:600}
+.gsc-custom-row{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+/* Flatpickr dark theme overrides */
+.flatpickr-calendar{background:var(--bg3)!important;border:1px solid var(--border2)!important;border-radius:var(--r)!important;box-shadow:0 8px 32px rgba(0,0,0,.5)!important;font-family:var(--font)!important}
+.flatpickr-months,.flatpickr-month{background:var(--bg3)!important;color:var(--text)!important;fill:var(--text)!important}
+.flatpickr-current-month,.flatpickr-monthDropdown-months,.numInputWrapper{color:var(--text)!important}
+.flatpickr-day{color:var(--text2)!important;border-radius:6px!important}
+.flatpickr-day:hover{background:var(--bg4)!important;border-color:transparent!important}
+.flatpickr-day.selected,.flatpickr-day.startRange,.flatpickr-day.endRange{background:var(--blue)!important;border-color:var(--blue)!important;color:#fff!important}
+.flatpickr-day.inRange{background:rgba(59,158,255,.18)!important;border-color:transparent!important;color:var(--text)!important;box-shadow:none!important}
+.flatpickr-day.flatpickr-disabled,.flatpickr-day.prevMonthDay,.flatpickr-day.nextMonthDay{color:var(--text3)!important}
+.flatpickr-weekday{color:var(--text3)!important}
+.flatpickr-prev-month,.flatpickr-next-month{color:var(--text2)!important;fill:var(--text2)!important}
+.flatpickr-prev-month:hover svg,.flatpickr-next-month:hover svg{fill:var(--blue)!important}
+.numInputWrapper span{border-color:var(--border)!important}
+.numInputWrapper span svg{fill:var(--text3)!important}
+.flatpickr-time{background:var(--bg3)!important;border-top:1px solid var(--border)!important}
+.flatpickr-input{background:var(--bg2)!important;border:1px solid var(--border2)!important;color:var(--text)!important;border-radius:var(--r)!important;padding:0 12px!important;font-family:var(--font)!important;font-size:13px!important;cursor:pointer}
 .gap-opp-high{background:rgba(46,232,180,.14);color:var(--green);border:1px solid rgba(46,232,180,.28);padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600}
 .gap-opp-med{background:rgba(255,184,63,.13);color:var(--amber);border:1px solid rgba(255,184,63,.28);padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600}
 .gap-opp-low{background:rgba(255,255,255,.06);color:var(--text2);border:1px solid var(--border2);padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600}
@@ -546,7 +576,6 @@ input[type=file]{display:none}
     <button class="nav-btn" onclick="goView('performance',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Page Performance</button>
     <button class="nav-btn" onclick="goView('urltracker',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>URL Tracker</button>
     <button class="nav-btn" id="nav-gsclive" onclick="goView('gsclive',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>GSC Live</button>
-    <button class="nav-btn" onclick="goView('imports',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Imports</button>
     <button class="nav-btn" onclick="goView('help',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Help</button>
     <button class="nav-btn" onclick="goView('settings',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</button>
   </div>
@@ -565,15 +594,21 @@ input[type=file]{display:none}
 <div class="topbar">
   <div class="topbar-site"><span id="tb-flag">&#127464;&#127462;</span><span id="tb-site">insidecasino.ca</span></div>
   <span class="compare-lbl">COMPARE</span>
-  <div class="period-picker" onclick="openModal('A')"><div class="period-slot"><div class="pslot-val" id="pa-val">No snapshot</div><div class="pslot-sub" id="pa-sub">&#8212;</div></div><div class="pchev">&#9662;</div></div>
+  <div class="period-picker" onclick="openModal('A')" title="Baseline — the older period you're comparing FROM">
+    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);margin-bottom:2px">Baseline (older)</div>
+    <div class="period-slot"><div class="pslot-val" id="pa-val">No snapshot</div><div class="pslot-sub" id="pa-sub">&#8212;</div></div><div class="pchev">&#9662;</div>
+  </div>
   <div class="vs-arr">&#8594;</div>
-  <div class="period-picker" onclick="openModal('B')"><div class="period-slot"><div class="pslot-val" id="pb-val">No snapshot</div><div class="pslot-sub" id="pb-sub">&#8212;</div></div><div class="pchev">&#9662;</div></div>
+  <div class="period-picker" onclick="openModal('B')" title="Current — the newer period you're comparing TO">
+    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--blue);margin-bottom:2px">Current (newer)</div>
+    <div class="period-slot"><div class="pslot-val" id="pb-val">No snapshot</div><div class="pslot-sub" id="pb-sub">&#8212;</div></div><div class="pchev">&#9662;</div>
+  </div>
   <button class="btn btn-ghost btn-sm" style="margin-left:8px" onclick="exportCSV()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
 </div>
 <div class="page-content">
 <!-- OVERVIEW -->
 <div class="view active" id="v-overview">
-  <div class="page-hdr"><div><div class="page-title">Overview</div><div class="page-sub" id="ov-sub">No data — import snapshots to get started</div></div><button class="btn btn-ghost btn-sm" onclick="goView('imports',null)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Manage data</button></div>
+  <div class="page-hdr"><div><div class="page-title">Overview</div><div class="page-sub" id="ov-sub">No data — pull from GSC Live to get started</div></div><button class="btn btn-ghost btn-sm" onclick="goView('gsclive',null)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Pull data</button></div>
   <div id="alert-wrap" style="display:none" class="alert-banner">&#9888;&#65039; <span id="alert-txt"></span><a class="alert-link" onclick="goView('keywords',null);setStatus('declined')">Review them &#8594;</a></div>
   <div class="kpi-row" id="kpi-row"></div>
   <div class="main-aside">
@@ -696,7 +731,7 @@ input[type=file]{display:none}
 
   <!-- no snapshot warning -->
   <div id="serp-no-snap" style="display:none;background:var(--amber-d);border:1px solid rgba(255,184,63,.3);border-radius:var(--rl);padding:14px 18px;margin-bottom:18px;font-size:13px">
-    &#9888; No Period B snapshot selected. Go to <a onclick="goView('imports',null)" style="color:var(--blue);cursor:pointer;font-weight:500">Imports</a> and set a snapshot as Period B first.
+    &#9888; No Period B snapshot selected. Go to <a onclick="goView('gsclive',null)" style="color:var(--blue);cursor:pointer;font-weight:500">GSC Live</a>, pull data, then set a snapshot as Period B.
   </div>
 
   <!-- progress -->
@@ -816,97 +851,52 @@ input[type=file]{display:none}
     </div>
   </div>
 
-  <!-- How to export from GA4 -->
-  <div class="ga4-how-to" id="ga4-howto">
-    <div class="ga4-how-to-title">&#128202; Two GA4 reports — which gives you what</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
-      <div style="background:var(--bg4);border:1px solid rgba(91,159,255,.25);border-radius:var(--r);padding:14px">
-        <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:8px">&#128196; Report 1 — Landing pages <span style="background:var(--green-d);color:var(--green);border:1px solid rgba(46,232,180,.3);padding:1px 7px;border-radius:4px;font-size:10px;font-weight:600;margin-left:4px">You already have this</span></div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.8">Reports → Engagement → <strong style="color:var(--text)">Landing pages</strong><br>Gives you: <span style="color:var(--green)">✓ Sessions &nbsp; ✓ Active users &nbsp; ✓ Time on page</span><br><span style="color:var(--red)">✗ Views (not in this report)</span></div>
-      </div>
-      <div style="background:var(--bg4);border:1px solid rgba(255,184,63,.25);border-radius:var(--r);padding:14px">
-        <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:8px">&#128202; Report 2 — Pages and screens <span style="background:var(--amber-d);color:var(--amber);border:1px solid rgba(255,184,63,.3);padding:1px 7px;border-radius:4px;font-size:10px;font-weight:600;margin-left:4px">Upload for Views</span></div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.8">Reports → Engagement → <strong style="color:var(--text)">Pages and screens</strong><br>Gives you: <span style="color:var(--green)">✓ Views</span><br><span style="color:var(--text3)">Upload Period B below to fill the Views column</span></div>
+  <!-- GA4 Live API panel -->
+  <div id="ga4-live-panel" style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rl);padding:18px 20px;margin-bottom:18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div>
+        <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px">&#128202; Google Analytics 4 — Live Data</div>
+        <div style="font-size:12px;color:var(--text3)">Pulls sessions, views, and time on page directly from GA4 — no CSV export needed.</div>
       </div>
     </div>
-    <ol class="ga4-steps">
-      <li><strong>Sessions + Time on page:</strong> Reports → Engagement → <strong>Landing pages</strong> → set date range → download → <code>Download CSV</code>. Export two — Period A and Period B.</li>
-      <li><strong>Views:</strong> Reports → Engagement → <strong>Pages and screens</strong> → same date ranges → <code>Download CSV</code>. Upload Period B below as "Pages &amp; Screens".</li>
-
-    </ol>
-
+    <!-- Connect row (shown when not authorized) -->
+    <div id="ga4-live-connect-row">
+      <button class="btn btn-primary" onclick="connectGa4()" style="margin-bottom:10px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:14px;height:14px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Connect Google Analytics
+      </button>
+      <div style="font-size:12px;color:var(--text3)">Uses the same Google account and Client ID as GSC. Requires <strong style="color:var(--text2)">Google Analytics Data API</strong> enabled in your Google Cloud project and a GA4 Property ID saved in Settings.</div>
+    </div>
+    <!-- Connected row (shown when authorized) -->
+    <div id="ga4-live-connected-row" style="display:none">
+      <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+        <div style="flex:1;min-width:200px">
+          <div style="font-size:11px;color:var(--green);font-weight:600;margin-bottom:8px">✓ Connected as <span id="ga4-live-email"></span></div>
+          <div id="ga4-live-dates" style="font-size:12px;color:var(--text2);line-height:1.9"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start">
+          <button class="btn btn-primary" id="ga4-live-pull-btn" onclick="pullGa4Live()" style="min-width:140px">Pull GA4 data</button>
+          <div id="ga4-live-hint" style="display:none;font-size:11px;color:var(--amber);margin-top:2px"></div>
+          <div id="ga4-live-loaded" style="display:none;font-size:12px;color:var(--green)"></div>
+        </div>
+      </div>
+      <!-- Progress bar -->
+      <div id="ga4-live-progress" style="display:none;margin-top:14px">
+        <div style="height:4px;background:var(--bg5);border-radius:2px;overflow:hidden;margin-bottom:6px">
+          <div id="ga4-live-bar" style="height:100%;background:var(--blue);border-radius:2px;transition:width .3s;width:0%"></div>
+        </div>
+        <div id="ga4-live-status" style="font-size:12px;color:var(--text3)"></div>
+      </div>
+    </div>
   </div>
 
-  <!-- Upload cards — 2x2 grid -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px">
-
-    <!-- A: Landing pages -->
-    <div class="pp-period-card">
-      <div class="pp-period-label a">&#128197; Period A — Landing pages <span style="font-size:9px;font-weight:500;opacity:.7">(previous period)</span></div>
-      <div class="pp-how-to-mini">
-        <strong>How to export:</strong> GA4 → Reports → Engagement → Landing pages → set your <em>previous</em> date range → download icon → Download CSV
-      </div>
-      <div class="pp-upload-zone" id="ga4a-drop" onclick="document.getElementById('ga4a-input').click()" ondragover="doDragOver(event,'ga4a-drop')" ondragleave="doDragLeave('ga4a-drop')" ondrop="doGa4Drop(event,'A')">
-        <div class="pp-upload-icon">&#128229;</div>
-        <div class="pp-upload-title">Drop GA4 CSV here</div>
-        <div class="pp-upload-sub">Fills: Visitors Δ · Time on page Δ</div>
-      </div>
-      <input type="file" id="ga4a-input" accept=".csv" onchange="handleGa4('A',this.files[0]);this.value=''">
-      <div class="pp-status" id="ga4a-status">No file uploaded — needed for comparison columns</div>
-    </div>
-
-    <!-- A: Pages & screens -->
-    <div class="pp-period-card" style="border-color:rgba(255,184,63,.2)">
-      <div class="pp-period-label" style="color:var(--amber)">&#128197; Period A — Pages &amp; screens <span style="font-size:9px;font-weight:500;opacity:.7">(previous period)</span></div>
-      <div class="pp-how-to-mini">
-        <strong>How to export:</strong> GA4 → Reports → Engagement → Pages and screens → set your <em>previous</em> date range → download icon → Download CSV
-      </div>
-      <div class="pp-upload-zone" id="ga4psa-drop" onclick="document.getElementById('ga4psa-input').click()" ondragover="doDragOver(event,'ga4psa-drop')" ondragleave="doDragLeave('ga4psa-drop')" ondrop="doGa4Drop(event,'PSA')">
-        <div class="pp-upload-icon">&#128202;</div>
-        <div class="pp-upload-title">Drop GA4 CSV here</div>
-        <div class="pp-upload-sub">Fills: Views Δ comparison column</div>
-      </div>
-      <input type="file" id="ga4psa-input" accept=".csv" onchange="handleGa4('PSA',this.files[0]);this.value=''">
-      <div class="pp-status" id="ga4psa-status">No file uploaded — needed for Views change %</div>
-    </div>
-
-    <!-- B: Landing pages -->
-    <div class="pp-period-card" style="border-color:rgba(91,159,255,.25)">
-      <div class="pp-period-label b">&#128198; Period B — Landing pages <span style="font-size:9px;font-weight:500;opacity:.7">(current period)</span></div>
-      <div class="pp-how-to-mini">
-        <strong>How to export:</strong> GA4 → Reports → Engagement → Landing pages → set your <em>current</em> date range → download icon → Download CSV
-      </div>
-      <div class="pp-upload-zone" id="ga4b-drop" onclick="document.getElementById('ga4b-input').click()" ondragover="doDragOver(event,'ga4b-drop')" ondragleave="doDragLeave('ga4b-drop')" ondrop="doGa4Drop(event,'B')">
-        <div class="pp-upload-icon">&#128229;</div>
-        <div class="pp-upload-title">Drop GA4 CSV here</div>
-        <div class="pp-upload-sub">Required · Visitors · Time on page</div>
-      </div>
-      <input type="file" id="ga4b-input" accept=".csv" onchange="handleGa4('B',this.files[0]);this.value=''">
-      <div class="pp-status" id="ga4b-status">No file uploaded</div>
-    </div>
-
-    <!-- B: Pages & screens -->
-    <div class="pp-period-card" style="border-color:rgba(91,159,255,.25)">
-      <div class="pp-period-label b">&#128198; Period B — Pages &amp; screens <span style="font-size:9px;font-weight:500;opacity:.7">(current period)</span></div>
-      <div class="pp-how-to-mini">
-        <strong>How to export:</strong> GA4 → Reports → Engagement → Pages and screens → set your <em>current</em> date range → download icon → Download CSV
-      </div>
-      <div class="pp-upload-zone" id="ga4ps-drop" onclick="document.getElementById('ga4ps-input').click()" ondragover="doDragOver(event,'ga4ps-drop')" ondragleave="doDragLeave('ga4ps-drop')" ondrop="doGa4Drop(event,'PS')">
-        <div class="pp-upload-icon">&#128202;</div>
-        <div class="pp-upload-title">Drop GA4 CSV here</div>
-        <div class="pp-upload-sub">Fills: Views column</div>
-      </div>
-      <input type="file" id="ga4ps-input" accept=".csv" onchange="handleGa4('PS',this.files[0]);this.value=''">
-      <div class="pp-status" id="ga4ps-status">No file uploaded — needed for Views column</div>
-    </div>
-
-  </div>
+  <!-- CSV fallback (collapsed when live data loaded) -->
 
   <!-- empty state -->
   <div id="perf-empty" style="text-align:center;padding:50px 20px;color:var(--text3)">
     <div style="font-size:36px;margin-bottom:12px;opacity:.25">&#128202;</div>
-    <div style="font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px">Upload GA4 exports to get started</div>
-    <div style="font-size:13px;color:var(--text3);max-width:400px;margin:0 auto">Upload at least a Period B file above. GSC keyword data is joined automatically from whichever snapshot you've set as Period B.</div>
+    <div style="font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px">Connect Google Analytics to get started</div>
+    <div style="font-size:13px;color:var(--text3);max-width:400px;margin:0 auto">Click "Connect Google Analytics" above, then click "Pull GA4 data". GSC keyword data is joined automatically from your active Period B snapshot.</div>
   </div>
 
   <!-- results -->
@@ -1077,27 +1067,78 @@ input[type=file]{display:none}
   <div id="gsc-state-nokey">
     <div class="gsc-onboard">
       <div class="gsc-onboard-title">Connect Google Search Console</div>
-      <div class="gsc-onboard-sub">To pull live data you need a Google OAuth Client ID. It takes about 10 minutes to set up — you only do this once.</div>
+      <div class="gsc-onboard-sub">This is a one-time setup that lets Inside Rank pull data directly from your Google Search Console. It takes about 10–15 minutes and you'll never need to do it again.</div>
+
+      <div style="margin:20px 0 8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text3)">Before you start</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:20px">Make sure you're signed into Google Chrome (or your browser) with the <strong style="color:var(--text)">same Google account that has access to Google Search Console</strong>. If you're not sure which account that is, go to <strong style="color:var(--text)">search.google.com/search-console</strong> and check which account you're logged in as.</div>
+
       <ol class="gsc-steps">
-        <li><span class="gsc-step-num">1</span><span>Go to <strong style="color:var(--text)">console.cloud.google.com</strong> and create a new project</span></li>
-        <li><span class="gsc-step-num">2</span><span>Enable the <strong style="color:var(--text)">Google Search Console API</strong> under APIs &amp; Services → Library</span></li>
-        <li><span class="gsc-step-num">3</span><span>Go to APIs &amp; Services → OAuth consent screen → External → add your email as a test user</span></li>
-        <li><span class="gsc-step-num">4</span><span>Go to APIs &amp; Services → Credentials → Create OAuth Client ID → Web application</span></li>
-        <li><span class="gsc-step-num">5</span><span>Add <code style="color:var(--teal);font-size:12px">https://insiderank.netlify.app</code> as an Authorized JavaScript origin</span></li>
-        <li><span class="gsc-step-num">6</span><span>Copy the Client ID and paste it in <a onclick="goView('settings',null);setTimeout(()=>document.getElementById('gsc-clientid-input').scrollIntoView({behavior:'smooth'}),300)" style="color:var(--blue);cursor:pointer;font-weight:500">Settings → GSC API</a></span></li>
+        <li>
+          <span class="gsc-step-num">1</span>
+          <span>
+            <strong style="color:var(--text)">Open Google Cloud Console</strong><br>
+            <span style="color:var(--text2);font-size:12px">Go to <strong>console.cloud.google.com</strong> — sign in with the same Google account that has Search Console access. If it's your first time, it'll ask you to agree to terms of service.</span>
+          </span>
+        </li>
+        <li>
+          <span class="gsc-step-num">2</span>
+          <span>
+            <strong style="color:var(--text)">Create a new project</strong><br>
+            <span style="color:var(--text2);font-size:12px">At the top of the page, click the project dropdown (it may say "Select a project"). Click <strong>New Project</strong>. Give it a name like <em>Inside Rank</em> and click <strong>Create</strong>. Wait a moment — it will redirect you to the new project dashboard.</span>
+          </span>
+        </li>
+        <li>
+          <span class="gsc-step-num">3</span>
+          <span>
+            <strong style="color:var(--text)">Enable the Search Console API</strong><br>
+            <span style="color:var(--text2);font-size:12px">In the left sidebar click <strong>APIs &amp; Services → Library</strong>. In the search box type <strong>Google Search Console API</strong>. Click the result, then click the blue <strong>Enable</strong> button. This gives your project permission to read Search Console data.</span>
+          </span>
+        </li>
+        <li>
+          <span class="gsc-step-num">4</span>
+          <span>
+            <strong style="color:var(--text)">Set up the OAuth consent screen</strong><br>
+            <span style="color:var(--text2);font-size:12px">Go to <strong>APIs &amp; Services → OAuth consent screen</strong>. Select <strong>External</strong> and click <strong>Create</strong>. Fill in the App name (e.g. <em>Inside Rank</em>) and your email address for both "User support email" and "Developer contact information". Click <strong>Save and Continue</strong> through the next two screens (Scopes and Test users) — you can leave them as-is for now. On the final Summary screen click <strong>Back to Dashboard</strong>.</span>
+          </span>
+        </li>
+        <li>
+          <span class="gsc-step-num">5</span>
+          <span>
+            <strong style="color:var(--text)">Add yourself as a test user</strong><br>
+            <span style="color:var(--text2);font-size:12px">On the OAuth consent screen page, scroll down to the <strong>Test users</strong> section and click <strong>+ Add Users</strong>. Enter the email address of everyone who will use this tool (including yourself). Click <strong>Save</strong>. Anyone not on this list won't be able to connect.</span>
+          </span>
+        </li>
+        <li>
+          <span class="gsc-step-num">6</span>
+          <span>
+            <strong style="color:var(--text)">Create your OAuth Client ID</strong><br>
+            <span style="color:var(--text2);font-size:12px">Go to <strong>APIs &amp; Services → Credentials</strong>. Click <strong>+ Create Credentials</strong> at the top → select <strong>OAuth client ID</strong>. Under "Application type" choose <strong>Web application</strong>. Give it a name (any name). Under <strong>Authorised JavaScript origins</strong> click <strong>+ Add URI</strong> and enter exactly:</span>
+            <br><code style="color:var(--teal);font-size:12px;display:inline-block;margin-top:4px;background:var(--bg3);padding:3px 8px;border-radius:4px">https://insiderank.netlify.app</code>
+            <br><span style="color:var(--text2);font-size:12px;display:block;margin-top:4px">Click <strong>Create</strong>. A popup will appear showing your Client ID — it looks like a long string ending in <em>.apps.googleusercontent.com</em>.</span>
+          </span>
+        </li>
+        <li>
+          <span class="gsc-step-num">7</span>
+          <span>
+            <strong style="color:var(--text)">Copy the Client ID and paste it here</strong><br>
+            <span style="color:var(--text2);font-size:12px">Copy the Client ID from the popup (or find it later under APIs &amp; Services → Credentials). Then go to <a onclick="goView('settings',null);setTimeout(()=>document.getElementById('gsc-clientid-input').scrollIntoView({behavior:'smooth'}),300)" style="color:var(--blue);cursor:pointer;font-weight:500">Settings → GSC API</a>, paste it in and click <strong>Save Client ID</strong>. Come back here — the Connect button will appear.</span>
+          </span>
+        </li>
       </ol>
-      <button class="btn btn-primary" onclick="goView('settings',null);setTimeout(()=>document.getElementById('gsc-clientid-input').focus(),300)">Go to Settings → paste Client ID</button>
+      <button class="btn btn-primary" style="margin-top:8px" onclick="goView('settings',null);setTimeout(()=>document.getElementById('gsc-clientid-input').focus(),300)">I have my Client ID → Go to Settings</button>
+      <div style="margin-top:12px;font-size:12px;color:var(--text3)">Need more help? See the <a onclick="goView('help',null)" style="color:var(--blue);cursor:pointer">Help section → GSC Live setup &amp; FAQ</a></div>
     </div>
   </div>
   <!-- state: has key, not yet authorized -->
   <div id="gsc-state-connect" style="display:none">
     <div class="gsc-connect-panel">
-      <div class="gsc-connect-title">Connect your Google account</div>
-      <div class="gsc-connect-sub">Click below to sign in with the Google account that has access to your Search Console properties. You'll be asked to grant read-only access.</div>
+      <div class="gsc-connect-title">Almost there — connect your Google account</div>
+      <div class="gsc-connect-sub" style="max-width:420px;margin:0 auto 20px">Click the button below. A Google sign-in popup will appear — choose the Google account that has access to your Search Console data and click <strong>Allow</strong>. Inside Rank only ever reads your data — it can never change anything.</div>
       <button class="btn btn-primary" onclick="connectGsc()">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         Connect Google Search Console
       </button>
+      <div style="margin-top:14px;font-size:12px;color:var(--text3)">If the popup is blocked, allow popups for this site in your browser and try again.<br>If you see "Access blocked: app not verified" — go back to Google Cloud → OAuth consent screen → Test users and make sure your email is added.</div>
     </div>
   </div>
   <!-- state: authorized + pull UI -->
@@ -1110,27 +1151,52 @@ input[type=file]{display:none}
     <!-- tab bar -->
     <div class="gsc-tab-bar">
       <button class="gsc-tab active" id="gtab-pull" onclick="setGscTab('pull')">Pull Data</button>
+      <button class="gsc-tab" id="gtab-queries" onclick="setGscTab('queries')">All Queries</button>
+      <button class="gsc-tab" id="gtab-bypage" onclick="setGscTab('bypage')">By Page</button>
       <button class="gsc-tab" id="gtab-gap" onclick="setGscTab('gap')">Content Gap</button>
+      <button class="gsc-tab" id="gtab-opp" onclick="setGscTab('opp')">Opportunities</button>
     </div>
     <!-- Pull Data tab -->
     <div id="gsc-tab-pull">
       <div class="gsc-pull-panel">
-        <div class="gsc-pull-row">
-          <div class="gsc-field">
-            <label>GSC Property</label>
-            <select class="fi" id="gsc-property" style="min-width:260px;height:38px"></select>
+        <!-- Property selector -->
+        <div class="gsc-field" style="margin-bottom:18px">
+          <label>GSC Property</label>
+          <select class="fi" id="gsc-property" style="min-width:280px;height:38px;max-width:420px"></select>
+        </div>
+        <!-- Preset chips -->
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);font-weight:500;margin-bottom:8px">Date range</div>
+        <div class="gsc-presets">
+          <button class="gsc-preset active" id="gpreset-3m" onclick="gscSetPreset('3m')">Last 3 months</button>
+          <button class="gsc-preset" id="gpreset-6m" onclick="gscSetPreset('6m')">Last 6 months</button>
+          <button class="gsc-preset compare" id="gpreset-3m-vs" onclick="gscSetPreset('3m-vs')">Last 3 months vs previous 3 months</button>
+          <button class="gsc-preset compare" id="gpreset-6m-vs" onclick="gscSetPreset('6m-vs')">Last 6 months vs previous 6 months</button>
+          <button class="gsc-preset" id="gpreset-custom" onclick="gscSetPreset('custom')">Custom range…</button>
+        </div>
+        <!-- Date preview -->
+        <div class="gsc-date-preview" id="gsc-date-preview"></div>
+        <!-- Custom date inputs (flatpickr) — shown only for 'custom' preset -->
+        <div id="gsc-custom-wrap" style="display:none">
+          <div class="gsc-custom-row">
+            <div class="gsc-field">
+              <label>Start date</label>
+              <input class="fi flatpickr-input" id="gsc-custom-start" placeholder="Select start date…" style="height:38px;width:180px;cursor:pointer" readonly>
+            </div>
+            <div class="gsc-field">
+              <label>End date</label>
+              <input class="fi flatpickr-input" id="gsc-custom-end" placeholder="Select end date…" style="height:38px;width:180px;cursor:pointer" readonly>
+            </div>
           </div>
-          <div class="gsc-field">
-            <label>Date range</label>
-            <select class="fi" id="gsc-range" style="height:38px">
-              <option value="28">Last 28 days</option>
-              <option value="90" selected>Last 3 months</option>
-              <option value="180">Last 6 months</option>
-            </select>
+        </div>
+        <!-- Pull button row -->
+        <div style="display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-top:4px">
+          <div class="gsc-field" style="flex:1;min-width:200px">
+            <label>Snapshot label <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3)">(optional — auto-filled)</span></label>
+            <input type="text" class="fi" id="gsc-snap-label" placeholder="e.g. Last 3 months — Jun 2026" style="width:100%;height:38px">
           </div>
-          <button class="btn btn-primary" onclick="pullGscLive()" id="gsc-pull-btn" style="height:38px;align-self:flex-end">
+          <button class="btn btn-primary" onclick="pullGscLive()" id="gsc-pull-btn" style="height:38px;align-self:flex-end;flex-shrink:0;min-width:120px">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.27"/></svg>
-            Pull data
+            <span id="gsc-pull-btn-lbl">Pull data</span>
           </button>
         </div>
         <div id="gsc-pull-progress" style="display:none;margin-top:14px">
@@ -1138,19 +1204,117 @@ input[type=file]{display:none}
           <div class="progress-bar-bg"><div class="progress-bar-fill" id="gsc-pull-bar" style="width:0%"></div></div>
         </div>
       </div>
-      <div id="gsc-pull-hist-wrap" style="display:none">
-        <div class="gsc-pull-hist">
-          <div class="gsc-pull-hist-hdr">Previously pulled snapshots</div>
-          <div id="gsc-pull-hist-list"></div>
+      <div id="gsc-snap-list-wrap" style="display:none">
+        <!-- Comparison summary strip -->
+        <div id="gsc-compare-strip" style="display:none;margin-bottom:14px;padding:12px 16px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r)">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);margin-bottom:8px">Active comparison</div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin-bottom:3px">Baseline (older)</div>
+              <div id="gsc-strip-a" style="font-size:13px;font-weight:600;color:var(--text)">—</div>
+              <div id="gsc-strip-a-dates" style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:1px"></div>
+            </div>
+            <div style="color:var(--text3);font-size:18px;flex-shrink:0">→</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--blue);margin-bottom:3px">Current (newer)</div>
+              <div id="gsc-strip-b" style="font-size:13px;font-weight:600;color:var(--blue)">—</div>
+              <div id="gsc-strip-b-dates" style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:1px"></div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--text3);margin-top:10px;border-top:1px solid var(--border);padding-top:8px">All views compare Baseline → Current. Green deltas = improved in the newer period.</div>
         </div>
+        <div class="snap-list">
+          <div class="snap-list-hdr" style="padding:13px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+            <span class="snap-list-title" id="gsc-snap-list-title">Pulled snapshots</span>
+            <span style="font-size:11px;color:var(--text3)">Set one as Baseline and one as Current to compare</span>
+          </div>
+          <div id="gsc-snap-list-items"></div>
+        </div>
+      </div>
+    </div>
+    <!-- All Queries tab -->
+    <div id="gsc-tab-queries" style="display:none">
+      <div id="gsc-queries-nosnap" style="padding:48px 0;text-align:center;color:var(--text3)">
+        <div style="font-size:32px;margin-bottom:12px;opacity:.25">&#128270;</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px">No data pulled yet</div>
+        <div style="font-size:13px;max-width:360px;margin:0 auto">Go to <strong style="color:var(--text)">Pull Data</strong>, choose a date range and click <strong style="color:var(--text)">Pull data</strong> — your queries will appear here.</div>
+      </div>
+      <div id="gsc-queries-content" style="display:none">
+        <!-- period pickers -->
+        <div style="display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:16px;padding:14px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r)">
+          <div class="gsc-field" style="min-width:220px">
+            <label style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Viewing period</label>
+            <select class="fi" id="gq-snap-sel" style="height:36px" onchange="gscQSnapChanged()"></select>
+          </div>
+          <div class="gsc-field" style="min-width:220px">
+            <label style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Compare to (optional)</label>
+            <select class="fi" id="gq-comp-sel" style="height:36px" onchange="gscQSnapChanged()">
+              <option value="">— No comparison —</option>
+            </select>
+          </div>
+          <span id="gq-comp-badge" style="display:none;font-size:11px;padding:3px 8px;background:var(--blue);color:#fff;border-radius:20px;white-space:nowrap;align-self:center;margin-bottom:2px">Comparing 2 periods</span>
+        </div>
+        <!-- filters -->
+        <div class="filters" style="margin-bottom:16px">
+          <div class="fi-wrap"><span class="fi-icon">&#128269;</span><input class="fi" type="text" id="gq-search" placeholder="Search queries or page URLs…" style="width:240px;padding-left:26px" oninput="renderGscQueries()"></div>
+          <select class="fi" id="gq-pos" onchange="renderGscQueries()" title="Filter by average ranking position">
+            <option value="">All positions</option>
+            <option value="1-10">Top 10 (positions 1–10)</option>
+            <option value="11-20">Positions 11–20</option>
+            <option value="21-50">Positions 21–50</option>
+            <option value="51-100">Positions 51–100</option>
+          </select>
+          <div style="display:flex;align-items:center;gap:6px" title="Only show queries with at least this many impressions">
+            <label style="font-size:12px;color:var(--text3);white-space:nowrap">Min impressions</label>
+            <input class="fi" type="number" id="gq-min-impr" value="0" min="0" style="width:70px;height:38px" oninput="renderGscQueries()">
+          </div>
+          <span style="margin-left:auto;font-size:11px;color:var(--text3)" id="gq-count-lbl"></span>
+        </div>
+        <div class="card">
+          <div class="tbl-wrap">
+            <table>
+              <thead id="gq-thead"><tr>
+                <th onclick="srtGscQ('query')" style="min-width:260px">Query<span class="si" id="si-gqq">&#8597;</span></th>
+                <th onclick="srtGscQ('page')" style="min-width:220px">Page URL<span class="si" id="si-gqp">&#8597;</span></th>
+                <th onclick="srtGscQ('impressions')" style="min-width:110px">Impressions<span class="si" id="si-gqi">&#8597;</span></th>
+                <th onclick="srtGscQ('position')" style="min-width:100px">Avg Position<span class="si" id="si-gqpos">&#8597;</span></th>
+                <th onclick="srtGscQ('clicks')" style="min-width:80px">Clicks<span class="si" id="si-gqc">&#8597;</span></th>
+                <th onclick="srtGscQ('ctr')" style="min-width:80px">CTR<span class="si" id="si-gqctr">&#8597;</span></th>
+              </tr></thead>
+              <tbody id="gq-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pager"><span class="pager-info" id="gq-pinfo"></span><button class="pager-btn" id="gq-prev" onclick="pgGscQ(-1)">&#8592; Prev</button><button class="pager-btn" id="gq-next" onclick="pgGscQ(1)">Next &#8594;</button></div>
+        </div>
+      </div>
+    </div>
+    <!-- By Page tab -->
+    <div id="gsc-tab-bypage" style="display:none">
+      <div id="gsc-bypage-nosnap" style="padding:48px 0;text-align:center;color:var(--text3)">
+        <div style="font-size:32px;margin-bottom:12px;opacity:.25">&#128196;</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px">No snapshot selected</div>
+        <div style="font-size:13px;max-width:360px;margin:0 auto">Pull data and set a snapshot as <strong style="color:var(--text)">Period B</strong> — then see all queries grouped by their landing page.</div>
+      </div>
+      <div id="gsc-bypage-content" style="display:none">
+        <div class="filters" style="margin-bottom:16px">
+          <div class="fi-wrap"><span class="fi-icon">&#128269;</span><input class="fi" type="text" id="gbp-search" placeholder="Search pages…" style="width:240px;padding-left:26px" oninput="renderGscByPage()"></div>
+          <select class="fi" id="gbp-sort" onchange="renderGscByPage()">
+            <option value="impressions">Sort: Impressions</option>
+            <option value="clicks">Sort: Clicks</option>
+            <option value="kwCount">Sort: Keyword count</option>
+            <option value="position">Sort: Avg position</option>
+          </select>
+          <span style="margin-left:auto;font-size:11px;color:var(--text3)" id="gbp-count-lbl"></span>
+        </div>
+        <div id="gsc-bypage-list"></div>
       </div>
     </div>
     <!-- Content Gap tab -->
     <div id="gsc-tab-gap" style="display:none">
       <div id="gsc-gap-nosnap" style="padding:36px 0;text-align:center;color:var(--text3)">
         <div style="font-size:32px;margin-bottom:12px;opacity:.25">&#128203;</div>
-        <div style="font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px">No live data yet</div>
-        <div style="font-size:13px;max-width:340px;margin:0 auto">Pull data from the <strong style="color:var(--text)">Pull Data</strong> tab first — content gap analysis runs automatically on the pulled data.</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px">No data yet</div>
+        <div style="font-size:13px;max-width:340px;margin:0 auto">Pull data and set it as <strong style="color:var(--text)">Period B</strong> — content gaps are detected automatically.</div>
       </div>
       <div id="gsc-gap-content" style="display:none">
         <div class="filters" style="margin-bottom:16px">
@@ -1196,31 +1360,67 @@ input[type=file]{display:none}
         </div>
       </div>
     </div>
-  </div>
-</div>
-
-<!-- IMPORTS -->
-<div class="view" id="v-imports">
-  <div class="page-hdr"><div><div class="page-title">Imports &amp; snapshots</div><div class="page-sub" id="imp-sub">Each GSC export becomes a snapshot. Pick any two to compare.</div></div></div>
-  <div style="background:var(--bg2);border:1px solid var(--blue);border-radius:var(--rl);padding:18px;margin-bottom:16px">
-    <div style="font-size:14px;font-weight:600;margin-bottom:5px">&#128640; Bulk import — ZIP or multiple CSVs</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.75;margin-bottom:14px">Drop a <strong style="color:var(--text)">GSC data export ZIP</strong> or CSV files. Date range is read automatically from file metadata.</div>
-    <div class="imp-zone" id="bulk-drop" onclick="document.getElementById('bulk-input').click()" ondragover="doDragOver(event,'bulk-drop')" ondragleave="doDragLeave('bulk-drop')" ondrop="doDrop(event,'bulk')">
-      <div class="imp-zone-icon">&#128230;</div>
-      <div class="imp-zone-title">Drop GSC ZIP or CSV files here</div>
-      <div class="imp-zone-sub">Supports: .zip (GSC full export) · .csv (Queries, Pages, or combined) · multiple files</div>
+    <div id="gsc-tab-opp" style="display:none">
+      <div id="gsc-opp-nosnap" style="padding:36px 0;text-align:center;color:var(--text3)">
+        <div style="font-size:32px;margin-bottom:12px;opacity:.25">&#128161;</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px">No data yet</div>
+        <div style="font-size:13px;max-width:340px;margin:0 auto">Pull data and set it as <strong style="color:var(--text)">Period B</strong> to surface ranking opportunities.</div>
+      </div>
+      <div id="gsc-opp-content" style="display:none">
+        <div class="filters" style="margin-bottom:16px">
+          <button class="btn btn-ghost btn-sm" onclick="exportOppCSV()">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
+          <span style="margin-left:auto;font-size:11px;color:var(--text3)" id="opp-count-lbl"></span>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-hdr" style="cursor:pointer" onclick="toggleOppSection('boost')">
+            <div>
+              <div class="card-title">Boost to Page 1 <span class="tag tg-amber" id="opp-boost-badge" style="margin-left:8px"></span></div>
+              <div class="card-sub">Queries ranking pos 11–20 with ≥10 impressions — a content push could reach page 1</div>
+            </div>
+            <span id="opp-boost-icon" style="color:var(--text3);font-size:13px">&#9660;</span>
+          </div>
+          <div id="opp-boost-body">
+            <div class="tbl-wrap"><table>
+              <thead><tr><th style="min-width:280px">Query</th><th>Position</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>Action</th></tr></thead>
+              <tbody id="opp-boost-tbody"></tbody>
+            </table></div>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-hdr" style="cursor:pointer" onclick="toggleOppSection('ctr')">
+            <div>
+              <div class="card-title">Fix CTR <span class="tag tg-blue" id="opp-ctr-badge" style="margin-left:8px"></span></div>
+              <div class="card-sub">Ranking pos 1–10 with ≥20 impressions but CTR below the site average for that position band</div>
+            </div>
+            <span id="opp-ctr-icon" style="color:var(--text3);font-size:13px">&#9660;</span>
+          </div>
+          <div id="opp-ctr-body">
+            <div class="tbl-wrap"><table>
+              <thead><tr><th style="min-width:280px">Query</th><th>Position</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>Action</th></tr></thead>
+              <tbody id="opp-ctr-tbody"></tbody>
+            </table></div>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-hdr" style="cursor:pointer" onclick="toggleOppSection('create')">
+            <div>
+              <div class="card-title">Create Content <span class="tag tg-green" id="opp-create-badge" style="margin-left:8px"></span></div>
+              <div class="card-sub">Queries with ≥20 impressions and no dedicated landing page (high/med opportunity only)</div>
+            </div>
+            <span id="opp-create-icon" style="color:var(--text3);font-size:13px">&#9660;</span>
+          </div>
+          <div id="opp-create-body">
+            <div class="tbl-wrap"><table>
+              <thead><tr><th style="min-width:280px">Query</th><th>Position</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>Action</th></tr></thead>
+              <tbody id="opp-create-tbody"></tbody>
+            </table></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <input type="file" id="bulk-input" accept=".csv,.zip" multiple onchange="handleBulk(this.files);this.value=''">
-    <div id="zip-debug" style="display:none;margin-top:14px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:12px 16px"></div>
-  </div>
-  <div class="imp-cards">
-    <div class="imp-card"><div class="imp-card-title">&#128196; GSC — keyword positions</div><div class="imp-card-desc">Search Console → Performance → Export → CSV. Detects queries, position, clicks, impressions, CTR.</div><div class="imp-form-grid"><div><div class="imp-form-lbl">Label</div><input class="fi" type="text" id="gsc-label" placeholder="e.g. May 2026" style="width:100%;height:30px"></div><div><div class="imp-form-lbl">Start</div><input class="fi" type="date" id="gsc-start" style="width:100%;height:30px"></div><div><div class="imp-form-lbl">End</div><input class="fi" type="date" id="gsc-end" style="width:100%;height:30px"></div></div><div style="display:flex;gap:8px"><button class="btn btn-primary" onclick="document.getElementById('gsc-input').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Upload GSC CSV</button><button class="btn btn-ghost" onclick="loadSample()">Load sample</button></div><input type="file" id="gsc-input" accept=".csv" onchange="handleGSC(this.files[0]);this.value=''"></div>
-    <div class="imp-card"><div class="imp-card-title" style="color:var(--blue)">&#128202; GA4 — engagement (optional)</div><div class="imp-card-desc">GA4 → Reports → Engagement → Landing pages → Filter Organic → Download CSV.</div><button class="btn btn-ghost" onclick="document.getElementById('ga4-input').click()">Upload GA4 CSV</button><input type="file" id="ga4-input" accept=".csv" onchange="toast('GA4 data joined')"></div>
-    <div class="imp-card"><div class="imp-card-title" style="color:var(--amber)">&#128209; GSC — Pages (optional)</div><div class="imp-card-desc">Search Console → Performance → Pages tab → Export CSV. Joined to fill URL column.</div><button class="btn btn-ghost" onclick="document.getElementById('pages-input').click()">Upload Pages CSV</button><input type="file" id="pages-input" accept=".csv" onchange="toast('Pages CSV stored')"></div>
-  </div>
-  <div class="snap-list">
-    <div class="snap-list-hdr"><div class="snap-list-title" id="snap-list-title">Snapshots (0)</div><button class="btn btn-ghost btn-sm" onclick="clearSnaps()">Clear all</button></div>
-    <div id="snap-items"><div style="padding:22px;text-align:center;color:var(--text3);font-size:12px">No snapshots yet — upload a GSC CSV to get started</div></div>
   </div>
 </div>
 
@@ -1243,66 +1443,56 @@ input[type=file]{display:none}
 
   <!-- GSC LIVE SETUP -->
   <div class="help-sec">
-    <div class="help-sec-title">&#128279; GSC Live — setup &amp; FAQ</div>
+    <div class="help-sec-title">&#128279; GSC Live — setup guide &amp; FAQ</div>
     <div class="help-body">
-      <p style="margin-bottom:12px">GSC Live lets you pull data directly from Google Search Console without exporting CSV files. Here's how to set it up:</p>
-      <ol style="line-height:2.2;padding-left:18px;margin-bottom:16px">
-        <li>Go to <strong>console.cloud.google.com</strong> and sign in with the Google account that has Search Console access.</li>
-        <li>Click the project dropdown at the top → <strong>New Project</strong> → name it anything (e.g. Inside Rank) → Create.</li>
-        <li>Go to <strong>APIs &amp; Services → Library</strong> → search <em>Google Search Console API</em> → Enable.</li>
-        <li>Go to <strong>APIs &amp; Services → OAuth consent screen</strong> → External → fill in App name and your email → Save. On the Test users page, add every email that will use this tool.</li>
-        <li>Go to <strong>APIs &amp; Services → Credentials</strong> → Create Credentials → OAuth client ID → Web application.</li>
-        <li>Under Authorized JavaScript origins add <code style="color:var(--teal);font-size:12px">https://insiderank.netlify.app</code> → Create.</li>
-        <li>Copy the Client ID → go to <a onclick="goView('settings',null)" style="color:var(--blue);cursor:pointer;font-weight:500">Settings → GSC API</a> → paste and save.</li>
-        <li>Go to <a onclick="goView('gsclive',null)" style="color:var(--blue);cursor:pointer;font-weight:500">GSC Live</a> → Connect Google Search Console → authorize → Pull data.</li>
-      </ol>
-      <ul>
-        <li><strong>The token expires after 1 hour.</strong> Click "Connect" again — if you're still logged into Google in the same browser, it re-authorizes silently with no popup.</li>
-        <li><strong>25,000 row limit.</strong> GSC Live fetches up to 25,000 queries per pull. Most sites are well under this. If your site has more, the top 25,000 by impressions are returned.</li>
-        <li><strong>Adding team members.</strong> Each team member must be added as a Test User in your Google Cloud project's OAuth consent screen (Step 4) and must connect with their own Google account.</li>
-        <li><strong>What is Content Gap?</strong> The Content Gap tab shows queries where GSC has impression data but no landing page URL is associated — meaning Google is showing your site for these queries but you haven't created a dedicated page for them yet. Sort by Impressions to find the biggest opportunities.</li>
-        <li><strong>Pulled data works like a CSV import.</strong> Every pull creates a snapshot you can set as Period A or Period B in the top bar picker. All existing views (Keywords, Pages, SERP Tracker) work with it automatically.</li>
+      <p style="margin-bottom:16px"><strong>GSC Live</strong> connects Inside Rank directly to your Google Search Console so you can pull ranking data with one click — no CSV exports needed. The setup is a one-time process that takes about 10–15 minutes.</p>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">&#128204; Step-by-step setup</div>
+
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:20px">
+        <div style="font-size:12px;color:var(--text2);line-height:1.9">
+          <div style="margin-bottom:8px"><strong style="color:var(--text)">Step 1 — Go to Google Cloud Console</strong><br>Open <strong>console.cloud.google.com</strong> in a new tab. Sign in with the Google account that has access to Google Search Console. If you're not sure which account that is, check by going to <strong>search.google.com/search-console</strong> first.</div>
+          <div style="margin-bottom:8px"><strong style="color:var(--text)">Step 2 — Create a new project</strong><br>At the very top of the page, click the project name dropdown (it might say "Select a project" or show an existing project name). Click <strong>New Project</strong>, give it a name like <em>Inside Rank</em>, and click <strong>Create</strong>. Google will redirect you to the new project's dashboard.</div>
+          <div style="margin-bottom:8px"><strong style="color:var(--text)">Step 3 — Enable the Search Console API</strong><br>In the left sidebar click <strong>APIs &amp; Services</strong>, then <strong>Library</strong>. In the search bar type <em>Google Search Console API</em> and click the result. Click the blue <strong>Enable</strong> button. This tells Google your project is allowed to read Search Console data.</div>
+          <div style="margin-bottom:8px"><strong style="color:var(--text)">Step 4 — Set up the OAuth consent screen</strong><br>In the left sidebar click <strong>APIs &amp; Services → OAuth consent screen</strong>. Select <strong>External</strong> and click <strong>Create</strong>. You'll see a form — fill in an App name (anything, e.g. <em>Inside Rank</em>) and your email address for "User support email" and "Developer contact information". Click <strong>Save and Continue</strong> three times until you reach the Summary page, then click <strong>Back to Dashboard</strong>.</div>
+          <div style="margin-bottom:8px"><strong style="color:var(--text)">Step 5 — Add test users</strong><br>Still on the OAuth consent screen page, scroll down to the <strong>Test users</strong> section. Click <strong>+ Add Users</strong> and add the email address of everyone who will use Inside Rank (including yourself). Click <strong>Save</strong>. <em>Important: anyone not added here will get an "Access blocked" error when they try to connect.</em></div>
+          <div style="margin-bottom:8px"><strong style="color:var(--text)">Step 6 — Create a Client ID</strong><br>Go to <strong>APIs &amp; Services → Credentials</strong>. Click <strong>+ Create Credentials</strong> at the top of the page and select <strong>OAuth client ID</strong>. Under "Application type" choose <strong>Web application</strong>. Scroll down to <strong>Authorised JavaScript origins</strong>, click <strong>+ Add URI</strong> and enter exactly: <code style="color:var(--teal);background:var(--bg);padding:2px 6px;border-radius:4px">https://insiderank.netlify.app</code>. Click <strong>Create</strong>.</div>
+          <div style="margin-bottom:8px"><strong style="color:var(--text)">Step 7 — Copy and save the Client ID</strong><br>A popup appears showing your new Client ID — a long string ending in <em>.apps.googleusercontent.com</em>. Copy it. Then go to <a onclick="goView('settings',null)" style="color:var(--blue);cursor:pointer;font-weight:500">Settings → GSC API</a> in Inside Rank, paste it in the box and click <strong>Save Client ID</strong>.</div>
+          <div><strong style="color:var(--text)">Step 8 — Connect and pull data</strong><br>Go to <a onclick="goView('gsclive',null)" style="color:var(--blue);cursor:pointer;font-weight:500">GSC Live</a>. Click <strong>Connect Google Search Console</strong>. A Google sign-in popup appears — choose your account and click <strong>Allow</strong>. Once connected, choose your website from the property dropdown, pick a date range, and click <strong>Pull data</strong>.</div>
+        </div>
+      </div>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">&#10067; Common questions</div>
+      <ul style="line-height:1.9">
+        <li><strong>"Access blocked: app not verified"</strong> — This means your email wasn't added as a test user. Go back to Google Cloud → APIs &amp; Services → OAuth consent screen → Test users → add your email → Save. Then try connecting again.</li>
+        <li><strong>"The popup is blocked"</strong> — Your browser is blocking the Google sign-in popup. Look for a blocked popup icon in the address bar, click it, and choose "Always allow popups from this site".</li>
+        <li><strong>The connection expires after 1 hour.</strong> This is a Google security limit. Click <strong>Connect</strong> again — if you're still logged into Google in the same browser, it reconnects instantly with no popup.</li>
+        <li><strong>I don't see my GSC property in the dropdown.</strong> Make sure you're connecting with the same Google account that has access to that property in Search Console. You can check at <strong>search.google.com/search-console</strong>.</li>
+        <li><strong>What does "Content Gap" mean?</strong> It shows search queries where Google is showing your website in results and getting impressions — but you don't have a dedicated page built for that topic yet. These are content opportunities. Sort by Impressions to find the biggest ones.</li>
+        <li><strong>Adding a new team member.</strong> Go to Google Cloud → OAuth consent screen → Test users → add their email. They then go to GSC Live on their own device and click Connect with their own Google account.</li>
+        <li><strong>How much data does one pull get?</strong> Up to 25,000 queries per pull. For most websites this covers everything. If you have more, the top 25,000 by impressions are returned.</li>
       </ul>
     </div>
   </div>
 
-  <!-- STEP 1: EXPORT FROM GSC -->
+  <!-- STEP 1: GET STARTED WITH GSC LIVE -->
   <div class="help-sec">
-    <div class="help-sec-title">&#9312; Step 1 — Export your data from Google Search Console</div>
+    <div class="help-sec-title">&#9312; Step 1 — Pull your data from GSC Live</div>
     <div class="help-body">
-      You need at least one GSC export to get started. To compare two periods you need two exports.
+      Inside Rank pulls data directly from Google Search Console — no CSV exports or file uploads needed.
       <br><br>
-      <strong>How to export a ZIP (recommended — most complete):</strong>
+      <strong>How to pull data:</strong>
       <ul>
-        <li>Go to <a href="https://search.google.com/search-console" target="_blank" style="color:var(--blue)">search.google.com/search-console</a></li>
-        <li>Select the correct property (e.g. <code style="color:var(--teal)">https://www.insidecasino.ca/</code>)</li>
-        <li>Click <strong>Performance</strong> in the left menu</li>
-        <li>Set your date range (e.g. last 3 months)</li>
-        <li>Click <strong>Export</strong> (top right) → <strong>Download</strong> — this downloads a full ZIP with multiple CSVs inside</li>
+        <li>Go to <strong>GSC Live</strong> in the left sidebar</li>
+        <li>If it's your first time, follow the one-time setup instructions to connect your Google account (takes about 10–15 minutes)</li>
+        <li>Once connected, select your website from the <strong>GSC Property</strong> dropdown</li>
+        <li>Choose a <strong>date range</strong> — Last 3 months, Last 6 months, or a custom range</li>
+        <li>Click <strong>Pull data</strong> — Inside Rank fetches up to 25,000 queries directly from Google</li>
       </ul>
-      <strong>How to export a single CSV (also works):</strong>
-      <ul>
-        <li>Same steps as above but click <strong>Export → CSV</strong> instead of Download</li>
-        <li>This gives you just the Queries CSV (keywords + positions)</li>
-      </ul>
-      <div class="help-tip">&#128161; <strong>Tip:</strong> Export two date ranges — for example, the last 3 months vs the same 3 months from the previous period — so you have a "before" and "after" to compare. The ZIP export is preferred because it includes Chart.csv, which makes total click/impression counts match exactly what GSC shows in the UI.</div>
-    </div>
-  </div>
-
-  <!-- STEP 2: IMPORT -->
-  <div class="help-sec">
-    <div class="help-sec-title">&#9313; Step 2 — Import your exports into Inside Rank</div>
-    <div class="help-body">
-      Go to <strong>Imports</strong> in the left sidebar. You'll see a drag-and-drop zone at the top.
-      <ul>
-        <li><strong>Drop a ZIP file</strong> — the tool automatically reads all CSVs inside it (Queries, Pages, Chart) and creates a snapshot in one go</li>
-        <li><strong>Drop one or more CSV files</strong> — works for individual Queries or Pages CSVs; if you drop them together they're combined into one snapshot</li>
-        <li>The <strong>date range</strong> is read automatically from the file metadata — no need to fill it in manually unless it's missing</li>
-      </ul>
-      Once imported, each export becomes a <strong>snapshot</strong> — a saved point-in-time record of all your keyword positions and traffic for that site.
+      Each pull creates a <strong>snapshot</strong> — a saved record of all your keyword rankings for that date range. Pull different date ranges to build up a history you can compare.
       <br><br>
-      <strong>Setting Period A and Period B:</strong> Every snapshot has a <strong>Set A</strong> and <strong>Set B</strong> button. Period A = the older/baseline period. Period B = the current/newer period. The comparison always runs A → B. You can see and change them in the top bar at any time.
-      <div class="help-tip">&#9888; <strong>Each site is separate.</strong> If you import data while insidecasino.ca is selected, that snapshot only appears under .ca. Switch sites using the sidebar to manage .co.nz or .com separately.</div>
+      <strong>Setting Period A and Period B:</strong> In the <strong>Pull Data</strong> tab, every snapshot has a <strong>Set A</strong> and <strong>Set B</strong> button. Period A = the older/baseline period. Period B = the current/newer period. The comparison always runs A → B. You can see and change the active periods in the top bar at any time.
+      <div class="help-tip">&#9888; <strong>Each site is separate.</strong> Data pulled while insidecasino.ca is selected only appears under .ca. Switch sites using the sidebar to manage different properties separately.</div>
     </div>
   </div>
 
@@ -1316,7 +1506,7 @@ input[type=file]{display:none}
       <ul>
         <li>Go to <strong>Settings → Team sync</strong> — you'll see the full admin panel</li>
         <li>Run the SQL shown there in your Supabase SQL editor to create the required tables (there are now two: one for GSC snapshots, one for GA4 data)</li>
-        <li>After importing a GSC ZIP, click <strong>↑ Sync</strong> next to each snapshot to push it to the team</li>
+        <li>After pulling GSC data, click <strong>↑ Sync</strong> next to each snapshot in the GSC Live → Pull Data tab to push it to the team</li>
         <li>After uploading GA4 CSVs in Page Performance, they are pushed to the team <strong>automatically</strong> — no extra step needed</li>
       </ul>
       <strong>For all other team members — nothing to set up:</strong>
@@ -1343,7 +1533,7 @@ input[type=file]{display:none}
         <li><strong>SERP Tracker</strong> — Pulls live Google rankings for <em>every</em> keyword in Period B (not just top 30). Shows your real position right now, Drift (how much your live position differs from the GSC average), GSC Δ (movement A→B), SERP features (Snippet, PAA, Local, Video), and bojoko.ca / bonus.ca positions side by side. Rows where a competitor is beating you are highlighted red. Filterable by position range, SERP feature, competitor presence, GSC movement, and position mismatch. Exportable to CSV.</li>
         <li><strong>Page Performance</strong> — Combines GA4 engagement data with GSC ranking data into one page-level table. Shows Visitors, Views, Time on page (all with period-over-period change columns), and the ranking keywords for each page pulled from your GSC snapshot. Requires uploading GA4 CSV exports separately — see the full guide further down this Help page.</li>
         <li><strong>URL Tracker</strong> — A focused before/after comparison tool for pages you've actively worked on. Add specific URL paths you've made changes to (content rewrites, new FAQ sections, internal linking updates, etc.) and instantly see how Clicks, Impressions, and Average Position changed between Period A and Period B. Also shows a full keyword-level breakdown per page. See the complete guide further down this Help page.</li>
-        <li><strong>Imports</strong> — Upload GSC exports and manage snapshots. Set which snapshot is Period A and which is Period B.</li>
+        <li><strong>GSC Live</strong> — Pull data directly from Google Search Console. Manage snapshots and set which is Period A and which is Period B.</li>
         <li><strong>Settings</strong> — Configure team sync (Supabase), Serper.dev API key, and active site.</li>
       </ul>
     </div>
@@ -1419,7 +1609,7 @@ input[type=file]{display:none}
         <li><strong>My keyword shows "Lost" but I know it's still ranking.</strong> This usually means it fell below position 30 in Period B but is still ranking at 31–100. Check the Pos 31–100 KPI card on the Overview. You can also filter the Keywords tab by "31–100 (Ahrefs blind)" to see them all.</li>
         <li><strong>The URL column is blank for some keywords.</strong> GSC Queries exports don't include URL data by default. Import a Pages CSV alongside your Queries CSV (or use the full ZIP export) — the tool will cross-reference and fill in URLs automatically.</li>
         <li><strong>Can I compare more than two periods?</strong> Yes — import as many snapshots as you want, then use the Period A and Period B pickers in the top bar to choose any two.</li>
-        <li><strong>Team members can't see my snapshots.</strong> Make sure you clicked <strong>↑ Sync</strong> next to the snapshot in the Imports tab. Team members connect automatically — they don't need to enter any credentials. If they still can't see it, ask them to click <strong>Refresh team snapshots</strong> in Settings.</li>
+        <li><strong>Team members can't see my snapshots.</strong> Make sure you clicked <strong>↑ Sync</strong> next to the snapshot in the GSC Live → Pull Data tab. Team members connect automatically — they don't need to enter any credentials. If they still can't see it, ask them to click <strong>Refresh team snapshots</strong> in Settings.</li>
         <li><strong>The Overview shows 0 clicks/impressions.</strong> This happens when you import a single Queries CSV without a Chart.csv. The tool totals from the top-1,000 rows — if your site has very low traffic it may still show correctly, but for large sites use the full ZIP export.</li>
         <li><strong>Position numbers look like averages, not exact ranks.</strong> That's correct — GSC reports the average position across all times a keyword appeared in results during the period. A keyword at "4.3" means it appeared sometimes at position 3, sometimes at position 5, averaging 4.3.</li>
       </ul>
@@ -1440,7 +1630,7 @@ input[type=file]{display:none}
       The tab joins two completely separate data sources on the page URL:
       <ul>
         <li><strong>Google Analytics 4 (GA4)</strong> — provides Visitors (sessions), Views (pageviews), and Time on page. You export this yourself as CSVs from the GA4 interface.</li>
-        <li><strong>GSC snapshots</strong> — provides Ranking keywords, average position, and position change. These are the same snapshots you import on the Imports tab — no extra work needed for this part.</li>
+        <li><strong>GSC snapshots</strong> — provides Ranking keywords, average position, and position change. These are the same snapshots pulled via GSC Live — no extra work needed for this part.</li>
       </ul>
       <div class="help-tip">&#9432; The tool matches pages between GA4 and GSC by their URL path (e.g. <code style="color:var(--teal);font-size:11px">/casinos/reviews/winspirit/</code>). If a page appears in GA4 but has no GSC keywords, the Ranking keywords column will be blank for that row — this is normal for pages that don't rank organically.</div>
     </div>
@@ -1751,6 +1941,24 @@ input[type=file]{display:none}
 ALTER TABLE insiderank_snapshots ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "allow_all" ON insiderank_snapshots FOR ALL USING (true) WITH CHECK (true);
 
+-- Full query rows (run this to enable unlimited GSC data storage)
+CREATE TABLE IF NOT EXISTS public.insiderank_rows (
+  id BIGSERIAL PRIMARY KEY,
+  snapshot_id TEXT NOT NULL REFERENCES insiderank_snapshots(id) ON DELETE CASCADE,
+  site TEXT NOT NULL,
+  query TEXT,
+  page TEXT,
+  impressions INTEGER DEFAULT 0,
+  clicks INTEGER DEFAULT 0,
+  ctr FLOAT DEFAULT 0,
+  position FLOAT DEFAULT 0,
+  src TEXT DEFAULT 'gsc-live',
+  url_source TEXT DEFAULT 'exact'
+);
+CREATE INDEX IF NOT EXISTS idx_ir_rows_snap ON insiderank_rows(snapshot_id);
+ALTER TABLE insiderank_rows ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "allow_all_rows" ON insiderank_rows FOR ALL USING (true) WITH CHECK (true);
+
 CREATE TABLE IF NOT EXISTS public.insiderank_ga4 (
   id TEXT PRIMARY KEY,
   site TEXT NOT NULL,
@@ -1776,7 +1984,7 @@ CREATE POLICY "allow_all_ga4" ON insiderank_ga4 FOR ALL USING (true) WITH CHECK 
         <span style="margin-left:auto;font-size:11px;color:var(--text3)" id="sync-last-pull-m"></span>
       </div>
       <div style="font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:14px">
-        Snapshots are shared by <strong style="color:var(--text)">teams@insidecasino.ca</strong> and pull automatically every time you open the tool. You'll see them in the <strong style="color:var(--text)">Imports</strong> tab with a <span style="background:rgba(46,232,180,.14);color:var(--green);border:1px solid rgba(46,232,180,.28);padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600">&#127381; Team</span> badge.
+        Snapshots are shared by <strong style="color:var(--text)">teams@insidecasino.ca</strong> and pull automatically every time you open the tool. You'll see them in the <strong style="color:var(--text)">GSC Live</strong> → Pull Data tab with a <span style="background:rgba(46,232,180,.14);color:var(--green);border:1px solid rgba(46,232,180,.28);padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600">&#127381; Team</span> badge.
       </div>
       <button class="btn btn-ghost" onclick="pullSharedSnaps()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.27"/></svg>
@@ -1801,6 +2009,16 @@ CREATE POLICY "allow_all_ga4" ON insiderank_ga4 FOR ALL USING (true) WITH CHECK 
       <span id="gsc-clientid-status" style="font-size:12px;color:var(--text3)"></span>
     </div>
     <div style="margin-top:12px;font-size:11px;color:var(--text3);line-height:1.8">&#9432; Don't have a Client ID yet? <a onclick="goView('gsclive',null)" style="color:var(--blue);cursor:pointer;font-weight:500">Go to GSC Live</a> for step-by-step setup instructions.</div>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px">GA4 Property ID</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:10px;line-height:1.6">Your numeric GA4 Property ID — found in GA4 → Admin → Property Settings. Same Google Cloud project as GSC.</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input class="fi" type="text" id="ga4-prop-input" placeholder="e.g. 123456789" style="width:200px">
+          <button class="btn btn-primary btn-sm" onclick="saveGa4PropId()">Save</button>
+          <span id="ga4-prop-status" style="font-size:12px;color:var(--text3)"></span>
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:8px">Also enable the <strong style="color:var(--text2)">Google Analytics Data API</strong> in your Google Cloud project (APIs &amp; Services → Library → search "Google Analytics Data API" → Enable).</div>
+      </div>
   </div>
   <!-- SERPER -->
   <div class="set-card">
@@ -1855,12 +2073,22 @@ const GSC_CID_SK='ir_gsc_cid';
 let gscTokenClient=null;
 let gscAccessToken=null;
 let gscTokenExpiry=0;
+let ga4TokenClient=null;
+let ga4AccessToken=null;
+let ga4TokenExpiry=0;
+let ga4UserEmail='';
 let gscProperties=[];
 let gscLiveRows=[];
 let gscQueryOnlyRows=[];
 let gscGapSort={col:'impressions',dir:-1};
 let gscGapPage=1;
+let gscQSort={col:'impressions',dir:-1};
+let gscQPage=1;
+let gscQSnapId=null;
+let gscQCompId=null;
+let gscBpExpanded=new Set();
 const GSC_PAGE_SIZE=50;
+let gscOppCollapsed={boost:false,ctr:false,create:false};
 
 // ═══ BOOT ═══
 // ═══ AUTH ═══
@@ -1974,6 +2202,22 @@ function loadGscClientId(){
   if(inp)inp.value=v;
   return v;
 }
+const GA4_PROP_SK='ir_ga4_prop';
+function saveGa4PropId(){
+  const val=(document.getElementById('ga4-prop-input').value||'').trim();
+  if(!val||!/^\d+$/.test(val)){toast('Enter a numeric GA4 Property ID','err');return;}
+  localStorage.setItem(GA4_PROP_SK,val);
+  document.getElementById('ga4-prop-status').textContent='Saved';
+  document.getElementById('ga4-prop-status').style.color='var(--green)';
+  toast('GA4 Property ID saved','ok');
+  if(typeof refreshGa4State==='function')refreshGa4State();
+}
+function loadGa4PropId(){
+  const v=localStorage.getItem(GA4_PROP_SK)||'';
+  const inp=document.getElementById('ga4-prop-input');
+  if(inp)inp.value=v;
+  return v;
+}
 
 // ── GSC OAuth ──
 function initGscTokenClient(){
@@ -1989,6 +2233,212 @@ function initGscTokenClient(){
       fetchGscUserInfo().then(()=>{fetchGscProperties().then(()=>{refreshGscState();});});
     }
   });
+}
+let ga4PullAfterAuth=false;
+function initGa4TokenClient(){
+  const cid=localStorage.getItem(GSC_CID_SK)||'';
+  if(!cid||!window.google?.accounts?.oauth2)return;
+  ga4TokenClient=google.accounts.oauth2.initTokenClient({
+    client_id:cid,
+    scope:'https://www.googleapis.com/auth/analytics.readonly',
+    callback:async(resp)=>{
+      if(resp.error){toast('GA4 auth failed: '+resp.error,'err');ga4PullAfterAuth=false;return;}
+      ga4AccessToken=resp.access_token;
+      ga4TokenExpiry=Date.now()+(Number(resp.expires_in)-60)*1000;
+      try{
+        const r=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+ga4AccessToken}});
+        const d=await r.json();ga4UserEmail=d.email||'';
+      }catch(e){}
+      refreshGa4State();
+      toast('✓ Connected to Google Analytics','ok');
+      if(ga4PullAfterAuth){ga4PullAfterAuth=false;pullGa4Live();}
+    }
+  });
+}
+function connectGa4(){
+  const cid=localStorage.getItem(GSC_CID_SK)||'';
+  if(!cid){toast('Paste your Client ID in Settings first','err');goView('settings',null);return;}
+  if(!ga4TokenClient)initGa4TokenClient();
+  if(!ga4TokenClient){toast('Google Identity Services not loaded yet','err');return;}
+  if(ga4AccessToken&&Date.now()<ga4TokenExpiry){refreshGa4State();return;}
+  ga4TokenClient.requestAccessToken({prompt:'consent'});
+}
+function revokeGa4(){
+  if(ga4AccessToken)google.accounts.oauth2.revoke(ga4AccessToken,()=>{});
+  ga4AccessToken=null;ga4TokenExpiry=0;ga4UserEmail='';
+  refreshGa4State();
+  toast('Disconnected from Google Analytics');
+}
+async function ga4FetchReport(propertyId,sd,ed){
+  const PAGE=10000;let allRows=[];let offset=0;
+  while(true){
+    const res=await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,{
+      method:'POST',
+      headers:{'Authorization':'Bearer '+ga4AccessToken,'Content-Type':'application/json'},
+      body:JSON.stringify({
+        dateRanges:[{startDate:sd,endDate:ed}],
+        dimensions:[{name:'pagePath'}],
+        metrics:[{name:'sessions'},{name:'screenPageViews'},{name:'averageSessionDuration'},{name:'bounceRate'}],
+        limit:PAGE,offset
+      })
+    });
+    if(!res.ok){
+      let msg='GA4 API error '+res.status;
+      try{const e=await res.json();msg=e.error?.message||msg;}catch(_){}
+      if(res.status===403)msg='Access denied (403) — make sure the Google Analytics Data API is enabled in your Google Cloud project and this Google account has access to the GA4 property.';
+      if(res.status===404)msg='Property not found (404) — check the GA4 Property ID in Settings (numbers only, e.g. 123456789).';
+      if(res.status===401)msg='Session expired — please click Disconnect and reconnect Google Analytics.';
+      throw new Error(msg);
+    }
+    const data=await res.json();
+    const rows=data.rows||[];
+    allRows=allRows.concat(rows);
+    if(rows.length<PAGE)break;
+    offset+=PAGE;
+  }
+  return allRows;
+}
+function ga4MapRows(rawRows,sd,ed){
+  const rows=rawRows.map(r=>{
+    const dims=r.dimensionValues||[];
+    const mets=r.metricValues||[];
+    const path=dims[0]?.value||'';
+    const sessions=parseFloat(mets[0]?.value||0);
+    const views=parseFloat(mets[1]?.value||0);
+    const avgDuration=parseFloat(mets[2]?.value||0);
+    const bounceRate=parseFloat(mets[3]?.value||0);
+    const base=A.site&&A.sites&&A.sites[A.site]?('https://'+A.sites[A.site].name):'';
+    const url=base+(path.startsWith('/')?path:'/'+path);
+    return{url,visitors:Math.round(sessions),views:Math.round(views),timeOnPage:avgDuration,bounceRate,active:0,newUsers:0,keyEvents:0};
+  }).filter(r=>r.url&&r.visitors>0);
+  return{rows,dateRange:sd+' → '+ed,hasViews:true,hasBounce:true,filename:'GA4 Live API'};
+}
+async function pullGa4Live(){
+  const btn=document.getElementById('ga4-live-pull-btn');
+  const prog=document.getElementById('ga4-live-progress');
+  const bar=document.getElementById('ga4-live-bar');
+  const status=document.getElementById('ga4-live-status');
+
+  // Show progress immediately so user always sees feedback
+  if(btn){btn.disabled=true;btn.textContent='Pulling…';}
+  if(prog)prog.style.display='';
+  if(bar)bar.style.width='5%';
+  if(status)status.textContent='Checking connection…';
+
+  // Token check — re-auth and auto-retry
+  if(!ga4AccessToken||Date.now()>=ga4TokenExpiry){
+    if(status)status.textContent='Session expired — re-authorising…';
+    ga4PullAfterAuth=true;
+    if(!ga4TokenClient)initGa4TokenClient();
+    if(!ga4TokenClient){
+      if(status)status.textContent='⚠ Google Identity Services not loaded. Reload the page and try again.';
+      if(btn){btn.disabled=false;btn.textContent='Pull GA4 data';}
+      return;
+    }
+    ga4TokenClient.requestAccessToken({prompt:'consent'});
+    if(btn){btn.disabled=false;btn.textContent='Pull GA4 data';}
+    if(prog)prog.style.display='none';
+    return;
+  }
+
+  // Prop ID check
+  const propId=localStorage.getItem(GA4_PROP_SK)||'';
+  if(!propId){
+    if(status)status.textContent='⚠ No GA4 Property ID saved. Go to Settings → save your GA4 Property ID first.';
+    if(btn){btn.disabled=false;btn.textContent='Pull GA4 data';}
+    return;
+  }
+
+  // Snapshot check
+  const sb=snapB();
+  if(!sb){
+    if(status)status.textContent='⚠ No Current period set. Set a GSC snapshot as Current (Period B) first.';
+    if(btn){btn.disabled=false;btn.textContent='Pull GA4 data';}
+    return;
+  }
+  const sa=snapA();
+
+  try{
+    if(status)status.textContent=`Fetching Current period (${sb.start} → ${sb.end})…`;
+    if(bar)bar.style.width='20%';
+    const rawB=await ga4FetchReport(propId,sb.start,sb.end);
+    if(bar)bar.style.width='50%';
+    const parsedB=ga4MapRows(rawB,sb.start,sb.end);
+    GA4.B=parsedB;GA4.PS=null;
+    try{await sv(GA4_SK+'B',JSON.stringify(parsedB));}catch(e){}
+    await pushGa4ToSupabase('B',parsedB);
+
+    if(sa){
+      if(status)status.textContent=`Fetching Baseline period (${sa.start} → ${sa.end})…`;
+      if(bar)bar.style.width='65%';
+      const rawA=await ga4FetchReport(propId,sa.start,sa.end);
+      if(bar)bar.style.width='85%';
+      const parsedA=ga4MapRows(rawA,sa.start,sa.end);
+      GA4.A=parsedA;GA4.PSA=null;
+      try{await sv(GA4_SK+'A',JSON.stringify(parsedA));}catch(e){}
+      await pushGa4ToSupabase('A',parsedA);
+    }
+
+    if(bar)bar.style.width='100%';
+    if(status)status.textContent=`✓ ${parsedB.rows.length.toLocaleString()} pages loaded`+(sa?' (both periods)':'');
+    renderPerfView();
+    refreshGa4State();
+    setTimeout(()=>{if(prog)prog.style.display='none';if(bar)bar.style.width='0%';},3000);
+  }catch(e){
+    if(status)status.textContent='⚠ '+e.message;
+    // keep progress bar visible so the error stays readable
+    if(bar)bar.style.width='0%';
+  }
+  if(btn){btn.disabled=false;btn.textContent='Pull GA4 data';}
+}
+function refreshGa4State(){
+  const propId=localStorage.getItem(GA4_PROP_SK)||'';
+  const panel=document.getElementById('ga4-live-panel');
+  if(!panel)return;
+  const connected=!!(ga4AccessToken&&Date.now()<ga4TokenExpiry);
+  const hasB=!!(snapB()?.start);
+  const hasProp=!!propId;
+  const canPull=connected&&hasB&&hasProp;
+
+  const connectRow=document.getElementById('ga4-live-connect-row');
+  const connectedRow=document.getElementById('ga4-live-connected-row');
+  if(connectRow)connectRow.style.display=connected?'none':'';
+  if(connectedRow)connectedRow.style.display=connected?'':'none';
+
+  if(connected){
+    const emailEl=document.getElementById('ga4-live-email');
+    if(emailEl)emailEl.textContent=ga4UserEmail||'Connected';
+    const pullBtn=document.getElementById('ga4-live-pull-btn');
+    if(pullBtn){
+      pullBtn.title=!hasProp?'Save a GA4 Property ID in Settings first'
+        :!hasB?'Set a GSC snapshot as Current (Period B) first':'';
+    }
+    const hintEl=document.getElementById('ga4-live-hint');
+    if(hintEl){
+      if(!hasProp){hintEl.textContent='⚠ Save a GA4 Property ID in Settings first';hintEl.style.display='';}
+      else if(!hasB){hintEl.textContent='⚠ Set a GSC snapshot as Current (Period B) first';hintEl.style.display='';}
+      else{hintEl.textContent='';hintEl.style.display='none';}
+    }
+    const datesEl=document.getElementById('ga4-live-dates');
+    if(datesEl){
+      const sa=snapA(),sb=snapB();
+      const parts=[];
+      if(sa)parts.push(`<span style="color:var(--text3)">Baseline:</span> ${esc(sa.label)} <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">${sa.start} → ${sa.end}</span>`);
+      if(sb)parts.push(`<span style="color:var(--blue)">Current:</span> ${esc(sb.label)} <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">${sb.start} → ${sb.end}</span>`);
+      datesEl.innerHTML=parts.length?parts.join('<br>'):'<span style="color:var(--text3)">Set GSC snapshots as Baseline / Current to enable pull</span>';
+    }
+  }
+
+  const loadedEl=document.getElementById('ga4-live-loaded');
+  if(loadedEl){
+    const bLoaded=GA4.B&&GA4.B.rows&&GA4.B.rows.length>0;
+    loadedEl.style.display=bLoaded?'':'none';
+    if(bLoaded){
+      loadedEl.innerHTML=`✓ GA4 data loaded &nbsp;·&nbsp; ${GA4.B.rows.length.toLocaleString()} pages`
+        +(GA4.A?` &nbsp;·&nbsp; both periods`:'')
+        +` &nbsp;<button class="btn btn-ghost btn-sm" onclick="revokeGa4()" style="margin-left:8px;padding:3px 10px">Disconnect</button>`;
+    }
+  }
 }
 function connectGsc(){
   const cid=localStorage.getItem(GSC_CID_SK)||'';
@@ -2034,120 +2484,447 @@ function refreshGscState(){
   if(!cid){nokey.style.display='';conn.style.display='none';ready.style.display='none';return;}
   if(!gscAccessToken||Date.now()>=gscTokenExpiry){nokey.style.display='none';conn.style.display='';ready.style.display='none';return;}
   nokey.style.display='none';conn.style.display='none';ready.style.display='';
-  renderGscPullHist();
+  renderGscSnapList();
 }
 function setGscTab(tab){
-  document.getElementById('gsc-tab-pull').style.display=tab==='pull'?'':'none';
-  document.getElementById('gsc-tab-gap').style.display=tab==='gap'?'':'none';
-  document.getElementById('gtab-pull').classList.toggle('active',tab==='pull');
-  document.getElementById('gtab-gap').classList.toggle('active',tab==='gap');
-  if(tab==='gap')renderGapTable();
+  ['pull','queries','bypage','gap','opp'].forEach(t=>{
+    const el=document.getElementById('gsc-tab-'+t);
+    const btn=document.getElementById('gtab-'+t);
+    if(el)el.style.display=t===tab?'':'none';
+    if(btn)btn.classList.toggle('active',t===tab);
+  });
+  if(tab==='queries')renderGscQueries();
+  else if(tab==='bypage')renderGscByPage();
+  else if(tab==='gap')renderGapTable();
+  else if(tab==='opp')renderOpportunities();
 }
 
 // ── GSC Live Pull ──
+// ── GSC Preset / Date logic ──
+let gscPreset='3m';
+let gscFpStart=null,gscFpEnd=null; // flatpickr instances
+
+function gscFmtDate(d){return d.toISOString().split('T')[0];}
+function gscFmtLabel(d){return d.toLocaleString('default',{month:'short',year:'numeric'});}
+function gscShiftBack(sd,ed){
+  // shift a date range back by the same number of days
+  const days=Math.round((new Date(ed)-new Date(sd))/(86400000))+1;
+  const prevEnd=new Date(sd);prevEnd.setDate(prevEnd.getDate()-1);
+  const prevStart=new Date(prevEnd);prevStart.setDate(prevEnd.getDate()-(days-1));
+  return{sd:gscFmtDate(prevStart),ed:gscFmtDate(prevEnd)};
+}
+function gscCalcDates(preset){
+  const now=new Date();
+  const fmt=gscFmtDate;
+  if(preset==='3m'){
+    const ed=new Date(now);const sd=new Date(now);sd.setDate(sd.getDate()-90);
+    return{periods:[{sd:fmt(sd),ed:fmt(ed),label:'Last 3 months — '+gscFmtLabel(now)}]};
+  }
+  if(preset==='6m'){
+    const ed=new Date(now);const sd=new Date(now);sd.setDate(sd.getDate()-180);
+    return{periods:[{sd:fmt(sd),ed:fmt(ed),label:'Last 6 months — '+gscFmtLabel(now)}]};
+  }
+  if(preset==='3m-vs'){
+    const ed=new Date(now);const sd=new Date(now);sd.setDate(sd.getDate()-90);
+    const cur={sd:fmt(sd),ed:fmt(ed),label:'Last 3 months — '+gscFmtLabel(now)};
+    const prev=gscShiftBack(cur.sd,cur.ed);
+    prev.label='Previous 3 months — '+gscFmtLabel(new Date(prev.ed));
+    return{periods:[prev,cur]};
+  }
+  if(preset==='6m-vs'){
+    const ed=new Date(now);const sd=new Date(now);sd.setDate(sd.getDate()-180);
+    const cur={sd:fmt(sd),ed:fmt(ed),label:'Last 6 months — '+gscFmtLabel(now)};
+    const prev=gscShiftBack(cur.sd,cur.ed);
+    prev.label='Previous 6 months — '+gscFmtLabel(new Date(prev.ed));
+    return{periods:[prev,cur]};
+  }
+  return null; // custom — handled separately
+}
+function gscSetPreset(preset){
+  gscPreset=preset;
+  // toggle active class on chips
+  ['3m','6m','3m-vs','6m-vs','custom'].forEach(p=>{
+    const el=document.getElementById('gpreset-'+p);
+    if(el)el.classList.toggle('active',p===preset);
+  });
+  // show/hide custom inputs
+  const customWrap=document.getElementById('gsc-custom-wrap');
+  if(customWrap)customWrap.style.display=preset==='custom'?'':'none';
+  // update button label
+  const btnLbl=document.getElementById('gsc-pull-btn-lbl');
+  if(btnLbl)btnLbl.textContent=(preset==='3m-vs'||preset==='6m-vs')?'Pull both periods':'Pull data';
+  // update date preview
+  gscUpdateDatePreview();
+  // auto-fill label
+  if(preset!=='custom'){
+    const calc=gscCalcDates(preset);
+    const lbl=document.getElementById('gsc-snap-label');
+    if(lbl&&calc){
+      if(calc.periods.length===1)lbl.value=calc.periods[0].label;
+      else lbl.value='';// comparison: each snapshot gets its own auto label
+    }
+  }
+}
+function gscUpdateDatePreview(){
+  const preview=document.getElementById('gsc-date-preview');
+  if(!preview)return;
+  if(gscPreset==='custom'){
+    const sd=document.getElementById('gsc-custom-start')?.value;
+    const ed=document.getElementById('gsc-custom-end')?.value;
+    if(sd&&ed){
+      preview.innerHTML=`<span style="font-size:11px;color:var(--text3);margin-right:2px">Range:</span><span class="period-pill">${sd} → ${ed}</span>`;
+    }else{
+      preview.innerHTML='<span style="font-size:12px;color:var(--text3)">Select a start and end date above</span>';
+    }
+    return;
+  }
+  const calc=gscCalcDates(gscPreset);
+  if(!calc)return;
+  if(calc.periods.length===1){
+    const p=calc.periods[0];
+    preview.innerHTML=`<span style="font-size:11px;color:var(--text3);margin-right:2px">Range:</span><span class="period-pill">${p.sd} → ${p.ed}</span>`;
+  }else{
+    const[prev,cur]=calc.periods;
+    preview.innerHTML=`
+      <span style="font-size:11px;color:var(--text3)">Period A (baseline):</span>
+      <span class="period-pill">${prev.sd} → ${prev.ed}</span>
+      <span class="vs-sep">vs</span>
+      <span style="font-size:11px;color:var(--text3)">Period B (current):</span>
+      <span class="period-pill" style="border-color:var(--blue);color:var(--blue)">${cur.sd} → ${cur.ed}</span>`;
+  }
+}
+function initGscFlatpickr(){
+  const startEl=document.getElementById('gsc-custom-start');
+  const endEl=document.getElementById('gsc-custom-end');
+  if(!startEl||!endEl||!window.flatpickr)return;
+  if(gscFpStart)gscFpStart.destroy();
+  if(gscFpEnd)gscFpEnd.destroy();
+  const maxDate=new Date();maxDate.setDate(maxDate.getDate()-3); // GSC has ~3 day delay
+  gscFpStart=flatpickr(startEl,{
+    dateFormat:'Y-m-d',maxDate,disableMobile:true,
+    onChange([d]){
+      if(gscFpEnd&&d)gscFpEnd.set('minDate',d);
+      gscUpdateDatePreview();
+    }
+  });
+  gscFpEnd=flatpickr(endEl,{
+    dateFormat:'Y-m-d',maxDate,disableMobile:true,
+    onChange(){gscUpdateDatePreview();}
+  });
+}
+// ── Supabase row storage helpers ──
+async function sbSaveRows(snapId,site,rows){
+  if(!A.sbConnected||!A.sbUrl||!A.sbKey)return;
+  await fetch(`${A.sbUrl}/rest/v1/insiderank_rows?snapshot_id=eq.${encodeURIComponent(snapId)}`,{method:'DELETE',headers:sbH()});
+  const BATCH=1000;
+  for(let i=0;i<rows.length;i+=BATCH){
+    const batch=rows.slice(i,i+BATCH).map(r=>({snapshot_id:snapId,site,query:r.query||'',page:r.page||null,impressions:r.impressions||0,clicks:r.clicks||0,ctr:r.ctr||0,position:r.position||0,src:r.src||'gsc-live',url_source:r.urlSource||(r.page?'exact':'none')}));
+    const res=await fetch(`${A.sbUrl}/rest/v1/insiderank_rows`,{method:'POST',headers:{...sbH(),Prefer:'return=minimal'},body:JSON.stringify(batch)});
+    if(!res.ok){const t=await res.text();throw new Error('Row save failed ('+res.status+'): '+t.slice(0,120));}
+  }
+}
+async function sbLoadRows(snapId){
+  if(!A.sbConnected||!A.sbUrl||!A.sbKey)return null;
+  const PAGE=10000;let allRows=[];let offset=0;
+  while(true){
+    const res=await fetch(`${A.sbUrl}/rest/v1/insiderank_rows?snapshot_id=eq.${encodeURIComponent(snapId)}&order=impressions.desc&limit=${PAGE}&offset=${offset}`,{headers:sbH()});
+    if(!res.ok)throw new Error('Row load failed: '+res.status);
+    const rows=await res.json();
+    allRows=allRows.concat(rows.map(r=>({query:r.query||'',page:r.page||null,impressions:r.impressions||0,clicks:r.clicks||0,ctr:r.ctr||0,position:r.position||0,src:r.src||'gsc-live',urlSource:r.url_source||'exact'})));
+    if(rows.length<PAGE)break;
+    offset+=PAGE;
+  }
+  return allRows;
+}
+async function loadSnapRows(snapId){
+  const snap=getSnap(snapId);if(!snap)return;
+  if(snap.rowsLoaded)return;
+  if(!A.sbConnected)return;
+  try{
+    const rows=await sbLoadRows(snapId);
+    if(rows&&rows.length>0){snap.rows=rows;snap.rowsLoaded=true;}
+  }catch(e){console.warn('Could not load rows from Supabase:',e.message);}
+}
+
+// ── GSC paginated fetch ──
+async function gscFetchAllRows(siteUrl,sd,ed,dimensions,onProgress){
+  const encoded=encodeURIComponent(siteUrl);
+  const PAGE=25000;let allRows=[];let startRow=0;
+  while(true){
+    if(onProgress)onProgress(startRow);
+    const res=await fetch(`https://searchconsole.googleapis.com/webmasters/v3/sites/${encoded}/searchAnalytics/query`,{
+      method:'POST',
+      headers:{'Authorization':'Bearer '+gscAccessToken,'Content-Type':'application/json'},
+      body:JSON.stringify({startDate:sd,endDate:ed,dimensions,rowLimit:PAGE,startRow})
+    });
+    if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'API error');}
+    const data=await res.json();
+    const rows=(data.rows||[]).map(r=>({query:r.keys[0]||'',page:dimensions.includes('page')?(r.keys[1]||''):null,clicks:r.clicks||0,impressions:r.impressions||0,ctr:r.ctr||0,position:r.position||0}));
+    allRows=allRows.concat(rows);
+    if(rows.length<PAGE)break;
+    startRow+=PAGE;
+  }
+  return allRows;
+}
+
+async function gscSavePeriod(siteUrl,sd,ed,label,isA){
+  const status=document.getElementById('gsc-pull-status');
+  const bar=document.getElementById('gsc-pull-bar');
+  const basePct=isA?0:50;
+  const setBar=p=>bar.style.width=Math.min(99,(basePct+p))+'%';
+
+  status.textContent=`Fetching ${label} — queries + pages…`;setBar(5);
+  const qpRows=await gscFetchAllRows(siteUrl,sd,ed,['query','page'],n=>{
+    status.textContent=`Fetching ${label} — queries + pages (${n.toLocaleString()} fetched)…`;setBar(5+Math.min(15,Math.floor(n/2000)));
+  });
+  setBar(22);
+  status.textContent=`Fetching ${label} — queries only…`;
+  const qRows=await gscFetchAllRows(siteUrl,sd,ed,['query'],n=>{
+    status.textContent=`Fetching ${label} — queries only (${n.toLocaleString()} fetched)…`;setBar(22+Math.min(10,Math.floor(n/3000)));
+  });
+  setBar(34);
+  if(!isA){gscLiveRows=qpRows;gscQueryOnlyRows=qRows;}
+
+  const allRowsMapped=qpRows.map(r=>({...r,src:'gsc-live',urlSource:r.page?'exact':'none'}));
+  const snapRows=allRowsMapped.slice().sort((a,b)=>b.impressions-a.impressions).slice(0,5000);
+  const snap={
+    id:'sn_gsc_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
+    label,start:sd,end:ed,
+    rows:snapRows,count:qpRows.length,
+    urlFilledCount:qpRows.filter(r=>r.page).length,
+    exactCount:qpRows.filter(r=>r.page).length,
+    inferredCount:0,sources:['gsc-live'],
+    files:['GSC Live API — '+siteUrl],zipName:null,
+    rowsLoaded:false
+  };
+  if(!A.snaps[A.site])A.snaps[A.site]=[];
+  A.snaps[A.site]=A.snaps[A.site].filter(s=>s.label!==snap.label);
+  A.snaps[A.site].push(snap);
+  A.snaps[A.site].sort((a,b)=>(a.start||a.label).localeCompare(b.start||b.label));
+
+  if(A.sbConnected){
+    // Push snapshot metadata first (insiderank_rows has FK → insiderank_snapshots)
+    await pushSnapToTeam(snap.id,true);
+    const total=allRowsMapped.length;
+    const BATCH=1000;
+    status.textContent=`Saving ${total.toLocaleString()} rows to database…`;setBar(36);
+    await fetch(`${A.sbUrl}/rest/v1/insiderank_rows?snapshot_id=eq.${encodeURIComponent(snap.id)}`,{method:'DELETE',headers:sbH()});
+    for(let i=0;i<total;i+=BATCH){
+      const pct=36+Math.floor((i/Math.max(total,1))*12);setBar(pct);
+      status.textContent=`Saving to database — ${Math.min(i+BATCH,total).toLocaleString()} / ${total.toLocaleString()} rows…`;
+      const batch=allRowsMapped.slice(i,i+BATCH).map(r=>({snapshot_id:snap.id,site:A.site,query:r.query||'',page:r.page||null,impressions:r.impressions||0,clicks:r.clicks||0,ctr:r.ctr||0,position:r.position||0,src:r.src||'gsc-live',url_source:r.urlSource||(r.page?'exact':'none')}));
+      const res=await fetch(`${A.sbUrl}/rest/v1/insiderank_rows`,{method:'POST',headers:{...sbH(),Prefer:'return=minimal'},body:JSON.stringify(batch)});
+      if(!res.ok){const t=await res.text();throw new Error('DB row save failed ('+res.status+'): '+t.slice(0,200));}
+    }
+    snap.rows=allRowsMapped;snap.rowsLoaded=true;
+    setBar(48);status.textContent=`Saved ${total.toLocaleString()} rows to database ✓`;
+  }else{
+    setBar(48);status.textContent=`${qpRows.length.toLocaleString()} queries fetched (top 5,000 saved locally — connect Supabase to store all)`;
+  }
+  return snap.id;
+}
 async function pullGscLive(){
   if(!gscAccessToken||Date.now()>=gscTokenExpiry){connectGsc();return;}
   const siteUrl=document.getElementById('gsc-property').value;
   if(!siteUrl){toast('Select a GSC property first','err');return;}
-  const days=parseInt(document.getElementById('gsc-range').value)||90;
-  const endDate=new Date();
-  const startDate=new Date();startDate.setDate(endDate.getDate()-days);
-  const fmt=d=>d.toISOString().split('T')[0];
-  const sd=fmt(startDate),ed=fmt(endDate);
   const btn=document.getElementById('gsc-pull-btn');
   const prog=document.getElementById('gsc-pull-progress');
   const bar=document.getElementById('gsc-pull-bar');
   const status=document.getElementById('gsc-pull-status');
   btn.disabled=true;prog.style.display='';
-  async function gscQuery(dimensions,label){
-    status.textContent=`Fetching ${label}…`;bar.style.width='20%';
-    const encoded=encodeURIComponent(siteUrl);
-    const res=await fetch(`https://searchconsole.googleapis.com/webmasters/v3/sites/${encoded}/searchAnalytics/query`,{
-      method:'POST',
-      headers:{'Authorization':'Bearer '+gscAccessToken,'Content-Type':'application/json'},
-      body:JSON.stringify({startDate:sd,endDate:ed,dimensions,rowLimit:25000,startRow:0})
-    });
-    if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'API error');}
-    const data=await res.json();
-    return(data.rows||[]).map(r=>({
-      query:r.keys[0]||'',
-      page:dimensions.includes('page')?(r.keys[1]||''):null,
-      clicks:r.clicks||0,
-      impressions:r.impressions||0,
-      ctr:r.ctr||0,
-      position:r.position||0
-    }));
-  }
   try{
-    const qpRows=await gscQuery(['query','page'],'queries + pages');
-    bar.style.width='60%';
-    const qRows=await gscQuery(['query'],'queries only');
-    bar.style.width='90%';
-    gscLiveRows=qpRows;
-    gscQueryOnlyRows=qRows;
-    const snap={
-      id:'sn_gsc_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
-      label:'GSC Live — '+sd+' → '+ed,
-      start:sd,end:ed,
-      rows:qpRows.map(r=>({...r,src:'gsc-live',urlSource:r.page?'exact':'none'})),
-      count:qpRows.length,
-      urlFilledCount:qpRows.filter(r=>r.page).length,
-      exactCount:qpRows.filter(r=>r.page).length,
-      inferredCount:0,
-      sources:['gsc-live'],
-      files:['GSC Live API — '+siteUrl],
-      zipName:null
-    };
-    if(!A.snaps[A.site])A.snaps[A.site]=[];
-    A.snaps[A.site]=A.snaps[A.site].filter(s=>s.label!==snap.label);
-    A.snaps[A.site].push(snap);
-    A.snaps[A.site].sort((a,b)=>(a.start||a.label).localeCompare(b.start||b.label));
-    await save();autoPickPeriods();renderAll();renderSnapList();
-    bar.style.width='100%';
-    status.textContent=`Done — ${qpRows.length.toLocaleString()} queries pulled`;
-    setTimeout(()=>{prog.style.display='none';bar.style.width='0%';},2000);
-    renderGscPullHist();
-    toast(`GSC Live snapshot saved — ${qpRows.length.toLocaleString()} rows`,'ok');
+    const userLabel=(document.getElementById('gsc-snap-label')?.value||'').trim();
+    if(gscPreset==='3m-vs'||gscPreset==='6m-vs'){
+      // Pull two periods sequentially → auto-set as Period A and B
+      const calc=gscCalcDates(gscPreset);
+      const[prev,cur]=calc.periods;
+      status.textContent='Pulling Period A (baseline)…';bar.style.width='5%';
+      const idA=await gscSavePeriod(siteUrl,prev.sd,prev.ed,prev.label,true);
+      const idB=await gscSavePeriod(siteUrl,cur.sd,cur.ed,cur.label,false);
+      A.pA[A.site]=idA;A.pB[A.site]=idB;
+      bar.style.width='100%';status.textContent='Both periods saved ✓';
+      await save();await savePer();renderAll();renderSnapList();
+      setTimeout(()=>{prog.style.display='none';bar.style.width='0%';},2500);
+      refreshGscState();
+      toast('Both periods pulled and set for comparison','ok');
+    }else{
+      // Single period pull
+      let sd,ed,label;
+      if(gscPreset==='custom'){
+        sd=document.getElementById('gsc-custom-start').value;
+        ed=document.getElementById('gsc-custom-end').value;
+        if(!sd||!ed){toast('Select a start and end date first','err');btn.disabled=false;prog.style.display='none';return;}
+        label=userLabel||('GSC Live — '+sd+' → '+ed);
+      }else{
+        const calc=gscCalcDates(gscPreset);
+        const p=calc.periods[0];
+        sd=p.sd;ed=p.ed;label=userLabel||p.label;
+      }
+      const id=await gscSavePeriod(siteUrl,sd,ed,label,false);
+      autoPickPeriods();
+      await save();await savePer();renderAll();renderSnapList();
+      bar.style.width='100%';
+      status.textContent='Done — snapshot saved';
+      setTimeout(()=>{prog.style.display='none';bar.style.width='0%';},2000);
+      refreshGscState();
+      toast('GSC snapshot saved','ok');
+    }
   }catch(e){
     toast('Pull failed: '+e.message,'err');
     prog.style.display='none';bar.style.width='0%';
   }
   btn.disabled=false;
 }
-function renderGscPullHist(){
-  const wrap=document.getElementById('gsc-pull-hist-wrap');
-  const list=document.getElementById('gsc-pull-hist-list');
-  if(!wrap||!list)return;
+function renderGscSnapList(){
+  const curA=A.pA[A.site],curB=A.pB[A.site];
+  const wrap=document.getElementById('gsc-snap-list-wrap');
+  const items=document.getElementById('gsc-snap-list-items');
+  const title=document.getElementById('gsc-snap-list-title');
+  if(!wrap||!items)return;
   const snaps=(A.snaps[A.site]||[]).filter(s=>s.sources&&s.sources.includes('gsc-live'));
   if(!snaps.length){wrap.style.display='none';return;}
   wrap.style.display='';
-  list.innerHTML=snaps.map(s=>`
-    <div class="gsc-hist-item">
-      <div class="gsc-hist-label">${s.label}</div>
-      <div class="gsc-hist-meta">${(s.count||0).toLocaleString()} rows</div>
-      <div class="gsc-hist-meta" style="margin-left:8px">${s.start} → ${s.end}</div>
-    </div>`).join('');
+  if(title)title.textContent='Pulled snapshots ('+snaps.length+')';
+  // update comparison strip
+  const strip=document.getElementById('gsc-compare-strip');
+  const sA=snaps.find(s=>s.id===curA),sB=snaps.find(s=>s.id===curB);
+  if(strip){
+    if(sA||sB){
+      strip.style.display='';
+      const sa=document.getElementById('gsc-strip-a'),sad=document.getElementById('gsc-strip-a-dates');
+      const sb=document.getElementById('gsc-strip-b'),sbd=document.getElementById('gsc-strip-b-dates');
+      if(sa)sa.textContent=sA?sA.label:'Not set';
+      if(sad)sad.textContent=sA?sA.start+' → '+sA.end:'';
+      if(sb)sb.textContent=sB?sB.label:'Not set';
+      if(sbd)sbd.textContent=sB?sB.start+' → '+sB.end:'';
+    }else{strip.style.display='none';}
+  }
+  items.innerHTML=snaps.slice().reverse().map(s=>{
+    const isA=curA===s.id,isB=curB===s.id;
+    const badge=isA&&isB?'<span style="font-size:10px;background:var(--amber-d,#2d2200);color:var(--amber);border:1px solid rgba(255,180,0,.3);padding:2px 7px;border-radius:4px;font-weight:600">Baseline + Current</span>'
+      :isA?'<span style="font-size:10px;background:var(--bg4);color:var(--text2);border:1px solid var(--border2);padding:2px 7px;border-radius:4px;font-weight:600">✓ Baseline (A)</span>'
+      :isB?'<span style="font-size:10px;background:var(--blue-d);color:var(--blue);border:1px solid rgba(91,159,255,.3);padding:2px 7px;border-radius:4px;font-weight:600">✓ Current (B)</span>':'';
+    return`<div class="snap-item" style="${isA||isB?'border-color:var(--border2)':''}">
+      <div class="snap-info">
+        <div style="display:flex;align-items:center;gap:8px"><div class="snap-lbl">${esc(s.label)}</div>${badge}</div>
+        <div class="snap-meta">${(s.count||0).toLocaleString()} queries · ${s.start} → ${s.end}</div>
+      </div>
+      <div class="snap-actions">
+        <button class="snap-btn snap-a ${isA?'':'dim'}" onclick="setSnap('A','${s.id}');renderGscSnapList();" title="Set as Baseline — the older period you're comparing FROM">Baseline</button>
+        <button class="snap-btn snap-b ${isB?'on':''}" onclick="setSnap('B','${s.id}');renderGscSnapList();" title="Set as Current — the newer period you're comparing TO">Current</button>
+        <button class="snap-del" onclick="deleteSnap('${s.id}');renderGscSnapList();renderGscQueries();" title="Delete"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
+      </div>
+    </div>`;
+  }).join('');
+  // populate period pickers in All Queries tab
+  const sel=document.getElementById('gq-snap-sel');
+  const cmp=document.getElementById('gq-comp-sel');
+  if(sel){
+    const prev=gscQSnapId;
+    sel.innerHTML=snaps.slice().reverse().map(s=>`<option value="${s.id}">${esc(s.label)} (${s.start} → ${s.end})</option>`).join('');
+    if(prev&&snaps.find(s=>s.id===prev))sel.value=prev;
+    else{gscQSnapId=sel.value||null;}
+  }
+  if(cmp){
+    const prev=gscQCompId;
+    cmp.innerHTML='<option value="">— No comparison —</option>'+snaps.slice().reverse().map(s=>`<option value="${s.id}">${esc(s.label)} (${s.start} → ${s.end})</option>`).join('');
+    if(prev&&snaps.find(s=>s.id===prev))cmp.value=prev;
+    else{gscQCompId=null;}
+  }
 }
 
 // ── Content Gap ──
 function computeContentGaps(){
-  if(!gscQueryOnlyRows.length)return[];
+  const srcRows=gscLiveRows.length?gscLiveRows:(snapB()?.rows||[]);
+  const srcQOnly=gscQueryOnlyRows.length?gscQueryOnlyRows:(snapB()?.rows||[]);
+  if(!srcQOnly.length)return[];
   const withPage=new Set();
-  gscLiveRows.forEach(r=>{
+  srcRows.forEach(r=>{
     if(r.page){
       const p=r.page.replace(/https?:\/\/[^/]+/,'').replace(/\/+$/,'');
       if(p&&p!=='')withPage.add(r.query);
     }
   });
   const homepageQueries=new Set();
-  gscLiveRows.forEach(r=>{
+  srcRows.forEach(r=>{
     if(!r.page)return;
     const p=r.page.replace(/https?:\/\/[^/]+/,'').replace(/\/+$/,'');
     if(p===''||p==='/')homepageQueries.add(r.query);
   });
-  return gscQueryOnlyRows
+  return srcQOnly
     .filter(r=>!withPage.has(r.query)||homepageQueries.has(r.query))
     .map(r=>({...r,opportunity:gapOpp(r)}));
+}
+function computeOpportunities(){
+  const rows=gscLiveRows.length?gscLiveRows:(snapB()?.rows||[]);
+  if(!rows.length)return{boost:[],fixCtr:[],create:[]};
+  const boost=rows
+    .filter(r=>r.position>=11&&r.position<=20&&r.impressions>=10)
+    .sort((a,b)=>b.impressions-a.impressions);
+  const bandMap={};
+  rows.filter(r=>r.position>=1&&r.position<=10&&r.impressions>=20).forEach(r=>{
+    const b=Math.ceil(r.position);
+    if(!bandMap[b])bandMap[b]={sum:0,cnt:0};
+    bandMap[b].sum+=(r.ctr||0);bandMap[b].cnt++;
+  });
+  const bandAvg={};
+  Object.keys(bandMap).forEach(b=>{bandAvg[b]=bandMap[b].cnt?bandMap[b].sum/bandMap[b].cnt:0;});
+  const fixCtr=rows
+    .filter(r=>{
+      if(r.position<1||r.position>10||r.impressions<20)return false;
+      const avg=bandAvg[Math.ceil(r.position)]||0;
+      return avg>0&&(r.ctr||0)<avg;
+    })
+    .sort((a,b)=>b.impressions-a.impressions);
+  const create=computeContentGaps()
+    .filter(r=>r.impressions>=20&&(r.opportunity==='high'||r.opportunity==='med'))
+    .sort((a,b)=>b.impressions-a.impressions);
+  return{boost,fixCtr,create};
+}
+function renderOpportunities(){
+  const nosnap=document.getElementById('gsc-opp-nosnap');
+  const content=document.getElementById('gsc-opp-content');
+  const rows=gscLiveRows.length?gscLiveRows:(snapB()?.rows||[]);
+  if(!rows.length){
+    if(nosnap)nosnap.style.display='';
+    if(content)content.style.display='none';
+    return;
+  }
+  if(nosnap)nosnap.style.display='none';
+  if(content)content.style.display='';
+  const {boost,fixCtr,create}=computeOpportunities();
+  const el=id=>document.getElementById(id);
+  if(el('opp-boost-badge'))el('opp-boost-badge').textContent=boost.length;
+  if(el('opp-ctr-badge'))el('opp-ctr-badge').textContent=fixCtr.length;
+  if(el('opp-create-badge'))el('opp-create-badge').textContent=create.length;
+  const total=boost.length+fixCtr.length+create.length;
+  if(el('opp-count-lbl'))el('opp-count-lbl').textContent=total.toLocaleString()+' opportunit'+(total===1?'y':'ies');
+  function buildRows(arr,actionLabel,actionClass){
+    if(!arr.length)return`<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--text3)">No opportunities found.</td></tr>`;
+    return arr.map(r=>`<tr>
+      <td class="col-kw" title="${esc(r.query)}">${esc(r.query)}</td>
+      <td>${posBadge(r.position)}</td>
+      <td style="font-family:var(--mono);font-weight:600">${fmtN(r.impressions)}</td>
+      <td style="font-family:var(--mono)">${(r.clicks||0).toLocaleString()}</td>
+      <td>${ctrCell(r.ctr||0)}</td>
+      <td><span class="${actionClass}">${esc(actionLabel)}</span></td>
+    </tr>`).join('');
+  }
+  if(el('opp-boost-tbody'))el('opp-boost-tbody').innerHTML=buildRows(boost,'Improve content','gap-opp-high');
+  if(el('opp-ctr-tbody'))el('opp-ctr-tbody').innerHTML=buildRows(fixCtr,'Fix title/meta','gap-opp-med');
+  if(el('opp-create-tbody'))el('opp-create-tbody').innerHTML=buildRows(create,'Create page','gap-opp-low');
+  ['boost','ctr','create'].forEach(k=>{
+    const body=el('opp-'+k+'-body'),icon=el('opp-'+k+'-icon');
+    if(body)body.style.display=gscOppCollapsed[k]?'none':'';
+    if(icon)icon.innerHTML=gscOppCollapsed[k]?'&#9650;':'&#9660;';
+  });
+}
+function toggleOppSection(key){
+  gscOppCollapsed[key]=!gscOppCollapsed[key];
+  const body=document.getElementById('opp-'+key+'-body');
+  const icon=document.getElementById('opp-'+key+'-icon');
+  if(body)body.style.display=gscOppCollapsed[key]?'none':'';
+  if(icon)icon.innerHTML=gscOppCollapsed[key]?'&#9650;':'&#9660;';
 }
 function gapOpp(r){
   if(r.impressions>=100&&r.position<=20)return'high';
@@ -2222,6 +2999,28 @@ function renderGapTable(){
   if(prev)prev.disabled=gscGapPage<=1;if(next)next.disabled=gscGapPage>=pages;
 }
 function escHtml(str){return(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function exportOppCSV(){
+  const {boost,fixCtr,create}=computeOpportunities();
+  const all=[
+    ...boost.map(r=>({...r,category:'boost_to_page1',action:'Improve content'})),
+    ...fixCtr.map(r=>({...r,category:'fix_ctr',action:'Fix title/meta'})),
+    ...create.map(r=>({...r,category:'create_content',action:'Create page'})),
+  ];
+  if(!all.length){toast('No opportunities to export','err');return;}
+  const hdrs=['query','category','action','position','impressions','clicks','ctr'];
+  const rows=all.map(r=>[
+    `"${(r.query||'').replace(/"/g,'""')}"`,
+    r.category,r.action,
+    r.position?.toFixed(2)||'',
+    r.impressions,r.clicks||0,
+    ((r.ctr||0)*100).toFixed(2)+'%'
+  ].join(','));
+  const csv=[hdrs.join(','),...rows].join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download='opportunities-'+A.site+'-'+new Date().toISOString().split('T')[0]+'.csv';
+  a.click();toast('Opportunities exported');
+}
 function exportGapCSV(){
   const gaps=getFilteredGaps();
   if(!gaps.length){toast('No gaps to export','err');return;}
@@ -2234,13 +3033,225 @@ function exportGapCSV(){
   a.click();toast('Content gaps exported');
 }
 
+// ── All Queries ──
+function gscQSnapChanged(){
+  gscQSnapId=document.getElementById('gq-snap-sel')?.value||null;
+  gscQCompId=document.getElementById('gq-comp-sel')?.value||null;
+  if(!gscQCompId)gscQCompId=null;
+  const badge=document.getElementById('gq-comp-badge');
+  if(badge)badge.style.display=gscQCompId?'':'none';
+  gscQPage=1;
+  renderGscQueries();
+}
+function dedupeRows(rows){
+  const map=new Map();
+  rows.forEach(r=>{
+    const key=r.query||'(unknown)';
+    if(!map.has(key)){
+      map.set(key,{query:r.query||'',page:r.page||'',impressions:r.impressions||0,clicks:r.clicks||0,position:r.position||0,_posImpr:(r.position||0)*(r.impressions||0),_totalImpr:r.impressions||0});
+    }else{
+      const e=map.get(key);
+      e.impressions+=(r.impressions||0);
+      e.clicks+=(r.clicks||0);
+      e._posImpr+=(r.position||0)*(r.impressions||0);
+      e._totalImpr+=(r.impressions||0);
+      if((r.position||999)<(e.position||999)&&r.page){e.page=r.page;e.position=r.position||0;}
+    }
+  });
+  return Array.from(map.values()).map(e=>{
+    e.position=e._totalImpr>0?e._posImpr/e._totalImpr:0;
+    e.ctr=e.impressions>0?e.clicks/e.impressions:0;
+    return e;
+  });
+}
+function getFilteredGscQ(){
+  const snapId=gscQSnapId||document.getElementById('gq-snap-sel')?.value;
+  const snap=(A.snaps[A.site]||[]).find(s=>s.id===snapId);
+  const rows=dedupeRows(snap?.rows||[]);
+  const search=(document.getElementById('gq-search')?.value||'').toLowerCase();
+  const pos=document.getElementById('gq-pos')?.value||'';
+  const minImpr=parseInt(document.getElementById('gq-min-impr')?.value)||0;
+  let filtered=rows.filter(r=>{
+    if(search&&!(r.query||'').toLowerCase().includes(search)&&!(r.page||'').toLowerCase().includes(search))return false;
+    if(r.impressions<minImpr)return false;
+    if(pos){const[lo,hi]=pos.split('-').map(Number);if(!r.position||r.position<lo||r.position>hi)return false;}
+    return true;
+  });
+  const{col,dir}=gscQSort;
+  filtered.sort((a,b)=>{
+    if(col==='query')return dir*(a.query||'').localeCompare(b.query||'');
+    if(col==='page')return dir*(a.page||'').localeCompare(b.page||'');
+    return dir*((b[col]||0)-(a[col]||0));
+  });
+  return filtered;
+}
+function renderGscQueries(){
+  const snaps=(A.snaps[A.site]||[]).filter(s=>s.sources&&s.sources.includes('gsc-live'));
+  const nosnap=document.getElementById('gsc-queries-nosnap');
+  const content=document.getElementById('gsc-queries-content');
+  if(!snaps.length){if(nosnap)nosnap.style.display='';if(content)content.style.display='none';return;}
+  if(nosnap)nosnap.style.display='none';if(content)content.style.display='';
+  // sync snap selector value
+  if(!gscQSnapId){
+    const sel=document.getElementById('gq-snap-sel');
+    gscQSnapId=sel?.value||snaps[snaps.length-1]?.id||null;
+  }
+  const compId=gscQCompId;
+  const compSnap=compId?(A.snaps[A.site]||[]).find(s=>s.id===compId):null;
+  // update table headers
+  const thead=document.getElementById('gq-thead');
+  if(thead){
+    if(compSnap){
+      const mainSnap=(A.snaps[A.site]||[]).find(s=>s.id===gscQSnapId);
+      thead.innerHTML=`<tr>
+        <th onclick="srtGscQ('query')" style="min-width:220px">Query<span class="si" id="si-gqq">&#8597;</span></th>
+        <th onclick="srtGscQ('page')" style="min-width:180px">Page URL<span class="si" id="si-gqp">&#8597;</span></th>
+        <th colspan="2" style="text-align:center;background:var(--bg3);font-size:11px;color:var(--text3)">Impressions</th>
+        <th colspan="2" style="text-align:center;background:var(--bg3);font-size:11px;color:var(--text3)">Avg Position</th>
+        <th colspan="2" style="text-align:center;background:var(--bg3);font-size:11px;color:var(--text3)">Clicks</th>
+      </tr><tr>
+        <th></th><th></th>
+        <th onclick="srtGscQ('impressions')" style="min-width:90px;font-size:11px">${esc((mainSnap?.label||'Current').substring(0,20))}<span class="si" id="si-gqi">&#8597;</span></th>
+        <th style="min-width:70px;font-size:11px;color:var(--text3)">${esc((compSnap.label||'Previous').substring(0,20))}</th>
+        <th onclick="srtGscQ('position')" style="min-width:80px;font-size:11px">${esc((mainSnap?.label||'Current').substring(0,20))}<span class="si" id="si-gqpos">&#8597;</span></th>
+        <th style="min-width:70px;font-size:11px;color:var(--text3)">${esc((compSnap.label||'Previous').substring(0,20))}</th>
+        <th onclick="srtGscQ('clicks')" style="min-width:70px;font-size:11px">${esc((mainSnap?.label||'Current').substring(0,20))}<span class="si" id="si-gqc">&#8597;</span></th>
+        <th style="min-width:70px;font-size:11px;color:var(--text3)">${esc((compSnap.label||'Previous').substring(0,20))}</th>
+      </tr>`;
+    }else{
+      thead.innerHTML=`<tr>
+        <th onclick="srtGscQ('query')" style="min-width:260px">Query<span class="si" id="si-gqq">&#8597;</span></th>
+        <th onclick="srtGscQ('page')" style="min-width:220px">Page URL<span class="si" id="si-gqp">&#8597;</span></th>
+        <th onclick="srtGscQ('impressions')" style="min-width:110px">Impressions<span class="si" id="si-gqi">&#8597;</span></th>
+        <th onclick="srtGscQ('position')" style="min-width:100px">Avg Position<span class="si" id="si-gqpos">&#8597;</span></th>
+        <th onclick="srtGscQ('clicks')" style="min-width:80px">Clicks<span class="si" id="si-gqc">&#8597;</span></th>
+        <th onclick="srtGscQ('ctr')" style="min-width:80px">CTR<span class="si" id="si-gqctr">&#8597;</span></th>
+      </tr>`;
+    }
+  }
+  const rows=getFilteredGscQ();
+  // build comparison map if needed
+  let compMap=null;
+  if(compSnap){
+    compMap=new Map();
+    dedupeRows(compSnap.rows||[]).forEach(r=>compMap.set(r.query,r));
+  }
+  const total=rows.length;
+  const pages=Math.max(1,Math.ceil(total/GSC_PAGE_SIZE));
+  if(gscQPage>pages)gscQPage=1;
+  const slice=rows.slice((gscQPage-1)*GSC_PAGE_SIZE,gscQPage*GSC_PAGE_SIZE);
+  const tbody=document.getElementById('gq-tbody');
+  if(!tbody)return;
+  const colCount=compMap?8:6;
+  if(!slice.length){
+    tbody.innerHTML=`<tr><td colspan="${colCount}" style="text-align:center;padding:36px;color:var(--text3)">No queries match your filters.</td></tr>`;
+  }else if(compMap){
+    tbody.innerHTML=slice.map(r=>{
+      const c=compMap.get(r.query);
+      const diDelta=(v,prev,lower)=>{
+        if(prev==null)return'<span style="color:var(--text3)">—</span>';
+        const d=v-prev;
+        if(Math.abs(d)<0.01)return'<span style="color:var(--text3)">±0</span>';
+        const good=lower?(d<0):(d>0);
+        const sign=d>0?'+':'';
+        return`<span style="color:${good?'var(--green)':'var(--red)'}">${sign}${typeof v==='number'&&v<10?d.toFixed(1):Math.round(d)}</span>`;
+      };
+      const imprDelta=c?`<td style="font-size:11px">${diDelta(r.impressions,c.impressions,false)}</td>`:'<td style="color:var(--text3);font-size:11px">new</td>';
+      const posDelta=c?`<td style="font-size:11px">${diDelta(r.position,c.position,true)}</td>`:'<td style="color:var(--text3);font-size:11px">new</td>';
+      const clkDelta=c?`<td style="font-size:11px">${diDelta(r.clicks,c.clicks,false)}</td>`:'<td style="color:var(--text3);font-size:11px">new</td>';
+      return`<tr>
+        <td class="col-kw" title="${esc(r.query)}">${esc(r.query)}</td>
+        <td class="col-url">${r.page?'<span style="color:var(--teal);font-family:var(--mono);font-size:11px">'+esc(trimUrl(r.page))+'</span>':'<span style="color:var(--text3)">—</span>'}</td>
+        <td style="font-family:var(--mono);font-weight:600">${(r.impressions||0).toLocaleString()}</td>
+        ${imprDelta}
+        <td>${posBadge(r.position)}</td>
+        ${posDelta}
+        <td style="font-family:var(--mono)">${(r.clicks||0).toLocaleString()}</td>
+        ${clkDelta}
+      </tr>`;
+    }).join('');
+  }else{
+    tbody.innerHTML=slice.map(r=>`<tr>
+      <td class="col-kw" title="${esc(r.query)}">${esc(r.query)}</td>
+      <td class="col-url">${r.page?'<span style="color:var(--teal);font-family:var(--mono);font-size:11px">'+esc(trimUrl(r.page))+'</span>':'<span style="color:var(--text3)">—</span>'}</td>
+      <td style="font-family:var(--mono);font-weight:600">${(r.impressions||0).toLocaleString()}</td>
+      <td>${posBadge(r.position)}</td>
+      <td style="font-family:var(--mono)">${(r.clicks||0).toLocaleString()}</td>
+      <td>${ctrCell(r.ctr||0)}</td>
+    </tr>`).join('');
+  }
+  const cnt=document.getElementById('gq-count-lbl');if(cnt)cnt.textContent=total.toLocaleString()+' queries';
+  const pi=document.getElementById('gq-pinfo');if(pi)pi.textContent=(gscQPage-1)*GSC_PAGE_SIZE+1+'–'+Math.min(gscQPage*GSC_PAGE_SIZE,total)+' of '+total.toLocaleString();
+  const prev=document.getElementById('gq-prev');const next=document.getElementById('gq-next');
+  if(prev)prev.disabled=gscQPage<=1;if(next)next.disabled=gscQPage>=pages;
+}
+function srtGscQ(col){
+  if(gscQSort.col===col)gscQSort.dir*=-1;else{gscQSort.col=col;gscQSort.dir=col==='query'||col==='page'?1:-1;}
+  gscQPage=1;
+  ['gqq','gqp','gqi','gqpos','gqc','gqctr'].forEach(k=>{const el=document.getElementById('si-'+k);if(el){el.textContent='↕';el.classList.remove('on');}});
+  const map={query:'gqq',page:'gqp',impressions:'gqi',position:'gqpos',clicks:'gqc',ctr:'gqctr'};
+  const el=document.getElementById('si-'+(map[col]||col));if(el){el.textContent=gscQSort.dir===1?'↑':'↓';el.classList.add('on');}
+  renderGscQueries();
+}
+function pgGscQ(dir){
+  const total=Math.ceil(getFilteredGscQ().length/GSC_PAGE_SIZE);
+  gscQPage=Math.max(1,Math.min(total,gscQPage+dir));
+  renderGscQueries();
+}
+function exportGscQueriesCSV(){
+  const rows=getFilteredGscQ();
+  if(!rows.length){toast('No queries to export','err');return;}
+  const hdrs=['query','page','impressions','avg_position','clicks','ctr'];
+  const csv=[hdrs.join(','),...rows.map(r=>[`"${(r.query||'').replace(/"/g,'""')}"`,`"${(r.page||'').replace(/"/g,'""')}"`,r.impressions||0,(r.position||0).toFixed(2),r.clicks||0,((r.ctr||0)*100).toFixed(2)+'%'].join(','))].join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download='all-queries-'+A.site+'-'+new Date().toISOString().split('T')[0]+'.csv';a.click();toast('Queries exported');
+}
+
+// ── By Page ──
+function renderGscByPage(){
+  const sb=snapB();
+  const nosnap=document.getElementById('gsc-bypage-nosnap');
+  const content=document.getElementById('gsc-bypage-content');
+  if(!sb||!sb.rows?.length){if(nosnap)nosnap.style.display='';if(content)content.style.display='none';return;}
+  if(nosnap)nosnap.style.display='none';if(content)content.style.display='';
+  const search=(document.getElementById('gbp-search')?.value||'').toLowerCase();
+  const sortKey=document.getElementById('gbp-sort')?.value||'impressions';
+  // aggregate by page
+  const pageMap={};
+  sb.rows.forEach(r=>{
+    if(!r.page)return;
+    const p=r.page;
+    if(!pageMap[p])pageMap[p]={page:p,impressions:0,clicks:0,posSum:0,posCnt:0,kws:[]};
+    const pg=pageMap[p];
+    pg.impressions+=r.impressions||0;pg.clicks+=r.clicks||0;
+    if(r.position>0){pg.posSum+=r.position;pg.posCnt++;}
+    pg.kws.push(r);
+  });
+  Object.values(pageMap).forEach(p=>{p.position=p.posCnt?p.posSum/p.posCnt:0;p.kwCount=p.kws.length;p.kws.sort((a,b)=>(b.impressions||0)-(a.impressions||0));});
+  let pages=Object.values(pageMap);
+  if(search)pages=pages.filter(p=>p.page.toLowerCase().includes(search));
+  pages.sort((a,b)=>sortKey==='position'?(a.position||999)-(b.position||999):(b[sortKey]||0)-(a[sortKey]||0));
+  const cnt=document.getElementById('gbp-count-lbl');if(cnt)cnt.textContent=pages.length.toLocaleString()+' pages';
+  const list=document.getElementById('gsc-bypage-list');if(!list)return;
+  list.innerHTML=pages.map(p=>{
+    const isExp=gscBpExpanded.has(p.page);
+    const expRows=isExp?`<div class="pr-expanded"><div class="pr-exp-hdr"><span>Queries (${p.kwCount})</span></div><div class="tbl-wrap"><table><thead><tr><th style="min-width:240px">Query</th><th style="min-width:100px">Impressions</th><th style="min-width:90px">Avg Pos</th><th style="min-width:80px">Clicks</th><th style="min-width:80px">CTR</th></tr></thead><tbody>${p.kws.map(r=>`<tr><td class="col-kw">${esc(r.query)}</td><td style="font-family:var(--mono)">${(r.impressions||0).toLocaleString()}</td><td>${posBadge(r.position)}</td><td style="font-family:var(--mono)">${(r.clicks||0).toLocaleString()}</td><td>${ctrCell(r.ctr||0)}</td></tr>`).join('')}</tbody></table></div></div>`:'';
+    return`<div class="page-row"><div class="pr-hdr" onclick="toggleGscBp('${esc(p.page)}')"><span class="exp-icon ${isExp?'open':''}">&#9654;</span><div class="pr-left"><div class="pr-url-row"><span class="pr-url">${esc(trimUrl(p.page))}</span></div><div class="pr-kw-stats">${p.kwCount} keywords</div></div><div class="pr-metrics"><div class="pr-metric"><div class="pr-metric-lbl">Impressions</div><div class="pr-metric-val"><span class="cur">${p.impressions.toLocaleString()}</span></div></div><div class="pr-metric"><div class="pr-metric-lbl">Avg Pos</div><div class="pr-metric-val"><span class="cur">${p.position?p.position.toFixed(1):'—'}</span></div></div><div class="pr-metric"><div class="pr-metric-lbl">Clicks</div><div class="pr-metric-val"><span class="cur">${p.clicks.toLocaleString()}</span></div></div></div></div>${expRows}</div>`;
+  }).join('');
+}
+function toggleGscBp(page){
+  if(gscBpExpanded.has(page))gscBpExpanded.delete(page);else gscBpExpanded.add(page);
+  renderGscByPage();
+}
+
 // ═══ BOOT (called after successful auth) ═══
 async function bootApp(){
   await load();await loadSbCreds();await loadGa4FromStorage();autoPickPeriods();renderAll();
   requestAnimationFrame(initKwScrollSync);
   document.addEventListener('click',e=>{if(!e.target.closest('.rel-cell')){document.querySelectorAll('.kw-dropdown').forEach(d=>d.remove());A.openKwDropdown=null;}});
   loadGscClientId();
-  setTimeout(()=>{initGscTokenClient();refreshGscState();},800);
+  loadGa4PropId();
+  setTimeout(async()=>{initGscTokenClient();initGa4TokenClient();refreshGscState();initGscFlatpickr();gscSetPreset('3m');const idA=A.pA[A.site],idB=A.pB[A.site];if(idA)await loadSnapRows(idA);if(idB&&idB!==idA)await loadSnapRows(idB);if(idA||idB)renderAll();},900);
 }
 
 addEventListener('DOMContentLoaded',async()=>{
@@ -2309,11 +3320,11 @@ async function pullSharedSnaps(silent=false){
     rows.forEach(row=>{
       if(!A.snaps[row.site])A.snaps[row.site]=[];
       if(!A.snaps[row.site].find(s=>s.id===row.id)){
-        A.snaps[row.site].push({...row.snapshot_json,id:row.id,label:row.label,start:row.start_date,end:row.end_date,syncedFrom:'team',syncedBy:row.synced_by});
+        A.snaps[row.site].push({...row.snapshot_json,id:row.id,label:row.label,start:row.start_date,end:row.end_date,syncedFrom:'team',syncedBy:row.synced_by,rowsLoaded:false});
         added++;
       }
     });
-    if(added>0){if(A.snaps[A.site])A.snaps[A.site].sort((a,b)=>(a.start||a.label).localeCompare(b.start||b.label));await save();autoPickPeriods();renderAll();renderSnapList();if(!silent)toast('✓ Pulled '+added+' team snapshot'+(added>1?'s':''),'ok');}
+    if(added>0){if(A.snaps[A.site])A.snaps[A.site].sort((a,b)=>(a.start||a.label).localeCompare(b.start||b.label));await save();autoPickPeriods();renderAll();renderSnapList();renderGscSnapList();if(!silent)toast('✓ Pulled '+added+' team snapshot'+(added>1?'s':''),'ok');}
     else if(!silent)toast('Team snapshots up to date');
     const el=document.getElementById('sync-last-pull');
     const ts=new Date().toLocaleString();
@@ -2322,14 +3333,15 @@ async function pullSharedSnaps(silent=false){
     renderSharedList(rows);
   }catch(e){if(!silent)toast('Sync pull failed: '+e.message,'err');}
 }
-async function pushSnapToTeam(id){
-  if(!A.sbConnected){toast('Connect Supabase first','err');return;}
-  const snap=getSnap(id);if(!snap){toast('Snapshot not found','err');return;}
+async function pushSnapToTeam(id,silent=false){
+  if(!A.sbConnected){if(!silent)toast('Connect Supabase first','err');return;}
+  const snap=getSnap(id);if(!snap){if(!silent)toast('Snapshot not found','err');return;}
   try{
-    const payload={id:snap.id,site:A.site,label:snap.label,start_date:snap.start,end_date:snap.end,snapshot_json:snap,synced_by:document.getElementById('sidebar-email').textContent,synced_at:new Date().toISOString()};
+    const {rows:_r,rowsLoaded:_rl,...snapMeta}=snap;
+    const payload={id:snap.id,site:A.site,label:snap.label,start_date:snap.start,end_date:snap.end,snapshot_json:snapMeta,synced_by:document.getElementById('sidebar-email').textContent,synced_at:new Date().toISOString()};
     const r=await fetch(`${A.sbUrl}/rest/v1/insiderank_snapshots`,{method:'POST',headers:{...sbH(),Prefer:'resolution=merge-duplicates'},body:JSON.stringify(payload)});
-    if(r.ok){toast('✓ Snapshot synced to team','ok');renderSnapList();}else{const t=await r.text();toast('Sync failed: '+t.slice(0,80),'err');}
-  }catch(e){toast('Sync failed: '+e.message,'err');}
+    if(r.ok){if(!silent)toast('✓ Snapshot synced to team','ok');renderSnapList();}else{const t=await r.text();if(!silent)toast('Sync failed: '+t.slice(0,80),'err');}
+  }catch(e){if(!silent)toast('Sync failed: '+e.message,'err');}
 }
 async function deleteTeamSnap(id){
   if(!A.sbConnected)return;if(!confirm('Remove from team database?'))return;
@@ -2388,7 +3400,7 @@ function renderSharedList(rows){
   if(wrap)wrap.style.display='block';
   list.innerHTML=rows.map(r=>'<div class="shared-item"><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500">'+esc(r.label||r.id)+'</div><div style="font-size:11px;color:var(--text3);font-family:var(--mono)">'+esc(r.site)+' · '+(r.start_date||'?')+' → '+(r.end_date||'?')+' · by '+esc(r.synced_by||'unknown')+'</div></div><button class="btn btn-ghost btn-sm" onclick="deleteTeamSnap(\''+r.id+'\')">Remove</button></div>').join('');
 }
-function copySQL(){const sql='CREATE TABLE IF NOT EXISTS public.insiderank_snapshots (\n  id TEXT PRIMARY KEY,\n  site TEXT NOT NULL,\n  label TEXT,\n  start_date TEXT,\n  end_date TEXT,\n  snapshot_json JSONB NOT NULL,\n  synced_by TEXT,\n  synced_at TIMESTAMPTZ DEFAULT NOW()\n);\nALTER TABLE insiderank_snapshots ENABLE ROW LEVEL SECURITY;\nCREATE POLICY "allow_all" ON insiderank_snapshots FOR ALL USING (true) WITH CHECK (true);\n\nCREATE TABLE IF NOT EXISTS public.insiderank_ga4 (\n  id TEXT PRIMARY KEY,\n  site TEXT NOT NULL,\n  period TEXT NOT NULL,\n  label TEXT,\n  rows_json JSONB NOT NULL,\n  synced_by TEXT,\n  synced_at TIMESTAMPTZ DEFAULT NOW()\n);\nALTER TABLE insiderank_ga4 ENABLE ROW LEVEL SECURITY;\nCREATE POLICY "allow_all_ga4" ON insiderank_ga4 FOR ALL USING (true) WITH CHECK (true);';navigator.clipboard.writeText(sql).then(()=>toast('SQL copied')).catch(()=>toast('Copy failed','err'));}
+function copySQL(){const sql='CREATE TABLE IF NOT EXISTS public.insiderank_snapshots (\n  id TEXT PRIMARY KEY,\n  site TEXT NOT NULL,\n  label TEXT,\n  start_date TEXT,\n  end_date TEXT,\n  snapshot_json JSONB NOT NULL,\n  synced_by TEXT,\n  synced_at TIMESTAMPTZ DEFAULT NOW()\n);\nALTER TABLE insiderank_snapshots ENABLE ROW LEVEL SECURITY;\nCREATE POLICY "allow_all" ON insiderank_snapshots FOR ALL USING (true) WITH CHECK (true);\n\n-- Full query rows (enables unlimited GSC data storage)\nCREATE TABLE IF NOT EXISTS public.insiderank_rows (\n  id BIGSERIAL PRIMARY KEY,\n  snapshot_id TEXT NOT NULL REFERENCES insiderank_snapshots(id) ON DELETE CASCADE,\n  site TEXT NOT NULL,\n  query TEXT,\n  page TEXT,\n  impressions INTEGER DEFAULT 0,\n  clicks INTEGER DEFAULT 0,\n  ctr FLOAT DEFAULT 0,\n  position FLOAT DEFAULT 0,\n  src TEXT DEFAULT \'gsc-live\',\n  url_source TEXT DEFAULT \'exact\'\n);\nCREATE INDEX IF NOT EXISTS idx_ir_rows_snap ON insiderank_rows(snapshot_id);\nALTER TABLE insiderank_rows ENABLE ROW LEVEL SECURITY;\nCREATE POLICY "allow_all_rows" ON insiderank_rows FOR ALL USING (true) WITH CHECK (true);\n\nCREATE TABLE IF NOT EXISTS public.insiderank_ga4 (\n  id TEXT PRIMARY KEY,\n  site TEXT NOT NULL,\n  period TEXT NOT NULL,\n  label TEXT,\n  rows_json JSONB NOT NULL,\n  synced_by TEXT,\n  synced_at TIMESTAMPTZ DEFAULT NOW()\n);\nALTER TABLE insiderank_ga4 ENABLE ROW LEVEL SECURITY;\nCREATE POLICY "allow_all_ga4" ON insiderank_ga4 FOR ALL USING (true) WITH CHECK (true);';navigator.clipboard.writeText(sql).then(()=>toast('SQL copied')).catch(()=>toast('Copy failed','err'));}
 
 // ═══ CSV PARSING ═══
 function pcr(line){const c=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){inQ=!inQ;}else if(ch===','&&!inQ){c.push(cur.trim().replace(/^"|"$/g,''));cur='';}else{cur+=ch;}}c.push(cur.trim().replace(/^"|"$/g,''));return c;}
@@ -2545,7 +3557,8 @@ function goView(v,el){
   if(v==='performance')renderPerfView();
   if(v==='urltracker')renderUrlTracker();
   if(v==='settings'){loadApiKeyToInput();renderSettingsSyncPanel();}
-  if(v==='gsclive'){refreshGscState();}
+  if(v==='gsclive'){refreshGscState();setTimeout(()=>{initGscFlatpickr();gscSetPreset(gscPreset);},100);}
+  if(v==='performance'){refreshGa4State();}
 }
 function renderAll(){updateTopbar();renderOverview();}
 function updateTopbar(){const a=snapA(),b=snapB();document.getElementById('pa-val').textContent=a?a.label:'No snapshot';document.getElementById('pa-sub').textContent=a?a.start+' → '+a.end:'—';document.getElementById('pb-val').textContent=b?b.label:'No snapshot';document.getElementById('pb-sub').textContent=b?b.start+' → '+b.end:'—';}
@@ -2553,7 +3566,7 @@ function updateTopbar(){const a=snapA(),b=snapB();document.getElementById('pa-va
 // ═══ OVERVIEW ═══
 function renderOverview(){
   const sa=snapA(),sb=snapB(),mA=buildKwMap(sa),mB=buildKwMap(sb),kwRows=compareKws(mA,mB);
-  const ovs=document.getElementById('ov-sub');if(!sb)ovs.textContent='No data — import snapshots to get started';else ovs.textContent=(sa?sa.label+' → ':'')+sb.label;
+  const ovs=document.getElementById('ov-sub');if(!sb)ovs.textContent='No data — pull from GSC Live to get started';else ovs.textContent=(sa?sa.label+' → ':'')+sb.label;
   const dropped10=kwRows.filter(r=>r.posA&&r.posA<=10&&(!r.posB||r.posB>10));
   const aw=document.getElementById('alert-wrap');if(dropped10.length&&sa&&sb){aw.style.display='flex';document.getElementById('alert-txt').innerHTML='<strong>'+dropped10.length+' keywords</strong> dropped out of the top 10.';}else aw.style.display='none';
   const rawB=sb?sb.rows:[],rawA=sa?sa.rows:[];const cB=sb?.chartTotals||null,cA=sa?.chartTotals||null;
@@ -2721,21 +3734,11 @@ function initAhScrollSync(){const ts=document.getElementById('ah-top-scroll'),ti
 
 // ═══ SNAPSHOTS ═══
 function renderSnapList(){
-  const snaps=getSnaps(),site=A.sites[A.site].name;
-  document.getElementById('snap-list-title').textContent='Snapshots for '+site+' ('+snaps.length+')';
-  document.getElementById('imp-sub').textContent='Each GSC export = a snapshot for '+site+'. Pick any two to compare.';
-  const el=document.getElementById('snap-items');
-  if(!snaps.length){el.innerHTML='<div style="padding:22px;text-align:center;color:var(--text3);font-size:12px">No snapshots yet</div>';return;}
-  const curA=A.pA[A.site],curB=A.pB[A.site];
-  el.innerHTML=snaps.map(s=>{
-    const srcTags=(s.sources||[]).map(t=>'<span class="snap-src-tag '+t+'">'+t+'</span>').join('');
-    const teamBadge=s.syncedFrom==='team'?'<span class="tag tg-green" style="font-size:9px">&#127381; Team</span>':'';
-    const syncBtn=A.sbConnected&&s.syncedFrom!=='team'?'<button class="snap-btn" style="background:var(--green-d);color:var(--green);border:1px solid rgba(46,232,180,.3)" onclick="pushSnapToTeam(\''+s.id+'\')">&#8593; Sync</button>':'';
-    return'<div class="snap-item"><div class="snap-info"><div class="snap-lbl" style="display:flex;align-items:center;gap:8px">'+esc(s.label)+' '+teamBadge+'</div><div class="snap-meta">'+(s.count?.toLocaleString()||0)+' keywords · '+(s.start||'?')+' → '+(s.end||'?')+(s.urlFilledCount?' · '+s.urlFilledCount+'/'+s.count+' URLs':'')+'</div>'+(s.chartTotals?'<div style="font-size:10px;color:var(--green);margin-top:3px">✓ Chart.csv — totals match GSC UI</div>':'<div style="font-size:10px;color:var(--amber);margin-top:3px">⚠ No Chart.csv — top-1,000 only</div>')+(srcTags?'<div class="snap-sources">'+srcTags+'</div>':'')+'</div><div class="snap-actions">'+syncBtn+'<button class="snap-btn snap-a '+(curA===s.id?'':'dim')+'" onclick="setSnap(\'A\',\''+s.id+'\')">Set A</button><button class="snap-btn snap-b '+(curB===s.id?'on':'')+'" onclick="setSnap(\'B\',\''+s.id+'\')">Set B</button><button class="snap-del" onclick="deleteSnap(\''+s.id+'\')" title="Delete"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button></div></div>';
-  }).join('');
+  // The old Imports page is gone — delegate to GSC Live snapshot list.
+  renderGscSnapList();
 }
-async function setSnap(which,id){if(which==='A')A.pA[A.site]=id;else A.pB[A.site]=id;await savePer();updateTopbar();renderSnapList();renderAll();toast('Snapshot set as Period '+which);}
-async function deleteSnap(id){if(!confirm('Delete this snapshot?'))return;A.snaps[A.site]=(A.snaps[A.site]||[]).filter(s=>s.id!==id);if(A.pA[A.site]===id)delete A.pA[A.site];if(A.pB[A.site]===id)delete A.pB[A.site];autoPickPeriods();await save();await savePer();renderSnapList();renderAll();toast('Deleted');}
+async function setSnap(which,id){if(which==='A')A.pA[A.site]=id;else A.pB[A.site]=id;await savePer();updateTopbar();renderSnapList();await loadSnapRows(id);renderAll();toast('Snapshot set as Period '+which);}
+async function deleteSnap(id){if(!confirm('Delete this snapshot?'))return;A.snaps[A.site]=(A.snaps[A.site]||[]).filter(s=>s.id!==id);if(A.pA[A.site]===id)delete A.pA[A.site];if(A.pB[A.site]===id)delete A.pB[A.site];autoPickPeriods();await save();await savePer();if(A.sbConnected){try{await fetch(`${A.sbUrl}/rest/v1/insiderank_rows?snapshot_id=eq.${encodeURIComponent(id)}`,{method:'DELETE',headers:sbH()});}catch(e){console.warn('Row delete failed:',e.message);}}renderSnapList();renderAll();toast('Deleted');}
 async function clearSnaps(){if(!confirm('Delete all snapshots for this site?'))return;delete A.snaps[A.site];delete A.pA[A.site];delete A.pB[A.site];await save();await savePer();renderSnapList();renderAll();toast('All cleared');}
 
 // ═══ SAMPLE ═══
@@ -2747,7 +3750,7 @@ async function loadSample(){
 }
 
 // ═══ MODAL ═══
-function openModal(which){A.modalFor=which;document.getElementById('modal-title').textContent='Select Period '+which;const snaps=getSnaps(),ml=document.getElementById('modal-list');if(!snaps.length){ml.innerHTML='<div style="color:var(--text3);font-size:12px;padding:10px 0">No snapshots — go to Imports to upload CSVs</div>';}else{ml.innerHTML=snaps.map(s=>'<div class="modal-snap" onclick="pickSnap(\''+s.id+'\')"><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500">'+esc(s.label)+'</div><div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:2px">'+(s.count?.toLocaleString()||0)+' keywords · '+(s.start||'?')+' → '+(s.end||'?')+'</div></div><span style="color:var(--text3);font-size:11px">Select →</span></div>').join('');}document.getElementById('modal-bg').style.display='flex';}
+function openModal(which){A.modalFor=which;document.getElementById('modal-title').textContent=which==='A'?'Select Baseline period (older / previous)':'Select Current period (newer / recent)';const snaps=getSnaps(),ml=document.getElementById('modal-list');if(!snaps.length){ml.innerHTML='<div style="color:var(--text3);font-size:12px;padding:10px 0">No snapshots yet — go to GSC Live to pull data</div>';}else{ml.innerHTML=snaps.map(s=>'<div class="modal-snap" onclick="pickSnap(\''+s.id+'\')"><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500">'+esc(s.label)+'</div><div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:2px">'+(s.count?.toLocaleString()||0)+' keywords · '+(s.start||'?')+' → '+(s.end||'?')+'</div></div><span style="color:var(--text3);font-size:11px">Select →</span></div>').join('');}document.getElementById('modal-bg').style.display='flex';}
 function pickSnap(id){setSnap(A.modalFor,id);closeModal();}
 function closeModal(){document.getElementById('modal-bg').style.display='none';}
 
@@ -3159,7 +4162,6 @@ async function pullGa4FromSupabase(silent=false){
       loaded++;
     }
     if(loaded>0){
-      if(GA4.A||GA4.B||GA4.PS||GA4.PSA){const h=document.getElementById('ga4-howto');if(h)h.style.display='none';}
       renderPerfView();
       if(!silent) toast('✓ GA4 data pulled — '+loaded+' period'+(loaded>1?'s':''),'ok');
     } else {
@@ -3192,7 +4194,6 @@ async function handleGa4(period, file){
     el.innerHTML = '✓ <strong>'+parsed.rows.length.toLocaleString()+' pages</strong>'+(parsed.dateRange?' · '+parsed.dateRange:'')+'<br><span style="font-size:10px;color:var(--text3)">Columns → '+colDebug+'</span>';
     el.className = 'pp-status loaded';
   }
-  if(GA4.A || GA4.B || GA4.PS || GA4.PSA){ const h=document.getElementById('ga4-howto'); if(h) h.style.display='none'; }
   // Push to Supabase so team sees it
   await pushGa4ToSupabase(period, parsed);
   renderPerfView();
@@ -3330,7 +4331,7 @@ function renderPerfView(){
   document.getElementById('perf-empty').style.display='none';
   document.getElementById('perf-content').style.display='block';
   document.getElementById('perf-export-btn').style.display='';
-  document.getElementById('ga4-howto').style.display='none';
+
 
   // Populate category filter
   const catSel = document.getElementById('perf-cat');
