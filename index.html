@@ -2298,8 +2298,10 @@ function refreshGa4State(){
   const hasProp=!!propId;
   const canPull=connected&&hasB&&hasProp;
 
-  document.getElementById('ga4-live-connect-row').style.display=connected?'none':'';
-  document.getElementById('ga4-live-connected-row').style.display=connected?'':'none';
+  const connectRow=document.getElementById('ga4-live-connect-row');
+  const connectedRow=document.getElementById('ga4-live-connected-row');
+  if(connectRow)connectRow.style.display=connected?'none':'';
+  if(connectedRow)connectedRow.style.display=connected?'':'none';
 
   if(connected){
     const emailEl=document.getElementById('ga4-live-email');
