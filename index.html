@@ -3132,7 +3132,7 @@ async function bootApp(){
   document.addEventListener('click',e=>{if(!e.target.closest('.rel-cell')){document.querySelectorAll('.kw-dropdown').forEach(d=>d.remove());A.openKwDropdown=null;}});
   loadGscClientId();
   loadGa4PropId();
-  setTimeout(async()=>{initGscTokenClient();refreshGscState();initGscFlatpickr();gscSetPreset('3m');const idA=A.pA[A.site],idB=A.pB[A.site];if(idA)await loadSnapRows(idA);if(idB&&idB!==idA)await loadSnapRows(idB);if(idA||idB)renderAll();},900);
+  setTimeout(async()=>{initGscTokenClient();initGa4TokenClient();refreshGscState();initGscFlatpickr();gscSetPreset('3m');const idA=A.pA[A.site],idB=A.pB[A.site];if(idA)await loadSnapRows(idA);if(idB&&idB!==idA)await loadSnapRows(idB);if(idA||idB)renderAll();},900);
 }
 
 addEventListener('DOMContentLoaded',async()=>{
@@ -3439,6 +3439,7 @@ function goView(v,el){
   if(v==='urltracker')renderUrlTracker();
   if(v==='settings'){loadApiKeyToInput();renderSettingsSyncPanel();}
   if(v==='gsclive'){refreshGscState();setTimeout(()=>{initGscFlatpickr();gscSetPreset(gscPreset);},100);}
+  if(v==='performance'){refreshGa4State();}
 }
 function renderAll(){updateTopbar();renderOverview();}
 function updateTopbar(){const a=snapA(),b=snapB();document.getElementById('pa-val').textContent=a?a.label:'No snapshot';document.getElementById('pa-sub').textContent=a?a.start+' → '+a.end:'—';document.getElementById('pb-val').textContent=b?b.label:'No snapshot';document.getElementById('pb-sub').textContent=b?b.start+' → '+b.end:'—';}
