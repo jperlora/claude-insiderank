@@ -2169,6 +2169,7 @@ function initGscTokenClient(){
     }
   });
 }
+let ga4PullAfterAuth=false;
 function initGa4TokenClient(){
   const cid=localStorage.getItem(GSC_CID_SK)||'';
   if(!cid||!window.google?.accounts?.oauth2)return;
@@ -2176,15 +2177,16 @@ function initGa4TokenClient(){
     client_id:cid,
     scope:'https://www.googleapis.com/auth/analytics.readonly',
     callback:async(resp)=>{
-      if(resp.error){toast('GA4 auth failed: '+resp.error,'err');return;}
+      if(resp.error){toast('GA4 auth failed: '+resp.error,'err');ga4PullAfterAuth=false;return;}
       ga4AccessToken=resp.access_token;
-      ga4TokenExpiry=Date.now()+(resp.expires_in-60)*1000;
+      ga4TokenExpiry=Date.now()+(Number(resp.expires_in)-60)*1000;
       try{
         const r=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+ga4AccessToken}});
         const d=await r.json();ga4UserEmail=d.email||'';
       }catch(e){}
       refreshGa4State();
       toast('✓ Connected to Google Analytics','ok');
+      if(ga4PullAfterAuth){ga4PullAfterAuth=false;pullGa4Live();}
     }
   });
 }
@@ -2215,7 +2217,14 @@ async function ga4FetchReport(propertyId,sd,ed){
         limit:PAGE,offset
       })
     });
-    if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'GA4 API error '+res.status);}
+    if(!res.ok){
+      let msg='GA4 API error '+res.status;
+      try{const e=await res.json();msg=e.error?.message||msg;}catch(_){}
+      if(res.status===403)msg='Access denied (403) — make sure the Google Analytics Data API is enabled in your Google Cloud project and this Google account has access to the GA4 property.';
+      if(res.status===404)msg='Property not found (404) — check the GA4 Property ID in Settings (numbers only, e.g. 123456789).';
+      if(res.status===401)msg='Session expired — please click Disconnect and reconnect Google Analytics.';
+      throw new Error(msg);
+    }
     const data=await res.json();
     const rows=data.rows||[];
     allRows=allRows.concat(rows);
@@ -2240,7 +2249,7 @@ function ga4MapRows(rawRows,sd,ed){
   return{rows,dateRange:sd+' → '+ed,hasViews:true,hasBounce:true,filename:'GA4 Live API'};
 }
 async function pullGa4Live(){
-  if(!ga4AccessToken||Date.now()>=ga4TokenExpiry){connectGa4();return;}
+  if(!ga4AccessToken||Date.now()>=ga4TokenExpiry){ga4PullAfterAuth=true;connectGa4();return;}
   const propId=localStorage.getItem(GA4_PROP_SK)||'';
   if(!propId){toast('Save a GA4 Property ID in Settings first','err');return;}
   const sb=snapB();
