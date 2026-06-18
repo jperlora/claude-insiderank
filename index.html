@@ -2196,7 +2196,7 @@ function connectGa4(){
   if(!ga4TokenClient)initGa4TokenClient();
   if(!ga4TokenClient){toast('Google Identity Services not loaded yet','err');return;}
   if(ga4AccessToken&&Date.now()<ga4TokenExpiry){refreshGa4State();return;}
-  ga4TokenClient.requestAccessToken({prompt:''});
+  ga4TokenClient.requestAccessToken({prompt:'consent'});
 }
 function revokeGa4(){
   if(ga4AccessToken)google.accounts.oauth2.revoke(ga4AccessToken,()=>{});
@@ -2249,22 +2249,52 @@ function ga4MapRows(rawRows,sd,ed){
   return{rows,dateRange:sd+' → '+ed,hasViews:true,hasBounce:true,filename:'GA4 Live API'};
 }
 async function pullGa4Live(){
-  if(!ga4AccessToken||Date.now()>=ga4TokenExpiry){ga4PullAfterAuth=true;connectGa4();return;}
-  const propId=localStorage.getItem(GA4_PROP_SK)||'';
-  if(!propId){toast('Save a GA4 Property ID in Settings first','err');return;}
-  const sb=snapB();
-  if(!sb){toast('Set a Current (Period B) GSC snapshot first','err');return;}
-  const sa=snapA();
-
   const btn=document.getElementById('ga4-live-pull-btn');
   const prog=document.getElementById('ga4-live-progress');
   const bar=document.getElementById('ga4-live-bar');
   const status=document.getElementById('ga4-live-status');
-  if(btn)btn.disabled=true;
+
+  // Show progress immediately so user always sees feedback
+  if(btn){btn.disabled=true;btn.textContent='Pulling…';}
   if(prog)prog.style.display='';
+  if(bar)bar.style.width='5%';
+  if(status)status.textContent='Checking connection…';
+
+  // Token check — re-auth and auto-retry
+  if(!ga4AccessToken||Date.now()>=ga4TokenExpiry){
+    if(status)status.textContent='Session expired — re-authorising…';
+    ga4PullAfterAuth=true;
+    if(!ga4TokenClient)initGa4TokenClient();
+    if(!ga4TokenClient){
+      if(status)status.textContent='⚠ Google Identity Services not loaded. Reload the page and try again.';
+      if(btn){btn.disabled=false;btn.textContent='Pull GA4 data';}
+      return;
+    }
+    ga4TokenClient.requestAccessToken({prompt:'consent'});
+    if(btn){btn.disabled=false;btn.textContent='Pull GA4 data';}
+    if(prog)prog.style.display='none';
+    return;
+  }
+
+  // Prop ID check
+  const propId=localStorage.getItem(GA4_PROP_SK)||'';
+  if(!propId){
+    if(status)status.textContent='⚠ No GA4 Property ID saved. Go to Settings → save your GA4 Property ID first.';
+    if(btn){btn.disabled=false;btn.textContent='Pull GA4 data';}
+    return;
+  }
+
+  // Snapshot check
+  const sb=snapB();
+  if(!sb){
+    if(status)status.textContent='⚠ No Current period set. Set a GSC snapshot as Current (Period B) first.';
+    if(btn){btn.disabled=false;btn.textContent='Pull GA4 data';}
+    return;
+  }
+  const sa=snapA();
 
   try{
-    if(status)status.textContent=`Fetching GA4 data for Current period (${sb.start} → ${sb.end})…`;
+    if(status)status.textContent=`Fetching Current period (${sb.start} → ${sb.end})…`;
     if(bar)bar.style.width='20%';
     const rawB=await ga4FetchReport(propId,sb.start,sb.end);
     if(bar)bar.style.width='50%';
@@ -2274,8 +2304,8 @@ async function pullGa4Live(){
     await pushGa4ToSupabase('B',parsedB);
 
     if(sa){
-      if(status)status.textContent=`Fetching GA4 data for Baseline period (${sa.start} → ${sa.end})…`;
-      if(bar)bar.style.width='60%';
+      if(status)status.textContent=`Fetching Baseline period (${sa.start} → ${sa.end})…`;
+      if(bar)bar.style.width='65%';
       const rawA=await ga4FetchReport(propId,sa.start,sa.end);
       if(bar)bar.style.width='85%';
       const parsedA=ga4MapRows(rawA,sa.start,sa.end);
@@ -2285,18 +2315,16 @@ async function pullGa4Live(){
     }
 
     if(bar)bar.style.width='100%';
-    if(status)status.textContent=`✓ Loaded ${parsedB.rows.length.toLocaleString()} pages`+(sa?` (both periods)`:'')+' — rendering…';
-
+    if(status)status.textContent=`✓ ${parsedB.rows.length.toLocaleString()} pages loaded`+(sa?' (both periods)':'');
     renderPerfView();
     refreshGa4State();
-    toast('✓ GA4 data loaded — '+parsedB.rows.length.toLocaleString()+' pages','ok');
-    setTimeout(()=>{if(prog)prog.style.display='none';if(bar)bar.style.width='0%';},2000);
+    setTimeout(()=>{if(prog)prog.style.display='none';if(bar)bar.style.width='0%';},3000);
   }catch(e){
-    toast('GA4 pull failed: '+e.message,'err');
-    if(prog)prog.style.display='none';
+    if(status)status.textContent='⚠ '+e.message;
+    // keep progress bar visible so the error stays readable
     if(bar)bar.style.width='0%';
   }
-  if(btn)btn.disabled=false;
+  if(btn){btn.disabled=false;btn.textContent='Pull GA4 data';}
 }
 function refreshGa4State(){
   const propId=localStorage.getItem(GA4_PROP_SK)||'';
